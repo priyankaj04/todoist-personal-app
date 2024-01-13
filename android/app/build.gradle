@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.foodfinderapp"
+    namespace "com.caremanagerapp"
     defaultConfig {
-        applicationId "com.foodfinderapp"
+        applicationId "com.caremanagerapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

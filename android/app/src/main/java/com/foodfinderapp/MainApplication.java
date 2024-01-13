@@ -1,4 +1,4 @@
-package com.foodfinderapp;
+package com.caremanagerapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

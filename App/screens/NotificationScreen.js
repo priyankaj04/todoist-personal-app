@@ -205,8 +205,7 @@ const NotificationScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content"/>
-      {/* <StatusBar backgroundColor="#FF6347" barStyle="light-content"/> */}
+      {/* <StatusBar backgroundColor="#3C6FD9" barStyle="light-content"/> */}
       <SwipeListView
         data={listData}
         renderItem={renderItem}
