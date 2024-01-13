@@ -18,12 +18,12 @@ const SplashScreen = ({navigation}) => {
 
     return (
       <View style={styles.container}>
-          {/* <StatusBar backgroundColor='#3C6FD9' barStyle="light-content"/> */}
+          <StatusBar translucent backgroundColor="transparent" />
         <View style={styles.header}>
             <Animatable.Image 
                 animation="bounceIn"
                 duraton="1500"
-            source={require('../assets/logo.png')}
+            source={require('../../assets/logo.png')}
             style={styles.logo}
             resizeMode="stretch"
             />

@@ -30,7 +30,7 @@ import BookmarkScreen from './screens/BookmarkScreen';
 
 import { AuthContext } from './components/context';
 
-import RootStackScreen from './screens/RootStackScreen';
+import RootStackScreen from './screens/SingInUp/RootStackScreen';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
