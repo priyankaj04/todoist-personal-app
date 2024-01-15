@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,20 +23,28 @@ const HomeStack = createStackNavigator();
 const NotificationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const MainTabScreen = () => (
-  <Tab.Navigator initialRouteName="MainHome" activeColor="#fff">
+  <Tab.Navigator
+    initialRouteName="MainHome"
+    screenOptions={{
+      tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
+      tabBarActiveTintColor:"#05375a",
+      headerShown:false
+    }}
+  >
     <Tab.Screen
       name="MainHome"
       component={HomeStackScreen}
       options={{
         tabBarLabel: 'Home',
-        tabBarColor: '#3C6FD9',
+        tabBarColor: '#143c92',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-home" color={color} size={26} />
+          <Icon name="ios-home" color={color} size={22} />
         ),
       }}
+      
     />
     <Tab.Screen
       name="MainNotifications"
@@ -45,7 +53,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Updates',
         tabBarColor: '#1f65ff',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-notifications" color={color} size={26} />
+          <Icon name="ios-notifications" color={color} size={22} />
         ),
       }}
     />
@@ -56,7 +64,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Profile',
         tabBarColor: '#694fad',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-person" color={color} size={26} />
+          <Icon name="ios-person" color={color} size={22} />
         ),
       }}
     />
@@ -67,7 +75,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Explore',
         tabBarColor: '#d02860',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-aperture" color={color} size={26} />
+          <Icon name="ios-aperture" color={color} size={22} />
         ),
       }}
     />

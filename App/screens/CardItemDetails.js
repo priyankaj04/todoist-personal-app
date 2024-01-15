@@ -51,7 +51,7 @@ const CardItemDetails = ({route}) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.title}>Overview</Text>
             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-              <FontAwesome name="star" size={16} color="#3C6FD9" />
+              <FontAwesome name="star" size={16} color="#143c92" />
               <Text style={{marginHorizontal: 2}}>{itemData.rating}</Text>
               <Text>({itemData.reviews})</Text>
             </View>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     flexDirection: 'row',
-    backgroundColor: '#3C6FD9',
+    backgroundColor: '#143c92',
     borderRadius: 20,
     margin: 10,
     padding: 10,

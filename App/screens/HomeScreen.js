@@ -28,7 +28,7 @@ const HomeScreen = ({navigation}) => {
           autoplay
           horizontal={false}
           height={200}
-          activeDotColor="#3C6FD9">
+          activeDotColor="#143c92">
           <View style={styles.slide}>
             <Image
               source={require('../assets/banners/food-banner1.jpg')}
@@ -60,7 +60,7 @@ const HomeScreen = ({navigation}) => {
             navigation.navigate('CardListScreen', {title: 'Restaurant'})
           }>
           <View style={styles.categoryIcon}>
-            <Ionicons name="ios-restaurant" size={35} color="#3C6FD9" />
+            <Ionicons name="ios-restaurant" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Restaurant</Text>
         </TouchableOpacity>
@@ -73,14 +73,14 @@ const HomeScreen = ({navigation}) => {
             <MaterialCommunityIcons
               name="food-fork-drink"
               size={35}
-              color="#3C6FD9"
+              color="#143c92"
             />
           </View>
           <Text style={styles.categoryBtnTxt}>Fastfood Center</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <MaterialCommunityIcons name="food" size={35} color="#3C6FD9" />
+            <MaterialCommunityIcons name="food" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Snacks Corner</Text>
         </TouchableOpacity>
@@ -88,19 +88,19 @@ const HomeScreen = ({navigation}) => {
       <View style={[styles.categoryContainer, {marginTop: 10}]}>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <Fontisto name="hotel" size={35} color="#3C6FD9" />
+            <Fontisto name="hotel" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Hotels</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <Ionicons name="md-restaurant" size={35} color="#3C6FD9" />
+            <Ionicons name="md-restaurant" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Dineouts</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <MaterialIcons name="expand-more" size={35} color="#3C6FD9" />
+            <MaterialIcons name="expand-more" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Show More</Text>
         </TouchableOpacity>
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 70,
     height: 70,
-    backgroundColor: '#fdeae7' /* '#3C6FD9' */,
+    backgroundColor: '#fdeae7' /* '#143c92' */,
     borderRadius: 50,
   },
   categoryBtnTxt: {

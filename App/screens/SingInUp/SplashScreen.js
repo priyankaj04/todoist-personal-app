@@ -12,6 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '@react-navigation/native';
+import assets from '../../assets';
 
 const SplashScreen = ({navigation}) => {
     const { colors } = useTheme();
@@ -23,7 +24,7 @@ const SplashScreen = ({navigation}) => {
             <Animatable.Image 
                 animation="bounceIn"
                 duraton="1500"
-            source={require('../../assets/logo.png')}
+            source={assets.ImageBaseUrl('ch-logo-white')}
             style={styles.logo}
             resizeMode="stretch"
             />
@@ -36,12 +37,12 @@ const SplashScreen = ({navigation}) => {
         >
             <Text style={[styles.title, {
                 color: colors.text
-            }]}>Find best food in your locality!</Text>
-            <Text style={styles.text}>Sign in with account</Text>
+            }]}>Hi, Care Manager! Let's get started with our app!</Text>
+            <Text style={styles.text}>Sign in with your account</Text>
             <View style={styles.button}>
-            <TouchableOpacity onPress={()=>{navigation.navigate('SignInScreen'); console.log("gett dtstrtsasgv")}}>
+            <TouchableOpacity onPress={()=>{navigation.navigate('SignInScreen');}}>
                 <LinearGradient
-                    colors={['#FFA07A', '#3C6FD9']}
+                    colors={['#3c68c7', '#143c92']}
                     style={styles.signIn}
                 >
                     <Text style={styles.textSign}>Get Started</Text>
@@ -60,13 +61,14 @@ const SplashScreen = ({navigation}) => {
 
 export default SplashScreen;
 
-const {height} = Dimensions.get("screen");
-const height_logo = height * 0.28;
+const {height, width} = Dimensions.get("screen");
+const vh = height;
+const vw = width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#3C6FD9',
+    backgroundColor: '#143c92',
   },
   header: {
       flex: 2,
@@ -82,12 +84,12 @@ const styles = StyleSheet.create({
       paddingHorizontal: 30
   },
   logo: {
-      width: height_logo,
-      height: height_logo
+      width: vw*0.8,
+      height: vw*.125
   },
   title: {
       color: '#05375a',
-      fontSize: 30,
+      fontSize: 25,
       fontWeight: 'bold'
   },
   text: {
@@ -99,11 +101,11 @@ const styles = StyleSheet.create({
       marginTop: 30
   },
   signIn: {
-      width: 150,
-      height: 40,
+      width: 170,
+      height: 45,
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 50,
+      borderRadius: 12,
       flexDirection: 'row'
   },
   textSign: {

@@ -234,12 +234,12 @@ const ExploreScreen = () => {
                 <TouchableOpacity
                   onPress={() => {}}
                   style={[styles.signIn, {
-                    borderColor: '#3C6FD9',
+                    borderColor: '#143c92',
                     borderWidth: 1
                   }]}
                 >
                   <Text style={[styles.textSign, {
-                    color: '#3C6FD9'
+                    color: '#143c92'
                   }]}>Order Now</Text>
                 </TouchableOpacity>
               </View>
