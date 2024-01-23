@@ -41,7 +41,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Home',
         tabBarColor: '#143c92',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-home" color={color} size={22} />
+          <Icon name="home" color={color} size={22} />
         ),
       }}
       
@@ -53,7 +53,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Updates',
         tabBarColor: '#1f65ff',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-notifications" color={color} size={22} />
+          <Icon name="notifications" color={color} size={22} />
         ),
       }}
     />
@@ -64,7 +64,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Profile',
         tabBarColor: '#694fad',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-person" color={color} size={22} />
+          <Icon name="person" color={color} size={22} />
         ),
       }}
     />
@@ -75,7 +75,7 @@ const MainTabScreen = () => (
         tabBarLabel: 'Explore',
         tabBarColor: '#d02860',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-aperture" color={color} size={22} />
+          <Icon name="aperture" color={color} size={22} />
         ),
       }}
     />
@@ -107,7 +107,7 @@ const HomeStackScreen = ({navigation}) => {
           headerLeft: () => (
             <View style={{marginLeft: 10}}>
               <Icon.Button
-                name="ios-menu"
+                name="menu"
                 size={25}
                 color={colors.text}
                 backgroundColor={colors.background}
@@ -118,7 +118,7 @@ const HomeStackScreen = ({navigation}) => {
           headerRight: () => (
             <View style={{flexDirection: 'row', marginRight: 10}}>
               <Icon.Button
-                name="ios-search"
+                name="search"
                 size={25}
                 color={colors.text}
                 backgroundColor={colors.background}
@@ -181,7 +181,7 @@ const NotificationStackScreen = ({navigation}) => (
       options={{
         headerLeft: () => (
           <Icon.Button
-            name="ios-menu"
+            name="menu"
             size={25}
             backgroundColor="#1f65ff"
             onPress={() => navigation.openDrawer()}
@@ -213,7 +213,7 @@ const ProfileStackScreen = ({navigation}) => {
           headerLeft: () => (
             <View style={{marginLeft: 10}}>
               <Icon.Button
-                name="ios-menu"
+                name="menu"
                 size={25}
                 backgroundColor={colors.background}
                 color={colors.text}

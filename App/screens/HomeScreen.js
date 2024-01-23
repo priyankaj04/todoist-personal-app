@@ -60,7 +60,7 @@ const HomeScreen = ({navigation}) => {
             navigation.navigate('CardListScreen', {title: 'Restaurant'})
           }>
           <View style={styles.categoryIcon}>
-            <Ionicons name="ios-restaurant" size={35} color="#143c92" />
+            <Ionicons name="airplane-sharp" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Restaurant</Text>
         </TouchableOpacity>
@@ -94,7 +94,7 @@ const HomeScreen = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
           <View style={styles.categoryIcon}>
-            <Ionicons name="md-restaurant" size={35} color="#143c92" />
+            <Ionicons name="add-circle" size={35} color="#143c92" />
           </View>
           <Text style={styles.categoryBtnTxt}>Dineouts</Text>
         </TouchableOpacity>

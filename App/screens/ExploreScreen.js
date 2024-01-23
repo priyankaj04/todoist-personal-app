@@ -39,11 +39,11 @@ const ExploreScreen = () => {
       },
       {
         name: 'Restaurant',
-        icon: <Ionicons name="ios-restaurant" style={styles.chipsIcon} size={18} />,
+        icon: <Ionicons name="airplane-sharp" style={styles.chipsIcon} size={18} />,
       },
       {
         name: 'Dineouts',
-        icon: <Ionicons name="md-restaurant" style={styles.chipsIcon} size={18} />,
+        icon: <Ionicons name="add-circle" style={styles.chipsIcon} size={18} />,
       },
       {
         name: 'Snacks Corner',
@@ -163,7 +163,7 @@ const ExploreScreen = () => {
           autoCapitalize="none"
           style={{flex:1,padding:0}}
         />
-        <Ionicons name="ios-search" size={20} />
+        <Ionicons name="airplane-sharp" size={20} />
       </View>
       <ScrollView
         horizontal
