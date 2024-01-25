@@ -7,12 +7,12 @@ import {
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { DrawerContent } from './screens/DrawerContent';
+import { DrawerContent } from './components/Drawer';
 
-import MainTabScreen from './screens/MainTabScreen';
-import SupportScreen from './screens/SupportScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import BookmarkScreen from './screens/BookmarkScreen';
+import MainTabScreen from './screens/MainTab';
+// import SupportScreen from './screens/SupportScreen';
+// import SettingsScreen from './screens/SettingsScreen';
+// import BookmarkScreen from './screens/BookmarkScreen';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -29,7 +29,7 @@ import {
 
 import { postService, API_ROUTES, refreshToken } from './Server';
 
-import RootStackScreen from './screens/RootStackScreen';
+import RootStackScreen from './screens/RootStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -138,9 +138,9 @@ const App = () => {
         { loginData?.email ? (
             <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={{headerShown:false}}>
               <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-              <Drawer.Screen name="SupportScreen" component={SupportScreen} />
+              {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
               <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} />
+              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
             </Drawer.Navigator>
           )
           :
