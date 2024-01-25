@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     View, 
     Text, 
@@ -10,33 +10,55 @@ import {
     Alert,
     KeyboardAvoidingView,
     Keyboard,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ScrollView,
+    Dimensions
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+const { width, height } = Dimensions.get('window');
 
 import { useTheme } from 'react-native-paper';
 
-import { AuthContext } from '../../components/context';
+import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
 
 import Users from '../../model/users';
 
+import { postService, API_ROUTES, stringInterpolater } from '../../Server';
+
+import AsyncStorage from '@react-native-community/async-storage';
+
 const SignInScreen = ({navigation}) => {
 
+    const dispatch = myDispatch()
+
     const [data, setData] = React.useState({
-        username: '',
+        email: '',
         password: '',
         check_textInputChange: false,
         secureTextEntry: true,
         isValidUser: true,
         isValidPassword: true,
+        loginType:'',
     });
+
+    const [openPicker, setOpenPicker] = React.useState(false);
+    const [allEntered, setAllEntered] = useState(false);
+
+    const loginTypes = [
+        'admin',
+        'carecoordinator',
+        'ccsupport',
+        'ccsupport1',
+        'ccsupport2',
+        'crmsupport',
+    ]
 
     const { colors } = useTheme();
 
-    const { signIn } = React.useContext(AuthContext);
+    // const { signIn } = React.useContext(AuthContext);
 
     const textInputChange = (val) => {
         const emailRegex = /\S+@\S+\.\S+/;
@@ -44,16 +66,16 @@ const SignInScreen = ({navigation}) => {
         if(emailRegex.test(val)) {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: true,
                 isValidUser: true
             });
         } else {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: false,
-                isValidUser: false
+                isValidUser: true
             });
         }
     }
@@ -97,30 +119,69 @@ const SignInScreen = ({navigation}) => {
         }
     }
 
-    const loginHandle = (userName, password) => {
+    const updateUserData = async(userData) => { 
+        try {
+            await AsyncStorage.setItem('email', userData.email);
+            await AsyncStorage.setItem('refreshToken', userData.rt);
+            await AsyncStorage.setItem('token', userData.token);
+            await AsyncStorage.setItem('type', userData.type);
 
-        const foundUser = Users.filter( item => {
-            return userName == item.username && password == item.password;
-        } );
+            dispatch(loginActions.setLoginData({
+                email: userData.email,
+                type: userData.type,
+                token: userData.token
+            }))
 
-        if ( data.username.length == 0 || data.password.length == 0 ) {
-            Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
-                {text: 'Okay'}
-            ]);
-            return;
+        } catch(e) {
+            console.log(e);
         }
-
-        if ( foundUser.length == 0 ) {
-            Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-                {text: 'Okay'}
-            ]);
-            return;
-        }
-        signIn(foundUser);
     }
+
+    const loginHandle = (email, password, loginType) => {
+
+        let req_body = {
+            "email":email,
+            "password":password,
+            "type":loginType
+        }
+
+        postService(API_ROUTES.VERIFY_USER, req_body).then((response) => {
+            if(response.status === 1){
+
+                updateUserData(response)
+            }else{
+                dispatch(valuesActions.statusNot1(response.msg));
+            }
+        }).catch((error) => {
+            dispatch(valuesActions.error(error));
+        });
+    }
+
+    useEffect(()=>{
+        if(Object.values(data).every(value =>value && value !== '')) setAllEntered(true);
+        else setAllEntered(false);
+    },[data])
 
     const handlePressOutside = () => {
         Keyboard.dismiss();
+    };
+
+    const renderItem = (item,i) => {
+        return (
+            <TouchableOpacity
+                style={[
+                    styles.item,
+                    {backgroundColor: data.loginType == item ? '#143c92' : '#f5f5f5'}
+                ]}
+                key={i}
+                onPress={()=>{
+                    setData({...data, loginType:item});
+                    setOpenPicker(false)
+                }}
+            >
+                <Text style={{fontSize:15, color:data.loginType == item ? '#fff' :'#000'}}>  {item}</Text>
+            </TouchableOpacity>
+        );
     };
 
     return (
@@ -177,7 +238,7 @@ const SignInScreen = ({navigation}) => {
 
                     <Text style={[styles.text_footer, {
                         color: colors.text,
-                        marginTop: 35
+                        marginTop: 20
                     }]}>Password</Text>
                     <View style={styles.action}>
                         <Feather 
@@ -218,15 +279,83 @@ const SignInScreen = ({navigation}) => {
                         <Text style={styles.errorMsg}>Password must be min 4 characters long.</Text>
                         </Animatable.View>
                     }
+
+                    <Text style={[styles.text_footer, {
+                        color: colors.text,
+                        marginTop: 20
+                    }]}>Login Type</Text>
+                    <TouchableOpacity
+                        style={styles.action}
+                        onPress={()=>setOpenPicker(!openPicker)}
+                    >
+                        <Feather 
+                            name="at-sign"
+                            color={colors.text}
+                            size={20}
+                        />
+                        <TextInput
+                            editable={false}
+                            placeholder="Select a login type"
+                            placeholderTextColor="#666666"
+                            style={[styles.textInput, {
+                                color: colors.text
+                            }]}
+                            value={data.loginType}
+                        />
+                        {data.loginType ? 
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather 
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                        : null}
+                    </TouchableOpacity>
+
+                    {
+                        openPicker &&
+                        <View
+                            style={{
+                                borderRadius:8,
+                                height:250,
+                            }}>
+                            <ScrollView
+                                showsVerticalScrollIndicator={false}
+                            >
+                                <View
+                                    style={{
+                                        backgroundColor:'#f5f5f5',
+                                        borderRadius:8
+                                    }}
+                                >
+                                    {loginTypes.map((item,i)=>renderItem(item,i))}
+                                </View>
+                                <View
+                                    style={{
+                                        paddingBottom:80
+                                    }}
+                                />
+                            </ScrollView>
+                        </View>
+                    }
+                    
                     
                     <View style={styles.buttonView}>
                         <View style={styles.button}>
                             <TouchableOpacity
                                 style={styles.signIn}
-                                onPress={() => {loginHandle( data.username, data.password )}}
+                                onPress={() => {allEntered && loginHandle( data.email, data.password, data.loginType )}}
                             >
                             <LinearGradient
-                                colors={['#3c68c7', '#143c92']}
+                                colors={
+                                    allEntered ?
+                                    ['#3c68c7', '#143c92']
+                                    :
+                                    ['#bbc0ca', '#767676']
+                                }
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, {
@@ -284,22 +413,15 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: '#05375a',
-        fontSize: 18
+        color: '#001f35',
+        fontSize: 18,
+        fontWeight: 'semibold',
     },
     action: {
         flexDirection: 'row',
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#f2f2f2',
-        paddingBottom: 5
-    },
-    actionError: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FF0000',
-        paddingBottom: 5
     },
     textInput: {
         flex: 1,
@@ -310,6 +432,7 @@ const styles = StyleSheet.create({
     errorMsg: {
         color: '#FF0000',
         fontSize: 14,
+        paddingTop: 5
     },
     buttonView:{
         flex:1,
@@ -331,5 +454,12 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
-    }
+    },
+    item: {
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width:width-50,
+        borderRadius:8
+    },
   });

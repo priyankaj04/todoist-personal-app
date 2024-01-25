@@ -1,7 +1,10 @@
 import {URL} from './Controller';
 const baseURL = URL;
+import AsyncStorage from '@react-native-community/async-storage';
+import { valuesActions, loginActions } from '../redux';
+import jwtDecode from "jwt-decode";
 
-async function postService(url = '', data = {}) {
+  async function postService(url = '', data = {}) {
     const response = await fetch(url, {
       method: 'POST',
       mode: 'cors',
@@ -25,6 +28,22 @@ async function postService(url = '', data = {}) {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    });
+    return await response.json(); // parses JSON response into native JavaScript objects
+  }
+
+  async function getTokenService(url = '', token='') {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization":'Bearer '+token
       },
       redirect: 'follow', // manual, *follow, error
       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -80,60 +99,49 @@ async function postService(url = '', data = {}) {
     return await response.json(); // parses JSON response into native JavaScript objects
   }
 
-  const API_ROUTES = {
-    OTP_SEND: `${baseURL}/customer/otp/send`,
-    EMAIL_OTP_SEND: `${baseURL}/customer/otp/send/email`,
-    UPDATE_MOBILE:`${baseURL}/customer/mobile/update/send`,
-    VERIFY_MOBILE_UPDATE:`${baseURL}/customer/mobile/update/verify`,
-    OTP_CALL: `${baseURL}/customer/otp/retry`,
-    OTP_VERIFY: `${baseURL}/customer/otp/verify`,
-    EMAIL_OTP_VERIFY: `${baseURL}/customer/otp/verify/email`,
-    VERIFY_MOBILE_UPDATE:`${baseURL}/customer/mobile/update/verify`,
-    UPNEXTACTIVITY:`${baseURL}/activity/nextact/{patientid}`,
-    CREATE_USER: `${baseURL}/customer/create`,
-    CREATE_LIFE:`${baseURL}/patient/createlife`,
-    GET_PATIENTS: `${baseURL}/patient/search/mobile/{mobile}`,
-    GET_PATIENT_DETAILED: `${baseURL}/patient/detailed/patientid/{patientid}`,
-    ACTIVITIES: `${baseURL}/activity/patientid/{patientid}/{activity}`,
-    ACTIVITIY: `${baseURL}/activity/activityid/{activityid}`,
-    CAREMANAGER: `${baseURL}/staffuser/search/term/{emailid}`,
-    JOURNEY: `${baseURL}/journey/{patientid}`,
-    DOCTOR_SLOTS: `${baseURL}/slot/doctor/{doctorid}/{slots}`,
-    DOCTOR_DETAILS: `${baseURL}/doctor/{doctorid}`,
-    GETDEPTDOCTORS: `${baseURL}/doctor/department/{sepeciality}`,
-    CUSTOMORDER: `${baseURL}/order/paymentorder/custom`,
-    GET_CITIES:'https://api.postalpincode.in/pincode/{pincode}',
-    GET_HOMELAB_SLOTS:`${baseURL}/partner/get/slots?pincode={pincode}&slot_date={selecteddate}&address={address}&lat={lat}&long={long}&vendor={vendor}`,
-    CREATE_PARTNERLAB_BOOKING:`${baseURL}/partner/create/booking`,
-    IS_SERVICEABLE:`${baseURL}/partner/pincode/service?pincode={pincode}`,
-    GET_ALL_DOCTORS: `${baseURL}/doctor/all/0`,
-    CREATE_CUSTOMER_CONSULTATION: `${baseURL}/customer/booking/create`,
-    CREATE_PATIENT: `${baseURL}/patient/create`,
-    EDIT_PATIENT: `${baseURL}/patient/{patientid}`,
-    BOOKINGS: `${baseURL}/booking/patientid/{patientid}/status/booked`,
-    UPDATE_BOOKING: `${baseURL}/booking/update`,
-    LAB_SCAN_BOOKING: `${baseURL}/labscanpharmaorder/intent`,
-    DELETE_FILE: `${baseURL}/patientfiles`,
-    CANCEL_BOOKING: `${baseURL}/booking/update/cancel`,
-    HEALTH_CARD: `${baseURL}/patient/createtpacard/{pId}`,
-    BENIFITSappoffers: `${baseURL}/corporate/patient/benefits?patientid={patientid}`,
-    GETCORPORATEDETAILS: `${baseURL}/corporate/{id}`,
-    GETLATLONG: `${baseURL}/others/getlatlong?address={address}`,
-    ONGOINGHOMELAB:`${baseURL}/labscanpharmaorder/search/1?patientid={patientid}&status=ongoing&type=lab`,
-    CANCELHOMELAB:`${baseURL}/partner/cancel/link`,
-    POLICYDATA: `${baseURL}/policy/{id}?type=customer`,
-    POLICYDETAILS: `${baseURL}/policy/{id}?type=policydetails`,
-    GETAPPDETAILS: `${baseURL}/customer/appdetails`,
-    FEEDBACKDATA:`${baseURL}/feedback/search?patientid={patientid}&activityid={activityid}`,
-    SAVEFEEDBACK:`${baseURL}/feedback/create`,
-    GETPAIDLABS: `${baseURL}/partner/products`,
-    PRODUCTDETAILS:`${baseURL}/partner/products/details`,
-    PAIDHOMELABORDER:`${baseURL}/partner/homelab/booking`,
-    GETHEALTHPLANDETAILS:`${baseURL}/healthplan/patient/{patientid}`,
-    PATCHHEALTHPLAN:`${baseURL}/healthplan/patient/{patientid}`,
-    FAQS:`${baseURL}/others/faqs`,
-    FAQSTYPE:`${baseURL}/others/faqs?type={type}`
+  const stringInterpolater = (stringToReplace, data) => {
+    return stringToReplace.replace(
+      /{\w+}/g,
+      (placeholder) =>
+        data[placeholder.substring(1, placeholder.length - 1)] || placeholder,
+    );
   };
+
+  const API_ROUTES = {
+    VERIFY_USER : `${baseURL}/staffuser/verify`,
+    REFRESH_USER : `${baseURL}/staffuser/refreshtokenv2`
+  };
+
+  const refreshToken = (dispatch, setLoading)=>{
+
+    AsyncStorage.getItem('refreshToken').then((refreshToken)=>{
+      
+      if (refreshToken) {
+
+        getTokenService(API_ROUTES.REFRESH_USER, refreshToken ).then((response) => {
+          
+          if(response?.token){
+
+            let decoded = jwtDecode(response.token);
+
+            dispatch(loginActions.setLoginData({
+              email: decoded.email,
+              type: decoded.type,
+              token: response?.token
+            }));
+          }else{
+
+              dispatch(valuesActions.statusNot1(response.msg));
+          }
+        }).catch((error) => {
+
+            dispatch(valuesActions.error(error));
+        }).finally(()=>{
+          setLoading(false)
+        })
+      }
+    })
+  }
   
-  export { getService, postService, putService, deleteService, patchService, API_ROUTES };
+  export { getService, postService, putService, deleteService, patchService, API_ROUTES, stringInterpolater, refreshToken };
   

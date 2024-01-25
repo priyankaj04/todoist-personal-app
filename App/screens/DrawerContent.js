@@ -24,7 +24,8 @@ export function DrawerContent(props) {
 
     const paperTheme = useTheme();
 
-    const { signOut, toggleTheme } = React.useContext(AuthContext);
+    const { signOut, toggleTheme } = {a:'a', b:'b'}
+    // React.useContext(AuthContext);
 
     return(
         <View style={{flex:1}}>
