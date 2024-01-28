@@ -19,8 +19,14 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import StarRating from '../../components/StarRating';
 
+import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
+import { getName } from '../../utils';
+
 const HomeScreen = ({navigation}) => {
   const theme = useTheme();
+
+  const dispatch = myDispatch();
+  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
 
   return (
     <ScrollView style={styles.container}>
@@ -28,7 +34,7 @@ const HomeScreen = ({navigation}) => {
         <Ionicons
           name="menu"
           size={27}
-          color={'#000'}
+          color={theme.colors.text}
           onPress={() => navigation.openDrawer()}
         />
         <Text
@@ -38,7 +44,7 @@ const HomeScreen = ({navigation}) => {
             paddingLeft: 15
           }}
         >
-          Hi CareManager
+          Hi {cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'}!
         </Text>
         <Ionicons
           style={{
@@ -47,8 +53,8 @@ const HomeScreen = ({navigation}) => {
           }}
           name="notifications"
           size={25}
-          color={'#000'}
-          onPress={() => navigation.openDrawer()}
+          color={theme.colors.text}
+          // onPress={() => navigation.openDrawer()}
         />
       </View>
 

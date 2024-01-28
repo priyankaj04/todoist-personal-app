@@ -15,7 +15,7 @@ import { useTheme } from 'react-native-paper';
 import Home from './Home';
 import Messages from './Messages';
 import MyJobs from './MyJobs';
-import MyPatients from './MyPatients';
+import MyPatients from './Patients';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +28,7 @@ const MainTabScreen = () => {
     <View style={{ paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
       <Tab.Navigator
-        initialRouteName="TabHome"
+        initialRouteName="Home"
         screenOptions={{
           tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
           tabBarActiveTintColor:"#05375a",
@@ -40,7 +40,6 @@ const MainTabScreen = () => {
           component={Home}
           options={{
             tabBarLabel: 'Home',
-            tabBarColor: '#143c92',
             tabBarIcon: ({color}) => (
               <Icon name="home" color={color} size={22} />
             ),
@@ -52,7 +51,6 @@ const MainTabScreen = () => {
           component={Messages}
           options={{
             tabBarLabel: 'Messages',
-            tabBarColor: '#1f65ff',
             tabBarIcon: ({color}) => (
               <Entypo name="message" color={color} size={25} />
             ),
@@ -63,18 +61,16 @@ const MainTabScreen = () => {
           component={MyJobs}
           options={{
             tabBarLabel: 'My Jobs',
-            tabBarColor: '#694fad',
             tabBarIcon: ({color}) => (
               <Icon name="browsers" color={color} size={22} />
             ),
           }}
         />
         <Tab.Screen
-          name="TabMyPatients"
+          name="TabPatients"
           component={MyPatients}
           options={{
-            tabBarLabel: 'My Patients',
-            tabBarColor: '#d02860',
+            tabBarLabel: 'Patients',
             tabBarIcon: ({color}) => (
               <Icon name="person" color={color} size={22} />
             ),

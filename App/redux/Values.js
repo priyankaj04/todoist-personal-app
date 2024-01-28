@@ -7,15 +7,14 @@ const initialValue= {
                             show : false,
                             type : ''
                         },
+                        toggleTheme: false
                     }
 
 export const SharedValues = createSlice({
     name:'user',
     initialState:{value:initialValue},
     reducers:{
-        setAlert: (state,action) => {
-            state.value.alert = action.payload;
-        },
+        setAlert: (state,action) => { state.value.alert = action.payload; },
         statusNot1:(state,action) => {
             state.value.alert = {
                 text : action.payload,
@@ -32,10 +31,11 @@ export const SharedValues = createSlice({
                 show : true,
                 type : 'error'
             }
-        }
+        },
+        setToggleTheme: (state,action) => { state.value.toggleTheme = !state.value.toggleTheme; }
     }, 
 });
 
-export const { setAlert, statusNot1, error } = SharedValues.actions;
+export const { setAlert, statusNot1, error, setToggleTheme } = SharedValues.actions;
 
 export default SharedValues.reducer;

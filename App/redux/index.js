@@ -1,18 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import Login from './Login';
 import Values from "./Values";
-import AppData from "./AppData";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setLoginData } from './Login';
-import { setAlert, statusNot1, error } from "./Values";
-import {} from "./AppData";
+import { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCmDetails } from './Login';
+import { setAlert, statusNot1, error, setToggleTheme } from "./Values";
 
 const store = configureStore({
     reducer: {
       Login,
-      Values,
-      AppData
+      Values
     },
 })
 
@@ -25,15 +22,13 @@ const mySelector = (selector) => {
   return useSelector(selector);
 };
 
-const loginActions = { setLoginData }
-const valuesActions = { setAlert, statusNot1, error }
-const appDataActions = {}
+const loginActions = { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCmDetails }
+const valuesActions = { setAlert, statusNot1, error, setToggleTheme, logOut }
 
 export {
   myDispatch,
   mySelector,
   store,
   loginActions,
-  valuesActions,
-  appDataActions,
+  valuesActions
 }

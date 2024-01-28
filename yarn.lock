@@ -6384,6 +6384,11 @@
   dependencies:
     "prop-types" "^15.8.1"
 
+"react-native-bottomsheet-reanimated@^0.3.1":
+  "integrity" "sha512-9js9MHZDKSqFTYv+PC2nHlPAXJ2JV85FjTDKxrxReq4MHbKYEsXo1S9wbdc60rn0MSU+Hoz3teikpzlYZKDu1w=="
+  "resolved" "https://registry.npmjs.org/react-native-bottomsheet-reanimated/-/react-native-bottomsheet-reanimated-0.3.1.tgz"
+  "version" "0.3.1"
+
 "react-native-codegen@^0.0.7":
   "integrity" "sha512-dwNgR8zJ3ALr480QnAmpTiqvFo+rDtq6V5oCggKhYFlRjzOmVSFn3YD41u8ltvKS5G2nQ8gCs2vReFFnRGLYng=="
   "resolved" "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.7.tgz"
@@ -6431,6 +6436,11 @@
   "resolved" "https://registry.npmjs.org/react-native-image-header-scroll-view/-/react-native-image-header-scroll-view-1.0.0.tgz"
   "version" "1.0.0"
 
+"react-native-interactable-reanimated@^0.0.15":
+  "integrity" "sha512-WvzeHuSObx4eCJfTNMHnu1zxpczU5wKSs4DfBANCWy0nSaf/M4RWspdncfEs6azSSJODtd+SWl5I2/380NfzFg=="
+  "resolved" "https://registry.npmjs.org/react-native-interactable-reanimated/-/react-native-interactable-reanimated-0.0.15.tgz"
+  "version" "0.0.15"
+
 "react-native-linear-gradient@^2.6.2":
   "integrity" "sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA=="
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
@@ -6460,10 +6470,10 @@
     "color" "^3.1.2"
     "use-latest-callback" "^0.1.5"
 
-"react-native-reanimated@^3.6.1":
-  "integrity" "sha512-F4vG9Yf9PKmE3GaWtVGUpzj3SM6YY2cx1yRHCwiMd1uY7W0gU017LfcVUorboJnj0y5QZqEriEK1Usq2Y8YZqg=="
-  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.6.1.tgz"
-  "version" "3.6.1"
+"react-native-reanimated@^3.6.2":
+  "integrity" "sha512-IIMREMOrxhtK35drfpzh2UhxNqAOHnuvGgtMofj7yHcMj16tmWZR2zFvMUf6z2MfmXv+aVgFQ6TRZ6yKYf7LNA=="
+  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.6.2.tgz"
+  "version" "3.6.2"
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"

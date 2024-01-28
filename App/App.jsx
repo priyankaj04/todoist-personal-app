@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { 
   View,
   ActivityIndicator,
-  Text,
+  Text
 } from 'react-native';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -10,7 +10,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './components/Drawer';
 
 import MainTabScreen from './screens/MainTab';
-// import SupportScreen from './screens/SupportScreen';
+import EditProfile from './screens/StaffUser/Profile';
 // import SettingsScreen from './screens/SettingsScreen';
 // import BookmarkScreen from './screens/BookmarkScreen';
 
@@ -27,7 +27,7 @@ import {
   WingBlank,
 } from '@ant-design/react-native';
 
-import { postService, API_ROUTES, refreshToken } from './Server';
+import { postService, API_ROUTES, refreshToken, getCmDetails } from './Server';
 
 import RootStackScreen from './screens/RootStack';
 
@@ -50,14 +50,14 @@ import { loginActions, valuesActions, myDispatch, mySelector } from './redux';
 
 const App = () => {
 
-  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const dispatch = myDispatch();
 
   const loginData = mySelector(state=>state.Login.value.loginData);
-
+  const baseUrl = mySelector(state=>state.Login.value.baseUrl);
   const alert = mySelector(state=>state.Values.value.alert);
+  const isDarkTheme = mySelector(state=>state.Values.value.toggleTheme);
 
 
   useEffect(() => {
@@ -79,10 +79,12 @@ const App = () => {
                   token: token
               }));
 
+              getCmDetails(baseUrl, dispatch, decoded.email);
+
               setLoading(false);
 
             }
-            else refreshToken(dispatch, setLoading);
+            else refreshToken(baseUrl, dispatch, setLoading);
           }
           else setLoading(false);
 
@@ -133,39 +135,41 @@ const App = () => {
   }
 
   return (
-    <AntModalProvider>
-      <NavigationContainer theme={theme}>
-        { loginData?.email ? (
-            <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={{headerShown:false}}>
-              <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-              {/* <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-              <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-              <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
-            </Drawer.Navigator>
-          )
-          :
-          <RootStackScreen/>
-        }
-      </NavigationContainer>
-      <Modal
-        popup
-        visible={alert.show}
-        animationType="slide-up"
-        maskClosable={true}
-        onClose={()=>{
-          dispatch(valuesActions.setAlert({
-            text : '',
-            style : '',
-            show : false,
-            type : ''
-          }))
-        }}>
-        <View style={{ paddingVertical: 20, paddingHorizontal: 0, borderRadius:12 }}>
-          <Text style={{ textAlign: 'center', color:moadlTextColor[alert.style] ?? '#000', fontSize:16, fontWeight:'500' }}>{alert.text}</Text>
-        </View>
-      </Modal>
-    </AntModalProvider>
+    <PaperProvider theme={theme}>
+      <AntModalProvider>
+        <NavigationContainer theme={theme}>
+          { loginData?.email ? (
+              <Drawer.Navigator drawerContent={props => <DrawerContent {...props} dispatch={dispatch} />} screenOptions={{headerShown:false}}>
+                <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+                <Drawer.Screen name="ProfileEdit" component={EditProfile} />
+                {/* <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
+                <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
+              </Drawer.Navigator>
+            )
+            :
+            <RootStackScreen />
+          }
+        </NavigationContainer>
+        <Modal
+          popup
+          visible={alert.show}
+          animationType="slide-up"
+          maskClosable={true}
+          onClose={()=>{
+            dispatch(valuesActions.setAlert({
+              text : '',
+              style : '',
+              show : false,
+              type : ''
+            }))
+          }}>
+          <View style={{ paddingVertical: 20, paddingHorizontal: 0, borderRadius:12 }}>
+            <Text style={{ textAlign: 'center', color:moadlTextColor[alert.style] ?? '#000', fontSize:16, fontWeight:'500' }}>{alert.text}</Text>
+          </View>
+        </Modal>
+      </AntModalProvider>
+    </PaperProvider>
   )
 }
 
-export default App
+export default App;

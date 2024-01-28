@@ -17,15 +17,31 @@ import {
 } from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import{ AuthContext } from './context';
+import assets from '../assets';
+
+import { valuesActions, loginActions, mySelector } from '../redux';
+import { getName } from '../utils';
 
 export function DrawerContent(props) {
 
     const paperTheme = useTheme();
 
-    const { signOut, toggleTheme } = {a:'a', b:'b'}
-    // React.useContext(AuthContext);
+    const cmDetails = mySelector(state=>state.Login.value.cmDetails);
+
+    const signOut = async() => { 
+        try {
+            await AsyncStorage.removeItem('email');
+            await AsyncStorage.removeItem('refreshToken');
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('type');
+
+            props.dispatch(loginActions.logOut());
+        } catch(e) {
+            console.log(e);
+        }
+    }
 
     return(
         <View style={{flex:1}}>
@@ -34,25 +50,23 @@ export function DrawerContent(props) {
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row',marginTop: 15}}>
                             <Avatar.Image 
-                                source={{
-                                    uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
-                                }}
+                                source={ cmDetails?.profilepic ? {uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
                                 size={50}
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={styles.title}>John Doe</Title>
-                                <Caption style={styles.caption}>@j_doe</Caption>
+                                <Title style={styles.title}>{ getName(cmDetails?.name) }</Title>
+                                <Caption style={styles.caption}>{cmDetails?.email}</Caption>
                             </View>
                         </View>
 
                         <View style={styles.row}>
                             <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>80</Paragraph>
-                                <Caption style={styles.caption}>Following</Caption>
+                                <Caption style={styles.caption}>Ph- </Caption>
+                                <Paragraph style={[styles.paragraph, styles.caption]}>{cmDetails?.mobile}</Paragraph>
                             </View>
                             <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>100</Paragraph>
-                                <Caption style={styles.caption}>Followers</Caption>
+                                <Caption style={styles.caption}>Ut- </Caption>
+                                <Paragraph style={[styles.paragraph, styles.caption]}>{ getName(cmDetails?.type) }</Paragraph>
                             </View>
                         </View>
                     </View>
@@ -61,84 +75,82 @@ export function DrawerContent(props) {
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="home-outline" 
-                                color={color}
-                                size={size}
-                                />
-                            )}
-                            label="Home"
-                            onPress={() => {props.navigation.navigate('Home')}}
-                        />
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                name="account-outline" 
-                                color={color}
-                                size={size}
+                                    name="account-outline" 
+                                    color={color}
+                                    size={size}
                                 />
                             )}
                             label="Profile"
-                            onPress={() => {props.navigation.navigate('Profile')}}
+                            onPress={() => {props.navigation.navigate('ProfileEdit')}}
                         />
+                    </Drawer.Section>
+
+                    <Drawer.Section>
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="bookmark-outline" 
-                                color={color}
-                                size={size}
+                                    name="account-check-outline" 
+                                    color={color}
+                                    size={size}
                                 />
                             )}
-                            label="Bookmarks"
-                            onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                            label="All Patients"
+                            // onPress={() => {props.navigation.navigate('Profile')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="account-settings-outline" 
-                                color={color}
-                                size={size}
+                                    name="bookmark-outline" 
+                                    color={color}
+                                    size={size}
+                                />
+                            )}
+                            label="Care Stories"
+                            // onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                        />
+                        <DrawerItem 
+                            icon={({color, size}) => (
+                                <Icon 
+                                    name="account-settings-outline" 
+                                    color={color}
+                                    size={size}
                                 />
                             )}
                             label="Settings"
-                            onPress={() => {props.navigation.navigate('SettingScreen')}}
+                            // onPress={() => {props.navigation.navigate('SettingScreen')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="account-check-outline" 
-                                color={color}
-                                size={size}
+                                    name="account-check-outline" 
+                                    color={color}
+                                    size={size}
                                 />
                             )}
                             label="Support"
-                            onPress={() => {props.navigation.navigate('SupportScreen')}}
+                            // onPress={() => {props.navigation.navigate('SupportScreen')}}
                         />
-                    </Drawer.Section>
-                    <Drawer.Section title="Preferences">
-                        <TouchableRipple onPress={() => {toggleTheme()}}>
-                            <View style={styles.preference}>
-                                <Text>Dark Theme</Text>
-                                <View pointerEvents="none">
-                                    <Switch value={paperTheme.dark}/>
-                                </View>
-                            </View>
-                        </TouchableRipple>
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
-            <Drawer.Section style={styles.bottomDrawerSection}>
-                <DrawerItem 
-                    icon={({color, size}) => (
-                        <Icon 
-                        name="exit-to-app" 
-                        color={color}
-                        size={size}
-                        />
-                    )}
-                    label="Sign Out"
-                    onPress={() => {signOut()}}
-                />
+            <Drawer.Section>
+                <TouchableRipple onPress={() => {props.dispatch(valuesActions.setToggleTheme())}}>
+                    <View style={styles.preference}>
+                        <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall}}>Dark Theme</Text>
+                        <View pointerEvents="none">
+                            <Switch value={paperTheme.dark}/>
+                        </View>
+                    </View>
+                </TouchableRipple>
             </Drawer.Section>
+            <TouchableRipple onPress={signOut} style={{ paddingVertical:10}}>
+                <View style={styles.preference}>
+                    <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall}}>Sign Out</Text>
+                    <View pointerEvents="none">
+                        <Icon name="exit-to-app" color={paperTheme.colors.text} size={20} style={{ paddingRight:10}}/>
+                    </View>
+                </View>
+            </TouchableRipple>
         </View>
     );
 }
@@ -175,11 +187,6 @@ const styles = StyleSheet.create({
     },
     drawerSection: {
       marginTop: 15,
-    },
-    bottomDrawerSection: {
-        marginBottom: 15,
-        borderTopColor: '#f4f4f4',
-        borderTopWidth: 1
     },
     preference: {
       flexDirection: 'row',
