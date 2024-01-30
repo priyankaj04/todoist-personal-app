@@ -1,12 +1,15 @@
 import { 
   View,
   Platform,
-  StatusBar
+  StatusBar,
+  Dimensions
 } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 
@@ -41,7 +44,7 @@ const MainTabScreen = () => {
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({color}) => (
-              <Icon name="home" color={color} size={22} />
+              <Feather name="home" color={color} size={22} />
             ),
           }}
           
@@ -52,7 +55,7 @@ const MainTabScreen = () => {
           options={{
             tabBarLabel: 'Messages',
             tabBarIcon: ({color}) => (
-              <Entypo name="message" color={color} size={25} />
+              <Feather name="message-square" color={color} size={25} />
             ),
           }}
         />
@@ -62,7 +65,7 @@ const MainTabScreen = () => {
           options={{
             tabBarLabel: 'My Jobs',
             tabBarIcon: ({color}) => (
-              <Icon name="browsers" color={color} size={22} />
+              <Feather name="folder" color={color} size={22} />
             ),
           }}
         />
@@ -72,7 +75,7 @@ const MainTabScreen = () => {
           options={{
             tabBarLabel: 'Patients',
             tabBarIcon: ({color}) => (
-              <Icon name="person" color={color} size={22} />
+              <Feather name="users" color={color} size={22} />
             ),
           }}
         />

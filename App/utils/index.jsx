@@ -3,7 +3,7 @@ function getName(firstName= '', lastName= '') {
     if (firstName?.length > 0) {
 
         let last = '';
-        if(lastName.length > 0) {
+        if(lastName?.length > 0) {
             last = ' '+lastName.charAt(0).toUpperCase()+lastName.slice(1)
         }
 

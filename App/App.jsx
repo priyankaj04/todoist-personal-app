@@ -110,7 +110,8 @@ const App = () => {
       ...NavigationDefaultTheme.colors,
       ...PaperDefaultTheme.colors,
       background: '#ffffff',
-      text: '#333333'
+      text: '#333333',
+      primary: '#143c92'
     }
   }
   
@@ -121,7 +122,8 @@ const App = () => {
       ...NavigationDarkTheme.colors,
       ...PaperDarkTheme.colors,
       background: '#333333',
-      text: '#ffffff'
+      text: '#ffffff',
+      primary: '#143c92'
     }
   }
 

@@ -108,7 +108,9 @@ const stringInterpolater = (stringToReplace, data) => {
 const API_ROUTES = {
   VERIFY_USER : '/staffuser/verify',
   REFRESH_USER : '/staffuser/refreshtokenv2',
-  STAFF_DETAILS : '/staffuser/search/term/{email}'
+  STAFF_DETAILS : '/staffuser/search/term/{email}',
+  GET_MY_PATIENTS : '/patient/search/cm/{email}',
+  GET_PATIENTS : '/patient/search/any/{text}?show=all',
 };
 
 const refreshToken = (baseUrl, dispatch, setLoading)=>{

@@ -4,7 +4,7 @@ import { getService, postService, putService, deleteService, patchService, API_R
 const initialValue = {
     loginData:{},
     devEnv:false,
-    noOtp:false,
+    noOtp:true,
     baseUrl:`https://api.circle.care/v1`,
     cmDetails:{}
 }

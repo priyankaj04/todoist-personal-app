@@ -59,7 +59,7 @@ export function DrawerContent(props) {
                             </View>
                         </View>
 
-                        <View style={styles.row}>
+                        <View style={styles.column}>
                             <View style={styles.section}>
                                 <Caption style={styles.caption}>Ph- </Caption>
                                 <Paragraph style={[styles.paragraph, styles.caption]}>{cmDetails?.mobile}</Paragraph>
@@ -175,6 +175,12 @@ const styles = StyleSheet.create({
       marginTop: 20,
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    column: {
+        marginTop: 20,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        rowGap:10
     },
     section: {
       flexDirection: 'row',
