@@ -7385,11 +7385,6 @@
     "color" "^3.1.2"
     "use-latest-callback" "^0.1.5"
 
-"react-native-pure-jwt@^3.0.2":
-  "integrity" "sha512-TbZ9JLCC33Ew2ENjovlDTFnNR7evUu5yKF4X5vLO5uO8FMMnBxS0mOUuUtAzlNPZ+tJQOKEoCyo43Hs1pTy+hA=="
-  "resolved" "https://registry.npmjs.org/react-native-pure-jwt/-/react-native-pure-jwt-3.0.2.tgz"
-  "version" "3.0.2"
-
 "react-native-reanimated@^3.6.2":
   "integrity" "sha512-IIMREMOrxhtK35drfpzh2UhxNqAOHnuvGgtMofj7yHcMj16tmWZR2zFvMUf6z2MfmXv+aVgFQ6TRZ6yKYf7LNA=="
   "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.6.2.tgz"
