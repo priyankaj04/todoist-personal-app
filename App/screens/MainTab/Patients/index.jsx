@@ -1,15 +1,17 @@
 /* tslint:disable:no-console */
 import React, { useEffect, useState, memo } from 'react';
-import { ScrollView, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View, FlatList, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Tabs } from '@ant-design/react-native';
 import {useTheme} from '@react-navigation/native';
+import { vh, vw } from 'react-native-css-vh-vw';
 
 import { getService, API_ROUTES, stringInterpolater } from '../../../Server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, SearchBar } from '../../../components'
 import { getName } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
+import assets from '../../../assets';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto'
@@ -26,6 +28,7 @@ import {
 
 import styles from '../Styles'
 import { pink800 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { Image } from 'react-native-animatable';
 
 const Patients = () => {
   const theme = useTheme();
@@ -33,6 +36,7 @@ const Patients = () => {
 
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
+
   const [loading, setLoading]= useState({
     myPatient:true,
     allPatients:false
@@ -91,7 +95,7 @@ const Patients = () => {
         }
     }).catch((error) => {
 
-        dispatch(valuesActions.error(error));
+        dispatch(valuesActions.error({error:`Error in Getting My Patients ${error}`}));
     })
   },[])
 
@@ -121,7 +125,7 @@ const Patients = () => {
         }
     }).catch((error) => {
 
-        dispatch(valuesActions.error(error));
+        dispatch(valuesActions.error({error:`Error in Getting My Patients by Search Text ${error}`}));
     })
   }
 
@@ -147,14 +151,19 @@ const Patients = () => {
     return (
       <TouchableOpacity
         key={item.index}
-        onPress={()=>handleCopy('kjaskjd','kajdjk')}
+        // onPress={()=>handleCopy('kjaskjd','kajdjk')}
       >
         <LinearGradient
-          colors={pat.careplan === 'vip' ? ['#e5ac01','#fdf774','#e5ac01'] : ['#739cf4','#b9cbff','#739cf4']}
+          colors={
+            pat.careplan === 'vip' ? 
+            ['#e5ac01','#fdf774','#fdf774','#e5ac01'] 
+            : 
+            ['#87adff','#cedaff','#cedaff','#87adff']
+          }
           style={styles.patientCard}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}  
-        >
+        > 
           <View
             style={{
               ...styles.row,
@@ -213,7 +222,10 @@ const Patients = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity style={{...styles.minBtn}}>
+              <TouchableOpacity
+                style={{...styles.minBtn}}
+                onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
+              >
                 <Text style={{...styles.title}}>Call</Text>
                 <Fontisto
                   name='phone'
@@ -224,7 +236,6 @@ const Patients = () => {
 
             </View>
           </View>
-
         </LinearGradient>
       </TouchableOpacity>
     )
@@ -256,6 +267,7 @@ const Patients = () => {
               showCancelButton={true}
               cancelText="Cancel"
               disabled={false}
+              theme={theme}
             />
             {
               !loading.myPatient ?
@@ -286,7 +298,7 @@ const Patients = () => {
                 }
               </>
               :
-              <Loading/>
+              <Loading theme={theme}/>
             }
           </View>
 
@@ -306,6 +318,7 @@ const Patients = () => {
               ListFooterComponent={()=>
                 <View style={{height:80}}/>
               }
+              theme={theme}
             />
             {
               !loading.allPatients ?
@@ -343,7 +356,7 @@ const Patients = () => {
                 }
               </>
               :
-              <Loading/>
+              <Loading theme={theme}/>
             }
           </View>
         </Tabs>

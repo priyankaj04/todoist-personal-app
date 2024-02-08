@@ -1,22 +1,11 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  View
-} from 'react-native';
-import {
-  useTheme,
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
+  View,
   Text,
-  TouchableRipple,
-  Switch
-} from 'react-native-paper';
+} from 'react-native';
 
-const Loading = () => {
-  const paperTheme = useTheme();
+const Loading = ({theme}) => {
 
   return (
     <View
@@ -26,8 +15,8 @@ const Loading = () => {
         justifyContent: 'center',
       }}
     >
-      <ActivityIndicator color={paperTheme.colors.text} size={30}  />
-      <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall, marginTop:10}}>Loading..</Text>
+      <ActivityIndicator color={theme.colors.text} size={30}  />
+      <Text style={{color:theme.colors.text, ...theme.fonts.titleSmall, marginTop:10}}>Loading..</Text>
     </View>
   )
 }

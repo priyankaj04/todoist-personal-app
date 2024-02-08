@@ -20,6 +20,8 @@ import { Modal, Portal, Button, Provider } from 'react-native-paper';
 
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 const SplashScreen = ({navigation}) => {
     const { colors } = useTheme();
     const [visible, setVisible] = useState(false);
@@ -43,6 +45,18 @@ const SplashScreen = ({navigation}) => {
         padding:20,
         justifyContent: 'center',
     };
+
+    const toggleNoOtp = async()=> {
+
+        await AsyncStorage.setItem('noOtp', JSON.stringify(!noOtp));
+        dispatch(loginActions.toggleNoOtp());
+    }
+
+    const toggleDevEnv = async()=> {
+        
+        await AsyncStorage.setItem('devEnv', JSON.stringify(!devEnv));
+        dispatch(loginActions.toggleDevEnv());
+    }
 
     return (
         <Provider>
@@ -135,9 +149,7 @@ const SplashScreen = ({navigation}) => {
                                                 borderWidth:2,
                                                 backgroundColor:devEnv? '#628ae1' : '#fff'
                                             }}
-                                            onPress={()=>{
-                                                dispatch(loginActions.toggleDevEnv());
-                                            }}
+                                            onPress={toggleDevEnv}
                                         />
                                     </View>
 
@@ -158,9 +170,7 @@ const SplashScreen = ({navigation}) => {
                                                 borderWidth:2,
                                                 backgroundColor:!devEnv? '#628ae1' : '#fff'
                                             }}
-                                            onPress={()=>{
-                                                dispatch(loginActions.toggleDevEnv());
-                                            }}
+                                            onPress={toggleDevEnv}
                                         />
                                     </View>
                                 </View>
@@ -190,9 +200,7 @@ const SplashScreen = ({navigation}) => {
                                                 borderWidth:2,
                                                 backgroundColor:noOtp? '#628ae1' : '#fff'
                                             }}
-                                            onPress={()=>{
-                                                dispatch(loginActions.toggleNoOtp());
-                                            }}
+                                            onPress={toggleNoOtp}
                                         />
                                     </View>
 
@@ -213,9 +221,7 @@ const SplashScreen = ({navigation}) => {
                                                 borderWidth:2,
                                                 backgroundColor:!noOtp? '#628ae1' : '#fff'
                                             }}
-                                            onPress={()=>{
-                                                dispatch(loginActions.toggleNoOtp());
-                                            }}
+                                            onPress={toggleNoOtp}
                                         />
                                     </View>
                                 </View>

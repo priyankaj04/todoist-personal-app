@@ -4,7 +4,7 @@ import { getService, postService, putService, deleteService, patchService, API_R
 const initialValue = {
     loginData:{},
     devEnv:false,
-    noOtp:true,
+    noOtp:false,
     baseUrl:`https://api.circle.care/v1`,
     cmDetails:{}
 }
@@ -17,7 +17,7 @@ export const LoginDetails = createSlice({
         logOut: (state,action) => {state.value.loginData = {}},
         toggleDevEnv: (state,action) => {
             state.value.devEnv = !state.value.devEnv;
-            state.value.baseUrl = `https://${!state.value.devEnv?'dev':''}api.circle.care/v1`
+            state.value.baseUrl = `https://${state.value.devEnv?'dev':''}api.circle.care/v1`
         },
         toggleNoOtp: (state,action) => {state.value.noOtp = !state.value.noOtp},
         setCmDetails: (state,action) => {state.value.cmDetails = action.payload}

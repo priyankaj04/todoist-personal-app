@@ -7,6 +7,8 @@ import {
 const { width, height } = Dimensions.get('window');
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Provider } from 'react-native-paper';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -28,6 +30,7 @@ const MainTabScreen = () => {
   const { colors } = useTheme();
 
   return(
+    <Provider>
     <View style={{ paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
       <Tab.Navigator
@@ -81,6 +84,7 @@ const MainTabScreen = () => {
         />
       </Tab.Navigator>
     </View>
+    </Provider>
   )
   
 };

@@ -59,40 +59,91 @@ const App = () => {
   const alert = mySelector(state=>state.Values.value.alert);
   const isDarkTheme = mySelector(state=>state.Values.value.toggleTheme);
 
+  const handleNoOtpAuth = async()=>{
+
+    AsyncStorage.getItem('loginData').then((item)=>{
+
+      const data = JSON.parse(item)
+
+      if(data?.email){
+
+        dispatch(loginActions.setLoginData({
+          email: data.email,
+          type: data.type,
+          token: null
+        }));
+  
+        getCmDetails(baseUrl, dispatch, data.email);
+      }
+      
+      setLoading(false);
+
+    }).catch((error)=>{
+
+      console.log('Error in handle NoOtpAuth ', error)
+      setLoading(false);
+    })
+  }
+
+  const checkDevEnv = async()=>{
+    try {
+
+      const devEnv = await AsyncStorage.getItem('devEnv')
+      if( JSON.parse(devEnv) === true) dispatch(loginActions.toggleDevEnv())
+    }
+    catch (error) {
+
+      console.log('Error in check devEnv ', error)
+    }
+  }
+
 
   useEffect(() => {
 
-    setTimeout(async() => {
+    checkDevEnv();
 
-      try {
+    AsyncStorage.getItem('noOtp').then((noOtp) => {
 
-        AsyncStorage.getItem('token').then((token) => {
+      if(JSON.parse(noOtp) === true){
 
-          if(token){
-
-            let decoded = jwtDecode(token);
-            if(!(decoded.exp < (Date.now() / 1000))){
-
-              dispatch(loginActions.setLoginData({
-                  email: decoded.email,
-                  type: decoded.type,
-                  token: token
-              }));
-
-              getCmDetails(baseUrl, dispatch, decoded.email);
-
-              setLoading(false);
-
-            }
-            else refreshToken(baseUrl, dispatch, setLoading);
-          }
-          else setLoading(false);
-
-        })
-      } catch(e) {
-        dispatch(valuesActions.error(error));
+        dispatch(loginActions.toggleNoOtp())
+        handleNoOtpAuth();
       }
-    },0);
+      else{
+
+        try {
+
+          AsyncStorage.getItem('token').then((token) => {
+
+            if(token){
+
+              let decoded = jwtDecode(token);
+              if(!(decoded.exp < (Date.now() / 1000))){
+
+                dispatch(loginActions.setLoginData({
+                    email: decoded.email,
+                    type: decoded.type,
+                    token: token
+                }));
+
+                getCmDetails(baseUrl, dispatch, decoded.email);
+
+                setLoading(false);
+
+              }
+              else refreshToken(baseUrl, dispatch, setLoading);
+            }
+            else setLoading(false);
+
+          })
+        } catch(e) {
+          dispatch(valuesActions.error({error:`Error in Get AsyncStorage Token ${error}`}));
+        }
+      }
+    }).catch((e)=>{
+      console.log('Error in get noOtp', e)
+      setLoading(false);
+    })
   }, []); 
 
   if( loading ) {

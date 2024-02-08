@@ -32,10 +32,9 @@ export function DrawerContent(props) {
 
     const signOut = async() => { 
         try {
-            await AsyncStorage.removeItem('email');
+            await AsyncStorage.removeItem('loginData');
             await AsyncStorage.removeItem('refreshToken');
             await AsyncStorage.removeItem('token');
-            await AsyncStorage.removeItem('type');
 
             props.dispatch(loginActions.logOut());
         } catch(e) {
@@ -133,7 +132,7 @@ export function DrawerContent(props) {
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
-            <Drawer.Section>
+            {/* <Drawer.Section>
                 <TouchableRipple onPress={() => {props.dispatch(valuesActions.setToggleTheme())}}>
                     <View style={styles.preference}>
                         <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall}}>Dark Theme</Text>
@@ -142,7 +141,7 @@ export function DrawerContent(props) {
                         </View>
                     </View>
                 </TouchableRipple>
-            </Drawer.Section>
+            </Drawer.Section> */}
             <TouchableRipple onPress={signOut} style={{ paddingVertical:10}}>
                 <View style={styles.preference}>
                     <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall}}>Sign Out</Text>

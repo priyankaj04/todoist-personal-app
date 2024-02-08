@@ -24,7 +24,7 @@ export const SharedValues = createSlice({
             }
         },
         error:(state,action) => {
-            console.log('ERROR',action.payload)
+            console.log('ERROR',action.payload?.error)
             state.value.alert = {
                 text : `Something went wrong, please try again! if problem persists contact product team`,
                 style : 'warning',

@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import {
-  useTheme
-} from 'react-native-paper';
 
 const SearchBar = ({
   defaultValue = '',
@@ -16,8 +13,9 @@ const SearchBar = ({
   showCancelButton = false,
   cancelText = 'Cancel',
   disabled = false,
+  theme
 }) => {
-  const paperTheme = useTheme();
+  const paperTheme = theme
 
   const [searchValue, setSearchValue] = useState(value || defaultValue);
 

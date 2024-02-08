@@ -104,11 +104,32 @@ const styles = StyleSheet.create({
     padding:5,
     backgroundColor:'#ffffff',
     borderRadius:5,
-    paddingHorizontal:10
-  }
+    paddingHorizontal:10,
+    zIndex:2
+  },
 
 
   //! Patients
+
+  //! myJobs
+
+  actionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap:5,
+    padding:7,
+    backgroundColor:'#ffffff',
+    borderRadius:5,
+    paddingHorizontal:10,
+    zIndex:2,
+    width:'100%',
+    borderWidth: 1,
+    color: '#000',
+    flex: 1
+  }
+  
+  //! myJobs
+
 });
 
 export default styles;

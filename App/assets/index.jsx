@@ -1,7 +1,7 @@
 const ImageBaseUrl = (image) => {
   return({uri: `https://circlehealth-assets.s3.ap-south-1.amazonaws.com/APP_ASSESTS/${image}.png` })
   };
-
+  
  const getProfileIcon = (gender, age)=>{
   if(gender == 'male'){
     if(age <= 18) return ImageBaseUrl(S3Images.boy);

@@ -129,6 +129,7 @@ const SignInScreen = ({navigation}) => {
             await AsyncStorage.setItem('refreshToken', userData.rt);
             await AsyncStorage.setItem('token', userData.token);
             await AsyncStorage.setItem('type', userData.type);
+            await AsyncStorage.setItem('noOtp', JSON.stringify(false));
 
             dispatch(loginActions.setLoginData({
                 email: userData.email,
@@ -146,13 +147,12 @@ const SignInScreen = ({navigation}) => {
     const noOtpLogin = async(email,loginType) => {
 
         try {
-            await AsyncStorage.setItem('email', email);
-            await AsyncStorage.setItem('type', loginType);
+            await AsyncStorage.setItem('loginData', JSON.stringify({email:email, type:loginType}) );
 
             dispatch(loginActions.setLoginData({
                 email: email,
                 type: loginType,
-                token: ''
+                token: null
             }))
 
             getCmDetails(baseUrl, dispatch, email);
@@ -184,7 +184,7 @@ const SignInScreen = ({navigation}) => {
             setLoading(false);
         }).catch((error) => {
 
-            dispatch(valuesActions.error(error));
+            dispatch(valuesActions.error({error:`Error in Verify User ${error}`}));
         })
     }
 

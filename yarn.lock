@@ -1899,6 +1899,13 @@
     "prompts" "^2.4.2"
     "semver" "^7.5.2"
 
+"@react-native-community/datetimepicker@^7.6.2":
+  "integrity" "sha512-ogZnvCmNG/lGHhEQypqz/mPymiIWD5jv6uKczg/l/aWgiKs1RDPQH1abh+R0I26aKoXmgamJJPuXKeC5eRWtZg=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.6.2.tgz"
+  "version" "7.6.2"
+  dependencies:
+    "invariant" "^2.2.4"
+
 "@react-native-community/eslint-config@^3.2.0":
   "integrity" "sha512-ZjGvoeiBtCbd506hQqwjKmkWPgynGUoJspG8/MuV/EfKnkjCtBmeJvq2n+sWbWEvL9LWXDp2GJmPzmvU5RSvKQ=="
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-config/-/eslint-config-3.2.0.tgz"
@@ -3493,7 +3500,7 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
   "version" "3.1.3"
 
-"dayjs@^1.8.15":
+"dayjs@^1.11.10", "dayjs@^1.8.15":
   "integrity" "sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ=="
   "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.10.tgz"
   "version" "1.11.10"
@@ -7318,6 +7325,11 @@
   "resolved" "https://registry.npmjs.org/react-native-collapsible/-/react-native-collapsible-1.6.1.tgz"
   "version" "1.6.1"
 
+"react-native-css-vh-vw@^1.0.5":
+  "integrity" "sha512-pY0gIB1xc1xLp3VH6mji7zHfiOc7BpFFCtOTpMeyjfoQ4CacmcCD6vTZuM2ReuK+oXdWrbx7CquTHxl44aHcBA=="
+  "resolved" "https://registry.npmjs.org/react-native-css-vh-vw/-/react-native-css-vh-vw-1.0.5.tgz"
+  "version" "1.0.5"
+
 "react-native-dotenv@^0.2.0":
   "integrity" "sha512-SoRKQ7aFKibIdRkj2i2bhZrgEhzwiaQjkD6OEpt2kwdCGx94laOeI4L9WxUzI69Nd1Yf918+pqZxjI0pu5PZKg=="
   "resolved" "https://registry.npmjs.org/react-native-dotenv/-/react-native-dotenv-0.2.0.tgz"
@@ -7367,6 +7379,13 @@
   "version" "1.9.1"
   dependencies:
     "@types/geojson" "^7946.0.13"
+
+"react-native-modal-datetime-picker@^17.1.0":
+  "integrity" "sha512-jfTwfaCLtBffYbQ+pOGFLM+J5HmUh3vb9rT0JrrQPjxzecdc8pNYreB1c96+mVuq8bDCvaCdIeuEsslTqLJL0Q=="
+  "resolved" "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-17.1.0.tgz"
+  "version" "17.1.0"
+  dependencies:
+    "prop-types" "^15.7.2"
 
 "react-native-modal-popover@^2.0.1":
   "integrity" "sha512-2UrLzBNNTlR6uisJTWyDg6qFC0Qi8Fx3a6UrPS0bQBlUpo0MRPRVMCK5t8RIrTI6EoK1FMbnm+u8UOOboBJWgw=="

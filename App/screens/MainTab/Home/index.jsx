@@ -10,17 +10,17 @@ import {
 } from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
-import styles from './Styles'
+import styles from '../Styles'
 
 import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import StarRating from '../../components/StarRating';
+import StarRating from '../../../components/StarRating';
 
-import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
-import { getName } from '../../utils';
+import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
+import { getName } from '../../../utils';
 
 const HomeScreen = ({navigation}) => {
   const theme = useTheme();
