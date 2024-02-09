@@ -13,6 +13,7 @@ const Loading = ({theme}) => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginVertical: 15
       }}
     >
       <ActivityIndicator color={theme.colors.text} size={30}  />

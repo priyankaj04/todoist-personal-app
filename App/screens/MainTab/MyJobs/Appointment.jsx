@@ -3,16 +3,17 @@ import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, TextInput, Linking } from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, postTokenService } from '../../../Server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, Dropdown, Datepicker } from '../../../components'
-import { getName } from '../../../utils';
+import { getName, getActivity } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import assets from '../../../assets';
 
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 import styles from '../Styles'
 import dayjs from 'dayjs';
@@ -29,40 +30,20 @@ const Appointments = () => {
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
   const loginData = mySelector(state=>state.Login.value.loginData);
+  const devEnv = mySelector(state=>state.Login.value.devEnv);
 
   const [loading, setLoading]= useState({
-    myJobs:true,
+    appointments: false,
   });
 
-  const [myJobs, setMyJobs] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
 
-  useEffect(()=>{
-    if(cmDetails.type === 'admin' || selectedOption?.email) return;
-
-    setLoading((pre)=>({
-      ...pre,
-      myJobs: true
-    }))
-
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: cmDetails.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD') }))
-    .then((res)=>{
-        if(res.status === 1){
-
-          setLoading((pre)=>({
-            ...pre,
-            myJobs: false
-          }))
-          setMyJobs(res.data)
-        }else{
-          
-          dispatch(valuesActions.statusNot1('Get CM Jobs List Status != 1'));
-        }
-    }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in CM Jobs List ${error}`}));
-    })
-  },[selectedDate])
-
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedCareManager, setSelectedCareManager] = useState(null);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [doctors, setDoctors] = useState([]);
   const [careManagers, setCareManagers] = useState([]);
 
   useEffect(()=>{
@@ -79,41 +60,87 @@ const Appointments = () => {
 
       dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
     })
-  },[])
+  },[]);
 
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const handleFilter = () => {
 
-  const handleSelect = (option) => {
-    setSelectedOption(option);
-  };
+    let filterArray = appointments;
+    
+    let email = cmDetails.email
+
+    if(cmDetails.type === 'admin'){
+      email = selectedCareManager?.email ?? undefined;
+    }
+
+    if (email) {
+      filterArray = filterArray.filter(item => item.ccownername === email)
+    }
+
+    if (selectedDoctor?.doctorid) {
+      filterArray = filterArray.filter(item => item.doctorid === selectedDoctor?.doctorid)
+    }
+
+    setFilteredAppointments(filterArray)
+  }
 
   useEffect(()=>{
-    if(!selectedOption?.email) return;
+    handleFilter()
+  },[appointments, selectedCareManager, selectedDoctor ])
+
+
+
+  useEffect(()=>{
 
     setLoading((pre)=>({
       ...pre,
-      myJobs: true
+      appointments: true
     }))
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: selectedOption.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}))
+    getService(baseUrl, stringInterpolater(
+      API_ROUTES.GET_APPOINTMENTS,
+      { 
+        fromdate: fromDate ? dayjs(fromDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
+        todate: toDate ? dayjs(toDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
+      }
+    ))
     .then((res)=>{
-        if(res.status === 1){
+      if(res.status === 1){
 
-          setLoading((pre)=>({
-            ...pre,
-            myJobs: false
-          }))
-          setMyJobs(res.data)
-        }else{
-          
-          dispatch(valuesActions.statusNot1(res));
-        }
+        setLoading((pre)=>({
+          ...pre,
+          appointments: false
+        }))
+        setAppointments(res.data)
+      }else{
+        
+        dispatch(valuesActions.statusNot1(res));
+      }
     }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Get CM Jobs ${error}`}));
+        dispatch(valuesActions.error({error:`Error in Get Appointments ${error}`}));
     })
-  },[selectedOption, selectedDate])
+  },[toDate, fromDate])
+
+  const getDoctorsLists = (array) => {
+    
+    const uniqueDoctors = new Set();
+
+    array.forEach(appointment => {
+      const { doctorid, doctorname } = appointment;
+      uniqueDoctors.add(JSON.stringify({ doctorid, doctorname }));
+    });
+
+    const uniqueDoctorsArray = Array.from(uniqueDoctors).map(JSON.parse);
+
+    setDoctors(uniqueDoctorsArray);
+  };
+
+  useEffect(()=>{
+
+    if(appointments.length < 1) return;
+
+    getDoctorsLists(appointments)
+  },[appointments])
 
   function showToastNoMask(txt) {
     Toast.info({
@@ -136,116 +163,10 @@ const Appointments = () => {
   const RenderItem = ({item}) => {
     const pat = item;
 
-    const [remarks, setRemarks] = useState(pat.remarks);
     const [status, setStatus] = useState(pat.status);
-    const [deleteInitiated, setDeleteInitiated] = useState(false);
-    const [deleted, setDeleted] = useState(false);
+    const [cancelInitiated, setCancelInitiated] = useState(false);
+    const [cancelled, setCancelled] = useState(false);
     const [expanded, setExpanded] = useState(false);
-
-    const stageOptions = [
-      { label: "Not Interested", value: "notinterested" },
-      { label: "Un Reachable", value: "notreachable" },
-      { label: "Resigned", value: "resigned" },
-      { label: "Switched Off", value: "switchedoff" },
-      { label: "Language issue", value: "languageissue" },
-      { label: "No Incoming", value: "noincomingcall" }
-    ];
-
-    const [selectedStage, setSelectedStage] = useState({})
-
-    const updateStage = (stage) => {
-
-      if(stage?.length < 3) return;
-
-      const stages = {
-        notinterested: "Not Interested",
-        notreachable: "Un Reachable",
-        resigned: "Resigned",
-        switchedoff: "Switched Off",
-        languageissue: "Language issue",
-        noincomingcall: "No Incoming"
-      }
-
-      Object.keys(stages).forEach(item => {
-
-        if(stage.includes(item)){
-
-          setSelectedStage({
-            value: item,
-            label: stages?.[item]
-          })
-          
-          return;
-        }
-      })
-    }
-
-    useEffect(()=> {
-      pat?.stage && updateStage(pat?.stage)
-    },[])
-
-    function replaceOrAppendText(text, replacement) {
-      const match = text.match(/\[.*?\]/);
-      if (match) {
-          const newText = text.replace(/\[.*?\]/g, `[${replacement}]`);
-          return newText;
-      } else {
-          return `${text} [${replacement}]`;
-      }
-  }
-
-    const updateRemarksOptions = (text, type)=> {
-
-      if(type === 'remarks' && text.length < 3 ) return;
-      if(type === 'stage' && text.length < 3 ) return;
-
-
-      const body  = {
-        [type]: replaceOrAppendText(text, dayjs().format('DD-MM-YYYY')),
-        source: 'cm_app'
-      }
-
-      putTokenService(
-        baseUrl,
-        stringInterpolater(API_ROUTES.UPDATE_PATIENT_DETAILS,{patientid: pat.patientid}),
-        body,
-        loginData.token
-      )
-      .then((res)=>{
-          if(res.status === 1){
-
-            if(type === 'remarks' ) setRemarks(replaceOrAppendText(text, dayjs().format('DD-MM-YYYY')));
-            else if(type === 'stage') updateStage(text);
-            
-          }else{
-            
-            dispatch(valuesActions.statusNot1('Updating Remarks / Options Status != 1'));
-          }
-      }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in Updating Remarks / Options ${error}`}));
-      })
-    }
-
-    const updateStatus = (status)=> {
-
-      patchService(
-        baseUrl,
-        stringInterpolater(API_ROUTES.PATCH_CM_JOBS,{cmjobid: pat?.cmjobid , status, activityid: pat?.activityid}),
-      )
-      .then((res)=>{
-          if(res.status === 1){
-            showToast(`status marked as ${status}`)
-            setStatus(status)
-          }else{
-            
-            dispatch(valuesActions.statusNot1('Updating Status != 1'));
-          }
-      }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in Updating Status ${error}`}));
-      })
-    }
 
     function showToast(txt) {
       Toast.info({
@@ -254,23 +175,124 @@ const Appointments = () => {
       })
     }
 
-    const deleteCmJob = ()=> {
+    const updateAppointment = (type)=> {
 
-      deleteService(
+      let body
+
+      if(type === 'cancel'){
+        body={
+          updatetype: "cancelled",
+          cancelledby: loginData.email,
+          bookingid: pat?.bookingid
+        }
+      }else if(type === 'undo'){
+        body={
+          updatetype: "undo",
+          bookingid: pat?.bookingid
+        }
+      }
+      else if(type === 'checkedin'){
+        body={
+          updatetype: "checkedin",
+          bookingid: pat?.bookingid
+        }
+      }
+      else if(type === 'checkedout'){
+        body={
+          updatetype: "checkedout",
+          bookingid: pat?.bookingid
+        }
+      }
+      
+      postTokenService(
         baseUrl,
-        stringInterpolater(API_ROUTES.DELETED_CM_JOB,{cmjobid: pat?.cmjobid}),
+        API_ROUTES.UPDATE_BOOKING,
+        body,
+        loginData.token
+      )
+      .then((res)=>{
+
+          if(res.status === 1){
+
+            if(type === 'cancel'){
+
+              setCancelled(true);
+            }else if(type === 'undo'){
+
+              setStatus('booked');
+              showToast('Status updated to Booked!')
+            }
+          }else{
+            console.log(res)
+            dispatch(valuesActions.statusNot1('Update Appointment Status != 1'));
+          }
+      }).catch((error) => {
+
+        dispatch(valuesActions.error({error:`Error in Update Appointment ${error}`}));
+      })
+    }
+
+    function formatTime(timeString) {
+      const [hours, minutes, secs, ampm] = timeString.split(/:| /);
+      const formattedTime = `${hours}:${minutes} ${ampm.toUpperCase()}`;
+  
+      return formattedTime;
+    }
+
+    const copyEmrLink = ()=> {
+
+      if(pat?.selectedprocedure == 'consultation'){
+
+        if(!pat.bookingid){
+          showToast("Booking is not created")
+          return;
+        }
+
+        if (devEnv) {
+
+          const url = "http://doctor.circle.care/emrpage?id="+pat?.patientid+ "&actid=" +pat?.activityid+"&bid="+pat?.bookingid+"&check=1";
+          handleCopy('Dev Emr Page Link', url)
+        }else {
+
+          const url = "http://devdoctor.circle.care/emrpage?id="+pat?.patientid+ "&actid=" +pat?.activityid+"&bid="+pat?.bookingid+"&check=1";
+          handleCopy('Emr Page Link', url)
+        }
+      }
+    }
+
+    const sendAppointmentsReminder = () => {
+
+      const body={
+        mobile: pat?.mobile,
+        campaignName: 'ams_reminder_k',
+        patientid: pat?.patientid,
+        templateParams: [
+          pat?.patientname,
+          getActivity(pat?.activityname),
+          pat?.doctorname,
+          dayjs(pat.appointmentdate).format('DD MMM YYYY'),
+          formatTime(pat.startime),
+          pat?.onlinelink
+        ]
+      }
+
+      postTokenService(
+        baseUrl,
+        API_ROUTES.SEND_WHATSAPP_V2,
+        body,
+        loginData.token
       )
       .then((res)=>{
           if(res.status === 1){
 
-            setDeleted(true)
+            showToast('Reminder sent successfully')
           }else{
             
-            dispatch(valuesActions.statusNot1('Delete CmJob Status != 1'));
+            dispatch(valuesActions.statusNot1('Send WhatsApp Reminder Status != 1'));
           }
       }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Delete CmJob ${error}`}));
+        dispatch(valuesActions.error({error:`Error in Send WhatsApp Reminder ${error}`}));
       })
     }
 
@@ -288,12 +310,12 @@ const Appointments = () => {
           end={{ x: 1, y: 1 }}  
         > 
           {
-            !deleteInitiated ?
+            !cancelInitiated ?
             <>
               {
                 expanded ?
                 <>
-
+                
                   <View
                     style={{
                       ...styles.row,
@@ -301,46 +323,103 @@ const Appointments = () => {
                       alignItems:'flex-start'
                     }}
                   >
-                    <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.title,
-                          marginRight:7
-                        }}
-                      >{getName(pat.careplan)}</Text>
-                      {
-                        pat.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
-                      }
-                      {
-                        pat.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: pat.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{pat.gender}</Text>
-                    </View>
-                    <MaterialIcons
-                      name='delete-outline'
-                      size={25}
-                      color={'#830000'}
-                      onPress={()=>setDeleteInitiated(true)}
-                    />
+                    <Text style={styles.title}>{getName(pat.patientname)}</Text>
+                    <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
                   </View>
-                  
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  > 
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='compass'
+                        size={13}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        Status - {getName(status)}
+                      </Text>
+                    </View>
+
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  > 
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='box-archive'
+                        size={13}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        {getActivity(pat.activityname)}
+                      </Text>
+                    </View>
+                    
+
+                    <Text style={styles.title}>
+                      {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  >
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='user-doctor'
+                        size={16}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        {getName(pat.doctorname)}
+                      </Text>
+                    </View>
+                    
+
+                    <Text style={styles.title}>
+                      {formatTime(pat.startime)}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      marginTop: 15
+                    }}
+                  >
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
+
+                    {/* you can add something here */}
                   </View>
 
                   <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
@@ -377,73 +456,69 @@ const Appointments = () => {
                       ...styles.row,
                       justifyContent:'space-between',
                       alignItems:'flex-start',
-                      marginTop: 15
+                      marginTop:20,
+                      columnGap: 10,
                     }}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Job Type- </Text> {getName(pat.jobtype)}
-                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        ...styles.actionBtn, 
+                        opacity: status === 'checkedout' ? 1 : 0.5
+                      }}
+                      onPress={()=>{
+                        if(status === 'checkedout') updateAppointment('undo')
+                      }}
+                    >
+                      <Text 
+                        style={{
+                          ...theme.fonts.titleSmall,
+                          color: '#000'
+                        }}>
+                          {status === 'checkedout' ? 'Undo' : ''} CheckedOut
+                      </Text>
+                      <Feather
+                        name='repeat'
+                        size={15}
+                        color={theme.colors.primary}
+                      />
+                    </TouchableOpacity>
 
-                    <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
-                    </Text>
+                    <TouchableOpacity
+                      style={{...styles.actionBtn}}
+                      onPress={sendAppointmentsReminder}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Send Reminder</Text>
+                      <Feather
+                        name='send'
+                        size={15}
+                        color={theme.colors.primary}
+                      />
+                    </TouchableOpacity>
                   </View>
 
-                  <Text style={[styles.details, {fontSize: 14, marginTop:10}]}>
-                    Job Description- {pat.jobtypedescription}
-                  </Text>
-
-                  { status ?
-                    <Text style={[styles.title, {marginTop: 15}]}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
-                    </Text>
-                    : null
-                  }
-
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Remarks
-                  </Text>
-
-                  <TextInput
-                    style={[
-                      theme.fonts.titleSmall,
-                      { 
-                        marginTop:10,
-                        color:'#000',
-                        borderWidth:1,
-                        borderRadius: 5,
-                        borderColor: '#ccc',
-                        paddingHorizontal:10,
-                        paddingVertical:5,
-                        backgroundColor: '#fff',
-                      }
-                    ]}
-                    value={remarks}
-                    onChangeText={(val) => setRemarks(val)}
-                    placeholderTextColor="#848484" 
-                    placeholder='Type remarks here'
-                    onEndEditing={(e)=>updateRemarksOptions(e.nativeEvent.text, 'remarks')}
-                    returnKeyType="done"
-                  />
-
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Stage
-                  </Text>
-
-                  <Dropdown
+                  <View
                     style={{
-                      backgroundColor: '#fff',
-                      marginTop: 10,
-                      paddingVertical: 8
+                      ...styles.row,
+                      justifyContent:'center',
+                      alignItems:'center',
+                      marginTop:20,
+                      columnGap: 20
                     }}
-                    options={stageOptions}
-                    selectedOption={selectedStage}
-                    onSelect={(option)=>updateRemarksOptions(option.value, 'stage')}
-                    value={'value'}
-                    label={'label'}
-                    placeholder={'Stage'}
-                    title='Stage'
-                  />
+                  >
+                    <TouchableOpacity 
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={()=>{
+                        setCancelInitiated(true);
+                      }}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Cancel Booking</Text>
+                      <Feather
+                        name='x-square'
+                        size={15}
+                        color={'#a80000'}
+                      />
+                    </TouchableOpacity>
+                  </View>
 
                   <View
                     style={{
@@ -456,70 +531,32 @@ const Appointments = () => {
                   >
                     <TouchableOpacity
                       style={{...styles.minBtn}}
-                      onPress={()=>handleCopy('Next Action link', `https://actions.circle.care/?id=${pat?.patientid}`)}
+                      onPress={copyEmrLink}
                     >
                       <Feather
                         name='copy'
                         size={15}
                         color={theme.colors.primary}
                       />
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}> Next Actions</Text>
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Emr Link</Text>
                     </TouchableOpacity>
 
                     {
-                      pat?.jobtype ?
+                      pat?.onlinelink ?
                       <TouchableOpacity
                         style={{...styles.minBtn}}
-                        onPress={()=>handleCopy('Pre Assessment link', `https://chmequestionnaire.s3.ap-south-1.amazonaws.com/index.html?clinicalid=${pat?.patientid}`)}
+                        onPress={()=>handleCopy('Video Call link', pat.onlinelink)}
                       >
                         <Feather
                           name='copy'
                           size={15}
                           color={theme.colors.primary}
                         />
-                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Pre Assessment</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Video Link</Text>
                       </TouchableOpacity>
                       :null
                     }
                   
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity 
-                      style={{...styles.actionBtn}}
-                      onPress={()=>{
-                        updateStatus('completed');
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Completed</Text>
-                      <Feather
-                        name='paperclip'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={{...styles.actionBtn}}
-                      onPress={()=>{
-                        updateStatus('attempted');
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Attempted</Text>
-                      <Feather
-                        name='navigation'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
                   </View>
 
                   <View
@@ -564,40 +601,62 @@ const Appointments = () => {
                       alignItems:'flex-start'
                     }}
                   >
-                    <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.title,
-                          marginRight:7
-                        }}
-                      >{getName(pat.careplan)}</Text>
-                      {
-                        pat.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
-                      }
-                      {
-                        pat.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: pat.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{pat.gender}</Text>
+                    <Text style={styles.title}>{getName(pat.patientname)}</Text>
+                    <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  > 
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='compass'
+                        size={13}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        Status - {getName(pat.status)}
+                      </Text>
                     </View>
+
                   </View>
 
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  > 
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='box-archive'
+                        size={13}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        {getActivity(pat.activityname)}
+                      </Text>
+                    </View>
+                    
+
+                    <Text style={styles.title}>
+                      {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
+                    </Text>
                   </View>
 
                   <View
@@ -608,12 +667,24 @@ const Appointments = () => {
                       marginTop: 15
                     }}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(pat.status ?? 'Not Updated')}
-                    </Text>
+                    <View
+                      style={{
+                        ...styles.row
+                      }}
+                    >
+                      <FontAwesome6
+                        name='user-doctor'
+                        size={16}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.title}>
+                        {getName(pat.doctorname)}
+                      </Text>
+                    </View>
+                    
 
                     <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
+                      {formatTime(pat.startime)}
                     </Text>
                   </View>
 
@@ -621,16 +692,13 @@ const Appointments = () => {
                     style={{
                       ...styles.row,
                       justifyContent:'space-between',
-                      alignItems:'flex-start',
                       marginTop: 15
                     }}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Job Type- </Text> {getName(pat.jobtype)}
-                    </Text>
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
 
                     <View
-                      style={{...styles.minBtn, backgroundColor: 'transparent'}}
+                      style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
                     >
                       <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
                       <Feather
@@ -639,7 +707,6 @@ const Appointments = () => {
                         color={theme.colors.primary}
                       />
                     </View>
-                    
                   </View>
 
                 </TouchableOpacity>
@@ -648,10 +715,10 @@ const Appointments = () => {
             :
             <>
               {
-                !deleted ?
+                !cancelled ?
                 <>
                   <Text style={[styles.title, {marginVertical:10}]}>
-                    Are you sure you want to delete this job!
+                    Are you sure you want to Cancel this Appointment, once cancelled cannot be undone?
                   </Text>
 
                   <View
@@ -666,19 +733,19 @@ const Appointments = () => {
                   <TouchableOpacity 
                     style={{...styles.actionBtn, justifyContent:'center'}}
                     onPress={()=>{
-                      setDeleteInitiated(false);
+                      setCancelInitiated(false);
                     }}
                   >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
+                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>No Dont</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     style={{...styles.actionBtn, justifyContent:'center'}}
                     onPress={()=>{
-                      deleteCmJob();
+                      updateAppointment('cancel');
                     }}
                   >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
+                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Cancel!</Text>
                   </TouchableOpacity>
                   </View>
                 </>
@@ -694,11 +761,12 @@ const Appointments = () => {
                     }
                   ]}
                 >
-                  Job Deleted Successfully!
+                  Appointment cancelled Successfully!
                 </Text>
               }
             </>
           }
+
         </LinearGradient>
       </TouchableOpacity>
     )
@@ -714,33 +782,125 @@ const Appointments = () => {
           <Dropdown
             title='Select Care Manager'
             options={careManagers}
-            selectedOption={selectedOption}
-            onSelect={handleSelect}
+            selectedOption={selectedCareManager}
+            onSelect={(option)=> setSelectedCareManager(option)}
             value={'email'}
             label={'email'}
             placeholder={'Select Care Manager'}
+            style={{
+              marginTop: 5
+            }}
           />
           : null
         }
-
-        <Datepicker
-          label="Select Date"
-          value={selectedDate}
-          onChange={setSelectedDate}
-          placeholder="Select a date"
+        
+        <Dropdown
+          title='Select Doctor'
+          options={doctors}
+          selectedOption={selectedDoctor}
+          onSelect={(option)=> setSelectedDoctor(option)}
+          value={'doctorid'}
+          label={'doctorname'}
+          placeholder={'Select Doctor'}
           style={{
-            marginTop: 15
+            marginTop: 10
           }}
         />
+        
+        <View
+          style={{
+            ...styles.row,
+            justifyContent: 'flex-end',
+            marginTop: 10
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              ...styles.minBtn,
+              backgroundColor: '#f2f9ff',
+              borderWidth: 1,
+              borderColor: '#ccc'
+            }}
+            onPress={()=>{
+              setSelectedDoctor(null)
+              setSelectedCareManager(null)
+              setFilteredAppointments(appointments)
+            }}
+          >
+            <Feather
+              name='copy'
+              size={15}
+              color={theme.colors.primary}
+            />
+            <Text style={{...theme.fonts.titleSmall, color: '#000'}}>
+              Clear
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            ...styles.row,
+          }}
+        >
+          <Text
+            style={{
+              ...styles.text,
+              flex: 1,
+            }}
+          >
+            From Date
+          </Text>
+          <Text
+            style={{
+              ...styles.text,
+              flex: 1,
+            }}
+          >
+            To Date
+          </Text>
+        </View>
+
+        <View
+          style={{
+            ...styles.row,
+          }}
+        >
+          <Datepicker
+            label="Select Date"
+            value={fromDate}
+            maxDate={toDate}
+            onChange={setFromDate}
+            placeholder="Select a date"
+            style={{
+              marginTop: 10,
+              flex: 1,
+            }}
+          />
+          <Datepicker
+            label="Select Date"
+            value={toDate}
+            minDate={fromDate}
+            onChange={setToDate}
+            placeholder="Select a date"
+            style={{
+              marginTop: 10,
+              flex: 1
+            }}
+          />
+        </View>
+
+        
+        
 
         {
-          !loading.myJobs ?
+          !loading.appointments ?
           <>
             {
-              myJobs?.length > 0 ?
+              filteredAppointments?.length > 0 ?
               <>
                 {
-                  myJobs.map((item, i)=>(
+                  filteredAppointments.map((item, i)=>(
                     <RenderItem item={item} key={i}/>
                   ))
                 }
@@ -752,7 +912,7 @@ const Appointments = () => {
                 }}
               >
                 <Text style={styles.text}>
-                  No Jobs found for the day!, change the date or care Manager if admin
+                  No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
                 </Text>
               </View>
 

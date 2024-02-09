@@ -630,7 +630,7 @@ const MyJobs = () => {
                     </Text>
 
                     <View
-                      style={{...styles.minBtn, backgroundColor: 'transparent'}}
+                      style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
                     >
                       <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
                       <Feather
@@ -707,7 +707,7 @@ const MyJobs = () => {
   {/* My Jobs */}
   return (
     <Provider>
-      <View style={{flex: 1, marginHorizontal: 10, marginBottom: 20}}>
+      <View style={{flex: 1, marginHorizontal: 10 }}>
 
         {
           cmDetails.type === 'admin' ?

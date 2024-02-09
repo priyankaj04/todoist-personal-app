@@ -19,7 +19,7 @@ const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }
     <View style={styles.accordionItem}>
       <TouchableOpacity onPress={toggleAccordion}>
         <View style={styles.header}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={{...styles.title, fontSize: 16 }}>{title}</Text>
           { 
             expanded === id ?
             <Feather name="chevron-up" color={'#000'} size={18} />

@@ -131,7 +131,8 @@ const App = () => {
                 setLoading(false);
 
               }
-              else refreshToken(baseUrl, dispatch, setLoading);
+              else {refreshToken(baseUrl, dispatch, setLoading);
+              console.log('baseUrl, dispatch, setLoading',baseUrl, dispatch, setLoading)}
             }
             else setLoading(false);
 

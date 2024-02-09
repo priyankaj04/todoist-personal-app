@@ -204,6 +204,9 @@ const API_ROUTES = {
   UPDATE_PATIENT_DETAILS : '/patient/{patientid}',
   PATCH_CM_JOBS : '/cmjobs/{cmjobid}?status={status}&activityid={activityid}',
   DELETED_CM_JOB : '/cmjobs/{cmjobid}',
+  GET_APPOINTMENTS : '/booking/clinic/all/{fromdate}/{todate}',
+  SEND_WHATSAPP_V2 : '/misc/sendwhatsappv2',
+  UPDATE_BOOKING : '/booking/update'
 }
 
 export {

@@ -107,15 +107,13 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     zIndex:2
   },
-
-
   //! Patients
 
   //! myJobs
-
   actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     columnGap:5,
     padding:7,
     backgroundColor:'#ffffff',
@@ -126,9 +124,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: '#000',
     flex: 1
-  }
-  
+  },
   //! myJobs
+
+  //! appointments
+  
+  //! appointments
 
 });
 
