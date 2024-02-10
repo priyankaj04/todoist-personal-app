@@ -14,7 +14,7 @@ const Dropdown = ({ options, onSelect, value, label, selectedOption, placeholder
   };
 
   const theme = useTheme();
-
+  
   return (
     <View style={[styles.container]}>
 

@@ -11,7 +11,9 @@ import { DrawerContent } from './components/Drawer';
 
 import MainTabScreen from './screens/MainTab';
 import EditProfile from './screens/StaffUser/Profile';
-// import SettingsScreen from './screens/SettingsScreen';
+
+//! Items screens import
+import CurrentlySick from './screens/Items/CurrentlySick';
 // import BookmarkScreen from './screens/BookmarkScreen';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -196,8 +198,7 @@ const App = () => {
               <Drawer.Navigator drawerContent={props => <DrawerContent {...props} dispatch={dispatch} />} screenOptions={{headerShown:false}}>
                 <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
                 <Drawer.Screen name="ProfileEdit" component={EditProfile} />
-                {/* <Drawer.Screen name="SettingsScreen" component={SettingsScreen} />
-                <Drawer.Screen name="BookmarkScreen" component={BookmarkScreen} /> */}
+                <Drawer.Screen name="CurrentlySickItem" component={CurrentlySick} />
               </Drawer.Navigator>
             )
             :

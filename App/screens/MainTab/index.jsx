@@ -25,7 +25,7 @@ import MyPatients from './Patients';
 const Tab = createBottomTabNavigator();
 
 
-const MainTabScreen = () => {
+const MainTabScreen = ({route, navigation}) => {
 
   const { colors } = useTheme();
 
@@ -50,7 +50,7 @@ const MainTabScreen = () => {
               <Feather name="home" color={color} size={22} />
             ),
           }}
-          
+          initialParams={{navigation}}
         />
         <Tab.Screen
           name="TabMessages"
@@ -61,6 +61,7 @@ const MainTabScreen = () => {
               <Feather name="message-square" color={color} size={25} />
             ),
           }}
+          initialParams={{navigation}}
         />
         <Tab.Screen
           name="TabMyJobs"
@@ -71,6 +72,7 @@ const MainTabScreen = () => {
               <Feather name="folder" color={color} size={22} />
             ),
           }}
+          initialParams={{navigation}}
         />
         <Tab.Screen
           name="TabPatients"
@@ -81,6 +83,7 @@ const MainTabScreen = () => {
               <Feather name="users" color={color} size={22} />
             ),
           }}
+          initialParams={{navigation}}
         />
       </Tab.Navigator>
     </View>

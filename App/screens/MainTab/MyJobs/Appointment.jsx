@@ -775,153 +775,159 @@ const Appointments = () => {
   {/* My Jobs */}
   return (
     <Provider>
-      <View style={{flex: 1, marginHorizontal: 10, marginBottom: 20}}>
-
-        {
-          cmDetails.type === 'admin' ?
-          <Dropdown
-            title='Select Care Manager'
-            options={careManagers}
-            selectedOption={selectedCareManager}
-            onSelect={(option)=> setSelectedCareManager(option)}
-            value={'email'}
-            label={'email'}
-            placeholder={'Select Care Manager'}
-            style={{
-              marginTop: 5
-            }}
-          />
-          : null
-        }
-        
-        <Dropdown
-          title='Select Doctor'
-          options={doctors}
-          selectedOption={selectedDoctor}
-          onSelect={(option)=> setSelectedDoctor(option)}
-          value={'doctorid'}
-          label={'doctorname'}
-          placeholder={'Select Doctor'}
-          style={{
-            marginTop: 10
-          }}
-        />
-        
-        <View
-          style={{
-            ...styles.row,
-            justifyContent: 'flex-end',
-            marginTop: 10
-          }}
+      
+      <View style={{ marginHorizontal: 10 }}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
         >
-          <TouchableOpacity
-            style={{
-              ...styles.minBtn,
-              backgroundColor: '#f2f9ff',
-              borderWidth: 1,
-              borderColor: '#ccc'
-            }}
-            onPress={()=>{
-              setSelectedDoctor(null)
-              setSelectedCareManager(null)
-              setFilteredAppointments(appointments)
-            }}
-          >
-            <Feather
-              name='copy'
-              size={15}
-              color={theme.colors.primary}
+
+          {
+            cmDetails.type === 'admin' ?
+            <Dropdown
+              title='Select Care Manager'
+              options={careManagers}
+              selectedOption={selectedCareManager}
+              onSelect={(option)=> setSelectedCareManager(option)}
+              value={'email'}
+              label={'email'}
+              placeholder={'Select Care Manager'}
+              style={{
+                marginTop: 5
+              }}
             />
-            <Text style={{...theme.fonts.titleSmall, color: '#000'}}>
-              Clear
+            : null
+          }
+          
+          <Dropdown
+            title='Select Doctor'
+            options={doctors}
+            selectedOption={selectedDoctor}
+            onSelect={(option)=> setSelectedDoctor(option)}
+            value={'doctorid'}
+            label={'doctorname'}
+            placeholder={'Select Doctor'}
+            style={{
+              marginTop: 15
+            }}
+          />
+          
+          <View
+            style={{
+              ...styles.row,
+              justifyContent: 'flex-end',
+              marginTop: 10
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                ...styles.minBtn,
+                backgroundColor: '#f2f9ff',
+                borderWidth: 1,
+                borderColor: '#ccc'
+              }}
+              onPress={()=>{
+                setSelectedDoctor(null)
+                setSelectedCareManager(null)
+                setFilteredAppointments(appointments)
+              }}
+            >
+              <Feather
+                name='copy'
+                size={15}
+                color={theme.colors.primary}
+              />
+              <Text style={{...theme.fonts.titleSmall, color: '#000'}}>
+                Clear
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              ...styles.row,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.text,
+                flex: 1,
+              }}
+            >
+              From Date
             </Text>
-          </TouchableOpacity>
-        </View>
+            <Text
+              style={{
+                ...styles.text,
+                flex: 1,
+              }}
+            >
+              To Date
+            </Text>
+          </View>
 
-        <View
-          style={{
-            ...styles.row,
-          }}
-        >
-          <Text
+          <View
             style={{
-              ...styles.text,
-              flex: 1,
+              ...styles.row,
+              columnGap:10
             }}
           >
-            From Date
-          </Text>
-          <Text
-            style={{
-              ...styles.text,
-              flex: 1,
-            }}
-          >
-            To Date
-          </Text>
-        </View>
+            <Datepicker
+              label="Select Date"
+              value={fromDate}
+              maxDate={toDate}
+              onChange={setFromDate}
+              placeholder="Select a date"
+              style={{
+                marginTop: 10,
+                flex: 1,
+              }}
+            />
+            <Datepicker
+              label="Select Date"
+              value={toDate}
+              minDate={fromDate}
+              onChange={setToDate}
+              placeholder="Select a date"
+              style={{
+                marginTop: 10,
+                flex: 1
+              }}
+            />
+          </View>
 
-        <View
-          style={{
-            ...styles.row,
-          }}
-        >
-          <Datepicker
-            label="Select Date"
-            value={fromDate}
-            maxDate={toDate}
-            onChange={setFromDate}
-            placeholder="Select a date"
-            style={{
-              marginTop: 10,
-              flex: 1,
-            }}
-          />
-          <Datepicker
-            label="Select Date"
-            value={toDate}
-            minDate={fromDate}
-            onChange={setToDate}
-            placeholder="Select a date"
-            style={{
-              marginTop: 10,
-              flex: 1
-            }}
-          />
-        </View>
+          {
+            !loading.appointments ?
+            <>
+              {
+                filteredAppointments?.length > 0 ?
+                <>
+                  {
+                    filteredAppointments.map((item, i)=>(
+                      <RenderItem item={item} key={i}/>
+                    ))
+                  }
+                </>
+                :
+                <View
+                  style={{
+                    marginVertical:15
+                  }}
+                >
+                  <Text style={styles.text}>
+                    No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
+                  </Text>
+                </View>
 
-        
-        
+              }
+            </>
+            :
+            <Loading theme={theme}/>
+          }
 
-        {
-          !loading.appointments ?
-          <>
-            {
-              filteredAppointments?.length > 0 ?
-              <>
-                {
-                  filteredAppointments.map((item, i)=>(
-                    <RenderItem item={item} key={i}/>
-                  ))
-                }
-              </>
-              :
-              <View
-                style={{
-                  marginVertical:15
-                }}
-              >
-                <Text style={styles.text}>
-                  No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
-                </Text>
-              </View>
-
-            }
-          </>
-          :
-          <Loading theme={theme}/>
-        }
+        </ScrollView>
       </View>
+      
     </Provider>
   );
 };

@@ -2,21 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, UIManager, Platform } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
+import * as Animatable from 'react-native-animatable';
 
 // Enable layout animations on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+// if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+//   UIManager.setLayoutAnimationEnabledExperimental(true);
+// }
 
-const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }) => {
+const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText, navigation }) => {
 
   const toggleAccordion = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(id === expanded ? -1 : id);
   };
 
   return (
-    <View style={styles.accordionItem}>
+    <Animatable.View
+      style={[styles.accordionItem,  expanded === id && {flex: 1}]}
+      animation="fadeIn"
+      duration={700}
+    >
       <TouchableOpacity onPress={toggleAccordion}>
         <View style={styles.header}>
           <Text style={{...styles.title, fontSize: 16 }}>{title}</Text>
@@ -44,29 +49,36 @@ const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }
       </TouchableOpacity>
 
       { expanded === id && (
-        <Comp/>
+        <Animatable.View animation="slideInUp" duration={300} style={{flex:1}}>
+          <Comp navigation={navigation}/>
+        </Animatable.View>
       )}
-    </View>
+    </Animatable.View>
   );
 };
 
-const Accordion = ({components, titles,  componentText}) => {
-  const [expanded, setExpanded] = useState(0);
-
+const Accordion = ({components, titles,  componentText, expanded, setExpanded, navigation }) => {
+  
   return (
     <View style={styles.container}>
       {
-        components.map((comp,i)=>
-          <AccordionItem
-            key={i}
-            Comp={comp}
-            title={titles[i]} 
-            id={i} 
-            componentText={componentText?.[i]}
-            expanded={expanded}
-            setExpanded={setExpanded}
-          />
-        )
+        components.map((comp,i)=>{
+
+          if(expanded > -1 && expanded != i) return;
+
+          return(
+            <AccordionItem
+              key={i}
+              Comp={comp}
+              title={titles[i]} 
+              id={i}
+              navigation={navigation}
+              componentText={componentText?.[i]}
+              expanded={expanded}
+              setExpanded={setExpanded}
+            />
+          )
+        })
       }
     </View>
   );

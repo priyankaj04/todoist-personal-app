@@ -82,7 +82,7 @@ async function putService(baseUrl = '', url = '', data = {}) {
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
-async function patchService(baseUrl = '', url = '', data = {}) {console.log(`${baseUrl}${url}`.replace(/\+/g, '%2b'))
+async function patchService(baseUrl = '', url = '', data = {}) {
   const response = await fetch(`${baseUrl}${url}`.replace(/\+/g, '%2b'), {
     method: 'PATCH',
     mode: 'cors',
@@ -90,6 +90,23 @@ async function patchService(baseUrl = '', url = '', data = {}) {console.log(`${b
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return await response.json(); // parses JSON response into native JavaScript objects
+}
+
+async function patchTokenService(baseUrl = '', url = '', data = {}, token='') {
+  const response = await fetch(`${baseUrl}${url}`.replace(/\+/g, '%2b'), {
+    method: 'PATCH',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization":'Bearer '+token
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -206,7 +223,9 @@ const API_ROUTES = {
   DELETED_CM_JOB : '/cmjobs/{cmjobid}',
   GET_APPOINTMENTS : '/booking/clinic/all/{fromdate}/{todate}',
   SEND_WHATSAPP_V2 : '/misc/sendwhatsappv2',
-  UPDATE_BOOKING : '/booking/update'
+  UPDATE_BOOKING : '/booking/update',
+  MY_SICK_PATIENTS : '/adherence/csick/{email}',
+  SICKHISTORY_UPDATE : '/csick/{sickhistoryid}'
 }
 
 export {
@@ -220,6 +239,7 @@ export {
   refreshToken,
   getCmDetails,
   postTokenService,
-  putTokenService
-};
+  putTokenService,
+  patchTokenService
+}
   

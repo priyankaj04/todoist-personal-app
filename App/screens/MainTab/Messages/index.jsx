@@ -5,7 +5,9 @@ import {
 
 import styles from '../Styles'
 
-const Messages = ({navigation}) => {
+const Messages = ({route}) => {
+  const {navigation} = route.params;
+
   return (
     <View style={styles.container}>
 

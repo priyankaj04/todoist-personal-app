@@ -3,7 +3,7 @@ import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, TextInput, Linking } from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, patchTokenService } from '../../../Server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, Dropdown, Datepicker } from '../../../components'
 import { getName } from '../../../utils';
@@ -18,11 +18,11 @@ import styles from '../Styles'
 import dayjs from 'dayjs';
 
 import {
-  Provider,
+  Provider as AntProvider,
   Toast
 } from '@ant-design/react-native'
 
-const MyJobs = () => {
+const CurrentlySick = ({navigation}) => {
   const theme = useTheme();
   const dispatch = myDispatch();
 
@@ -31,41 +31,16 @@ const MyJobs = () => {
   const loginData = mySelector(state=>state.Login.value.loginData);
 
   const [loading, setLoading]= useState({
-    myJobs:false,
+    cSick: cmDetails.type === 'admin' ? false : true,
   });
+  //set loading true and used time out because of loading animation glitch
 
-  const [myJobs, setMyJobs] = useState([]);
-
-  useEffect(()=>{
-    if(cmDetails.type === 'admin' || selectedOption?.email) return;
-
-    setLoading((pre)=>({
-      ...pre,
-      myJobs: true
-    }))
-
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: cmDetails.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD') }))
-    .then((res)=>{
-        if(res.status === 1){
-
-          setLoading((pre)=>({
-            ...pre,
-            myJobs: false
-          }))
-          setMyJobs(res.data)
-        }else{
-          
-          dispatch(valuesActions.statusNot1('Get CM Jobs List Status != 1'));
-        }
-    }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in CM Jobs List ${error}`}));
-    })
-  },[selectedDate])
+  const [cSick, setCSick] = useState([]);
 
   const [careManagers, setCareManagers] = useState([]);
 
   useEffect(()=>{
+
     getService(baseUrl, API_ROUTES.GET_CARE_MANAGERS)
     .then((res)=>{
         if(res.status === 1){
@@ -81,39 +56,50 @@ const MyJobs = () => {
     })
   },[])
 
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedCareManager, setSelectedCareManager] = useState(null);
 
   const handleSelect = (option) => {
-    setSelectedOption(option);
+    setSelectedCareManager(option);
   };
 
   useEffect(()=>{
-    if(!selectedOption?.email) return;
+    if(cmDetails.type === 'admin' && !selectedCareManager?.email) return;
 
+    let email = selectedCareManager?.email ?? cmDetails.email
+    
     setLoading((pre)=>({
       ...pre,
-      myJobs: true
+      cSick: true
     }))
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: selectedOption.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}))
+    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, {email: email}))
     .then((res)=>{
         if(res.status === 1){
 
-          setLoading((pre)=>({
-            ...pre,
-            myJobs: false
-          }))
-          setMyJobs(res.data)
-        }else{
-          
-          dispatch(valuesActions.statusNot1(res));
+          setTimeout(()=>{
+            setLoading((pre)=>({
+              ...pre,
+              cSick: false
+            }))
+
+            setCSick(res.data)
+          },500)
+        }else if(res.status === 0){
+
+          setTimeout(()=>{
+            setLoading((pre)=>({
+              ...pre,
+              cSick: false
+            }))
+
+            setCSick(null)
+          },500)
         }
     }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Get CM Jobs ${error}`}));
+        dispatch(valuesActions.error({error:`Error in My Sick Patients ${error}`}));
     })
-  },[selectedOption, selectedDate])
+  },[selectedCareManager])
 
   function showToastNoMask(txt) {
     Toast.info({
@@ -142,48 +128,6 @@ const MyJobs = () => {
     const [deleted, setDeleted] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
-    const stageOptions = [
-      { label: "Not Interested", value: "notinterested" },
-      { label: "Un Reachable", value: "notreachable" },
-      { label: "Resigned", value: "resigned" },
-      { label: "Switched Off", value: "switchedoff" },
-      { label: "Language issue", value: "languageissue" },
-      { label: "No Incoming", value: "noincomingcall" }
-    ];
-
-    const [selectedStage, setSelectedStage] = useState({})
-
-    const updateStage = (stage) => {
-
-      if(stage?.length < 3) return;
-
-      const stages = {
-        notinterested: "Not Interested",
-        notreachable: "Un Reachable",
-        resigned: "Resigned",
-        switchedoff: "Switched Off",
-        languageissue: "Language issue",
-        noincomingcall: "No Incoming"
-      }
-
-      Object.keys(stages).forEach(item => {
-
-        if(stage.includes(item)){
-
-          setSelectedStage({
-            value: item,
-            label: stages?.[item]
-          })
-          
-          return;
-        }
-      })
-    }
-
-    useEffect(()=> {
-      pat?.stage && updateStage(pat?.stage)
-    },[])
-
     function replaceOrAppendText(text, replacement) {
       const match = text.match(/\[.*?\]/);
       if (match) {
@@ -192,7 +136,7 @@ const MyJobs = () => {
       } else {
           return `${text} [${replacement}]`;
       }
-  }
+    }
 
     const updateRemarksOptions = (text, type)=> {
 
@@ -227,26 +171,6 @@ const MyJobs = () => {
       })
     }
 
-    const updateStatus = (status)=> {
-
-      patchService(
-        baseUrl,
-        stringInterpolater(API_ROUTES.PATCH_CM_JOBS,{cmjobid: pat?.cmjobid , status, activityid: pat?.activityid}),
-      )
-      .then((res)=>{
-          if(res.status === 1){
-            showToast(`status marked as ${status}`)
-            setStatus(status)
-          }else{
-            
-            dispatch(valuesActions.statusNot1('Updating Status != 1'));
-          }
-      }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in Updating Status ${error}`}));
-      })
-    }
-
     function showToast(txt) {
       Toast.info({
         content: txt,
@@ -254,23 +178,30 @@ const MyJobs = () => {
       })
     }
 
-    const deleteCmJob = ()=> {
+    const deleteSickHistory = ()=> {
 
-      deleteService(
+      const body = {
+        status: "delete",
+        source: "cm_app"
+      }
+
+      patchTokenService(
         baseUrl,
-        stringInterpolater(API_ROUTES.DELETED_CM_JOB,{cmjobid: pat?.cmjobid}),
+        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE,{sickhistoryid: pat?.sickhistoryid}),
+        body,
+        loginData.token
       )
       .then((res)=>{
           if(res.status === 1){
 
             setDeleted(true)
           }else{
-            
-            dispatch(valuesActions.statusNot1('Delete CmJob Status != 1'));
+            console.log('res',res)
+            dispatch(valuesActions.statusNot1('Delete Sick History Status != 1'));
           }
       }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Delete CmJob ${error}`}));
+        dispatch(valuesActions.error({error:`Error Sick History delete ${error}`}));
       })
     }
 
@@ -304,10 +235,10 @@ const MyJobs = () => {
                     <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
                     <View style={styles.row}>
                       <Text style={{
-                          ...styles.title,
+                          ...styles.text,
                           marginRight:7
                         }}
-                      >{getName(pat.careplan)}</Text>
+                      >{getName(pat?.relationship)}</Text>
                       {
                         pat.gender === 'male' &&
                         <Fontisto
@@ -331,16 +262,37 @@ const MyJobs = () => {
                         }}
                       >{pat.gender}</Text>
                     </View>
-                    <MaterialIcons
-                      name='delete-outline'
-                      size={25}
-                      color={'#830000'}
-                      onPress={()=>setDeleteInitiated(true)}
-                    />
                   </View>
-                  
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  >
+                    <Text style={styles.title}>
+                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(pat.status ?? 'Not Updated')}
+                    </Text>
+
+                    <Text style={styles.title}>
+                      {dayjs(pat.duedate).format('D MMM YYYY')}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop: 15
+                    }}
+                  >
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(pat.ccownername)}</Text>
+
+                    {/* something can be added here */}
+                    
                   </View>
 
                   <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
@@ -372,27 +324,6 @@ const MyJobs = () => {
                     </View>
                   </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Job Type- </Text> {getName(pat.jobtype)}
-                    </Text>
-
-                    <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
-
-                  <Text style={[styles.details, {fontSize: 14, marginTop:10}]}>
-                    Job Description- {pat.jobtypedescription}
-                  </Text>
-
                   { status ?
                     <Text style={[styles.title, {marginTop: 15}]}>
                       <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
@@ -400,89 +331,34 @@ const MyJobs = () => {
                     : null
                   }
 
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Remarks
-                  </Text>
+                  {
+                    remarks?.length > 0 &&
+                    <>
+                      <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                        Remarks
+                      </Text>
 
-                  <TextInput
-                    style={[
-                      theme.fonts.titleSmall,
-                      { 
-                        marginTop:10,
-                        color:'#000',
-                        borderWidth:1,
-                        borderRadius: 5,
-                        borderColor: '#ccc',
-                        paddingHorizontal:10,
-                        paddingVertical:5,
-                        backgroundColor: '#fff',
-                      }
-                    ]}
-                    value={remarks}
-                    onChangeText={(val) => setRemarks(val)}
-                    placeholderTextColor="#848484" 
-                    placeholder='Type remarks here'
-                    onEndEditing={(e)=>updateRemarksOptions(e.nativeEvent.text, 'remarks')}
-                    returnKeyType="done"
-                  />
-
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Stage
-                  </Text>
-
-                  <Dropdown
-                    style={{
-                      backgroundColor: '#fff',
-                      marginTop: 10,
-                      paddingVertical: 8
-                    }}
-                    options={stageOptions}
-                    selectedOption={selectedStage}
-                    onSelect={(option)=>updateRemarksOptions(option.value, 'stage')}
-                    value={'value'}
-                    label={'label'}
-                    placeholder={'Stage'}
-                    title='Stage'
-                  />
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{...styles.minBtn}}
-                      onPress={()=>handleCopy('Next Action link', `https://actions.circle.care/?id=${pat?.patientid}`)}
-                    >
-                      <Feather
-                        name='copy'
-                        size={15}
-                        color={theme.colors.primary}
+                      <TextInput
+                        style={[
+                          theme.fonts.titleSmall,
+                          { 
+                            marginTop:10,
+                            color:'#535353',
+                            borderWidth:1,
+                            borderRadius: 5,
+                            borderColor: '#ccc',
+                            paddingHorizontal:10,
+                            paddingVertical:5,
+                            backgroundColor: '#fff',
+                          }
+                        ]}
+                        multiline={true}
+                        value={remarks}
+                        onChangeText={(val) => setRemarks(val)}
+                        editable={false}
                       />
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}> Next Actions</Text>
-                    </TouchableOpacity>
-
-                    {
-                      pat?.jobtype ?
-                      <TouchableOpacity
-                        style={{...styles.minBtn}}
-                        onPress={()=>handleCopy('Pre Assessment link', `https://chmequestionnaire.s3.ap-south-1.amazonaws.com/index.html?clinicalid=${pat?.patientid}`)}
-                      >
-                        <Feather
-                          name='copy'
-                          size={15}
-                          color={theme.colors.primary}
-                        />
-                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Pre Assessment</Text>
-                      </TouchableOpacity>
-                      :null
-                    }
-                  
-                  </View>
+                    </>
+                  }
 
                   <View
                     style={{
@@ -494,28 +370,26 @@ const MyJobs = () => {
                     }}
                   >
                     <TouchableOpacity 
-                      style={{...styles.actionBtn}}
+                      style={{...styles.actionBtn, justifyContent:'center'}}
                       onPress={()=>{
-                        updateStatus('completed');
+                        setDeleteInitiated(true);
                       }}
                     >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Completed</Text>
+                      <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Delete</Text>
                       <Feather
-                        name='paperclip'
+                        name='x-square'
                         size={15}
-                        color={theme.colors.primary}
+                        color={'#a80000'}
                       />
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      style={{...styles.actionBtn}}
-                      onPress={()=>{
-                        updateStatus('attempted');
-                      }}
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={() => navigation.navigate('CurrentlySickItem')}
                     >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Attempted</Text>
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Edit</Text>
                       <Feather
-                        name='navigation'
+                        name='edit'
                         size={15}
                         color={theme.colors.primary}
                       />
@@ -567,10 +441,10 @@ const MyJobs = () => {
                     <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
                     <View style={styles.row}>
                       <Text style={{
-                          ...styles.title,
+                          ...styles.text,
                           marginRight:7
                         }}
-                      >{getName(pat.careplan)}</Text>
+                      >{getName(pat?.relationship)}</Text>
                       {
                         pat.gender === 'male' &&
                         <Fontisto
@@ -596,10 +470,6 @@ const MyJobs = () => {
                     </View>
                   </View>
 
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
-                  </View>
-
                   <View
                     style={{
                       ...styles.row,
@@ -613,7 +483,7 @@ const MyJobs = () => {
                     </Text>
 
                     <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
+                      {dayjs(pat.duedate).format('D MMM YYYY')}
                     </Text>
                   </View>
 
@@ -625,9 +495,7 @@ const MyJobs = () => {
                       marginTop: 15
                     }}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Job Type- </Text> {getName(pat.jobtype)}
-                    </Text>
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(pat.ccownername)}</Text>
 
                     <View
                       style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
@@ -651,7 +519,7 @@ const MyJobs = () => {
                 !deleted ?
                 <>
                   <Text style={[styles.title, {marginVertical:10}]}>
-                    Are you sure you want to delete this job!
+                    Are you sure you want to delete once deleted cannot be undone
                   </Text>
 
                   <View
@@ -675,7 +543,7 @@ const MyJobs = () => {
                   <TouchableOpacity
                     style={{...styles.actionBtn, justifyContent:'center'}}
                     onPress={()=>{
-                      deleteCmJob();
+                      deleteSickHistory();
                     }}
                   >
                     <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
@@ -694,7 +562,7 @@ const MyJobs = () => {
                     }
                   ]}
                 >
-                  Job Deleted Successfully!
+                  Sick History Deleted Successfully!
                 </Text>
               }
             </>
@@ -706,7 +574,7 @@ const MyJobs = () => {
 
   {/* My Jobs */}
   return (
-    <Provider>
+    <AntProvider>
       <ScrollView 
         showsVerticalScrollIndicator={false}
       >
@@ -717,48 +585,36 @@ const MyJobs = () => {
             <Dropdown
               title='Select Care Manager'
               options={careManagers}
-              selectedOption={selectedOption}
+              selectedOption={selectedCareManager}
               onSelect={handleSelect}
               value={'email'}
               label={'email'}
               placeholder={'Select Care Manager'}
+              style={{
+                marginBottom: 15
+              }}
             />
             : null
           }
 
-          <Datepicker
-            label="Select Date"
-            value={selectedDate}
-            onChange={setSelectedDate}
-            placeholder="Select a date"
-            style={{
-              marginTop: 15
-            }}
-          />
-
           {
-            !loading.myJobs ?
+            !loading.cSick ?
             <>
               {
-                myJobs?.length > 0 ?
+                cSick?.length > 0 ?
                 <>
                   {
-                    myJobs.map((item, i)=>(
+                    cSick.map((item, i)=>(
                       <RenderItem item={item} key={i}/>
                     ))
                   }
                 </>
                 :
-                <View
-                  style={{
-                    marginVertical:15
-                  }}
-                >
+                <View>
                   <Text style={styles.text}>
-                    No Jobs found for the day!, change the date or care Manager if admin
+                    Yea! there are no sick patients congrats 
                   </Text>
                 </View>
-
               }
             </>
             :
@@ -767,8 +623,8 @@ const MyJobs = () => {
 
         </View>
       </ScrollView>
-    </Provider>
+    </AntProvider>
   );
 };
 
-export default MyJobs;
+export default CurrentlySick;

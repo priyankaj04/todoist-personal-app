@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Animated
 } from 'react-native';
 
 import styles from '../Styles'
@@ -27,22 +28,51 @@ import { getService, API_ROUTES, stringInterpolater } from '../../../Server';
 
 import MyJobs from './MyJobs'
 import Appointment from './Appointment'
+import CurrentlySick from './CurrentlySick'
 import dayjs from 'dayjs';
 
 
-const MyJobsIndex = ({navigation}) => {
+const MyJobsIndex = ({route}) => {
 
   const theme = useTheme();
+  const {navigation} = route.params
 
   const dispatch = myDispatch();
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
 
-  const[componentText, setComponentText] = useState({
-    0: ''
-  })
+  const[componentText, setComponentText] = useState({});
+  const [expanded, setExpanded] = useState(-1);
  
   useEffect(()=>{
+
+    getService(baseUrl, stringInterpolater( API_ROUTES.GET_APPOINTMENTS, { fromdate: dayjs().format('YYYY-MM-DD'), todate: dayjs().format('YYYY-MM-DD') }))
+    .then((res)=>{
+      if(res.status === 1){
+
+        if(res.data.length > 0 ){
+
+          if(cmDetails.type === 'admin'){
+
+            setComponentText((prev)=>({
+              ...prev,
+              1: `${res.data.length} Appointments found for the day ${dayjs().format('DD MMM YYYY')}`
+            }))
+
+          }else handleFilter(res.data)
+          
+        }
+
+          
+      }else{
+          
+        dispatch(valuesActions.statusNot1('Get Appointments List Status != 1'));
+      }
+    }).catch((error) => {
+
+        dispatch(valuesActions.error({error:`Error in get Appointments List ${error}`}));
+    })
+
     if(cmDetails.type === 'admin') return;
 
     getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: cmDetails.email, date: dayjs().format('YYYY-MM-DD') }))
@@ -64,8 +94,27 @@ const MyJobsIndex = ({navigation}) => {
         dispatch(valuesActions.error({error:`Error in CM Jobs List ${error}`}));
     })
 
-
   },[])
+
+  const handleFilter = (appointments) => {
+
+    let filterArray = appointments;
+    
+    let email = cmDetails.email;
+
+    if (email) {
+      filterArray = filterArray.filter(item => item.ccownername === email)
+    }
+
+    if(filterArray.length > 0 ){
+
+      setComponentText((prev)=>({
+        ...prev,
+        1: `${filterArray.length} Appointment${filterArray.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`
+      }))
+    }
+    
+  }
 
   const CardContent = ()=>{
     return(
@@ -77,11 +126,11 @@ const MyJobsIndex = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-      >
+
+      {
+        expanded === -1 &&
         <TouchableOpacity
-         style={styles.header}>
+          style={styles.header}>
           <View
             style={{
               display:'flex',
@@ -94,34 +143,33 @@ const MyJobsIndex = ({navigation}) => {
               style={{
                 color:theme.colors.text,
                 ...theme.fonts.titleMedium,
-                paddingLeft: 15,
                 paddingVertical:10,
               }}
             >{cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'} Jobs!</Text>
           </View>
         </TouchableOpacity>
-
-        <Accordion
-          components={[
-            MyJobs,
-            Appointment,
-            CardContent,
-            CardContent,
-            CardContent,
-            CardContent,
-          ]}
-          componentText={componentText}
-          titles={[
-            'My Jobs List',
-            'Appointments',
-            'C Sick Ip',
-            'C Sick Op',
-            'Pending Health Plan',
-            'Health Plan Reminders',
-          ]}
-        />
-
-      </ScrollView>
+      }
+      
+      <Accordion
+        components={[
+          MyJobs,
+          Appointment,
+          CurrentlySick,
+          CardContent,
+          CardContent,
+        ]}
+        navigation={navigation}
+        setExpanded={setExpanded}
+        expanded={expanded}
+        componentText={componentText}
+        titles={[
+          'My Jobs List',
+          'Appointments',
+          'Currently Sick',
+          'Pending Health Plan',
+          'Health Plan Reminders',
+        ]}
+      />
 
     </View>
   );
