@@ -5,7 +5,7 @@ import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, postTokenService } from '../../../Server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
-import { Loading, Dropdown, Datepicker } from '../../../components'
+import { Loading, Dropdown, DatePicker } from '../../../components'
 import { getName, getActivity } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import assets from '../../../assets';
@@ -872,7 +872,7 @@ const Appointments = () => {
               columnGap:10
             }}
           >
-            <Datepicker
+            <DatePicker
               label="Select Date"
               value={fromDate}
               maxDate={toDate}
@@ -883,7 +883,7 @@ const Appointments = () => {
                 flex: 1,
               }}
             />
-            <Datepicker
+            <DatePicker
               label="Select Date"
               value={toDate}
               minDate={fromDate}

@@ -50,7 +50,7 @@ const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }
 
       { expanded === id && (
         <Animatable.View animation="slideInUp" duration={300} style={{flex:1}}>
-          <Comp navigation={navigation}/>
+          <Comp/>
         </Animatable.View>
       )}
     </Animatable.View>

@@ -5,7 +5,7 @@ import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService } from '../../../Server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
-import { Loading, Dropdown, Datepicker } from '../../../components'
+import { Loading, Dropdown, DatePicker } from '../../../components'
 import { getName } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import assets from '../../../assets';
@@ -726,7 +726,7 @@ const MyJobs = () => {
             : null
           }
 
-          <Datepicker
+          <DatePicker
             label="Select Date"
             value={selectedDate}
             onChange={setSelectedDate}

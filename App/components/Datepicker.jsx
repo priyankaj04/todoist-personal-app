@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import {useTheme} from '@react-navigation/native';
 
 const CustomDatePicker = ({
-  label,
   value,
   onChange,
   placeholder,
@@ -28,7 +27,7 @@ const CustomDatePicker = ({
   return (
     <View style={[styles.container, style]}>
       <TouchableOpacity onPress={() => setIsVisible(true)}>
-        <Text style={[styles.textInput, { ...theme.fonts.titleSmall, color:theme.colors.text }, textStyle,]}>{value ? dayjs(value).format('DD-MMM-YYYY') : placeholder}</Text>
+        <Text style={[styles.textInput, { ...theme.fonts.titleSmall, color:theme.colors.text }, textStyle ]}>{value ? dayjs(value).format('DD-MMM-YYYY') : placeholder}</Text>
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isVisible}
@@ -46,10 +45,6 @@ const CustomDatePicker = ({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
   },
   textInput: {
     borderWidth: 1,

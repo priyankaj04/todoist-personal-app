@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#303030',
   },
-  //! Patients
   patientCard: {
     backgroundColor:'#f1f5ff',
     marginBottom:18,
@@ -107,9 +106,6 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     zIndex:2
   },
-  //! Patients
-
-  //! myJobs
   actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -125,12 +121,70 @@ const styles = StyleSheet.create({
     color: '#000',
     flex: 1
   },
-  //! myJobs
-
-  //! appointments
-  
-  //! appointments
-
+  textWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    columnGap:5,
+    padding:6,
+    backgroundColor:'#ededed',
+    color: '#000',
+    borderRadius:5,
+    paddingHorizontal:10,
+  },
+  //! Dropdown styles
+  dropdown: {
+    color: '#000',
+    borderRadius:5,
+    paddingHorizontal:10,
+    flex: 1,
+    borderWidth: 1,
+    paddingVertical: 2
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: '#000'
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: '#000'
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: '#000'
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+    color: '#000'
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    color: '#000'
+  },
+  itemTextStyle: {
+    fontSize: 14,
+    color: '#000',
+  },
+  selectedStyle: {
+    fontSize: 14,
+    color: '#000'
+  },
+  itemContainerStyle: {
+    borderBottomWidth: 1,
+    borderColor: '#cfcfcf',
+  }
+  //! Dropdown styles
 });
 
 export default styles;

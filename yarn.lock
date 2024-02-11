@@ -7337,6 +7337,13 @@
   dependencies:
     "babel-plugin-dotenv" "0.1.1"
 
+"react-native-element-dropdown@^2.10.1":
+  "integrity" "sha512-7J3K6T1LZo5H2rsEdAPpYDwhgog4UvatFq8bsW3dCrd2oyXiftn83gcQP1NKRYl4QMyb4WCMXIf+FqmZzS4o/Q=="
+  "resolved" "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-2.10.1.tgz"
+  "version" "2.10.1"
+  dependencies:
+    "lodash" "^4.17.21"
+
 "react-native-gesture-handler@^2.14.1":
   "integrity" "sha512-YiM1BApV4aKeuwsM6O4C2ufwewYEKk6VMXOt0YqEZFMwABBFWhXLySFZYjBSNRU2USGppJbfHP1q1DfFQpKhdA=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.14.1.tgz"

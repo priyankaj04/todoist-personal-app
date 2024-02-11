@@ -225,7 +225,8 @@ const API_ROUTES = {
   SEND_WHATSAPP_V2 : '/misc/sendwhatsappv2',
   UPDATE_BOOKING : '/booking/update',
   MY_SICK_PATIENTS : '/adherence/csick/{email}',
-  SICKHISTORY_UPDATE : '/csick/{sickhistoryid}'
+  SICKHISTORY_UPDATE : '/csick/{sickhistoryid}',
+  GET_ALL_DOCTORS : '/doctor/all/0',
 }
 
 export {

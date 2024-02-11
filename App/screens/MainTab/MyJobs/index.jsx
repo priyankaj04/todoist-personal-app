@@ -38,6 +38,7 @@ const MyJobsIndex = () => {
 
   const dispatch = myDispatch();
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
+  const devEnv = mySelector(state=>state.Login.value.devEnv);
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
 
   const[componentText, setComponentText] = useState({});
@@ -70,6 +71,20 @@ const MyJobsIndex = () => {
     }).catch((error) => {
 
         dispatch(valuesActions.error({error:`Error in get Appointments List ${error}`}));
+    })
+
+    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, {email: cmDetails.email}))
+    .then((res)=>{
+        if(res.status === 1){
+
+          setComponentText((prev)=>({
+            ...prev,
+            2: `${res.data.length} Currently Sick Patient${res.data.length > 1 ? 's' : ''} found`
+          }))
+        }
+    }).catch((error) => {
+
+        dispatch(valuesActions.error({error:`Error in My Sick Patients ${error}`}));
     })
 
     if(cmDetails.type === 'admin') return;
@@ -144,7 +159,10 @@ const MyJobsIndex = () => {
                 ...theme.fonts.titleMedium,
                 paddingVertical:10,
               }}
-            >{cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'} Jobs!</Text>
+            >
+              {cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'} Jobs!
+            </Text>
+            <Text style={{color:'green', ...theme.fonts.titleMedium,}}>{devEnv && 'Dev'}</Text>
           </View>
         </TouchableOpacity>
       }

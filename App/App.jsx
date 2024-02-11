@@ -14,7 +14,6 @@ import EditProfile from './screens/StaffUser/Profile';
 
 //! Items screens import
 import CurrentlySick from './screens/Items/CurrentlySick';
-// import BookmarkScreen from './screens/BookmarkScreen';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -92,8 +91,9 @@ const App = () => {
   const checkDevEnv = async()=>{
     try {
 
-      const devEnv = await AsyncStorage.getItem('devEnv')
-      if( JSON.parse(devEnv) === true && !devEnv) dispatch(loginActions.toggleDevEnv())
+      const devEnvStored = await AsyncStorage.getItem('devEnv')
+      
+      if( JSON.parse(devEnvStored) === true && !devEnv) dispatch(loginActions.toggleDevEnv())
     }
     catch (error) {
 
@@ -107,9 +107,9 @@ const App = () => {
     checkDevEnv();
 
     AsyncStorage.getItem('noOtp').then((noOtp) => {
-
+      
       if(JSON.parse(noOtp) === true){
-
+        
         !noOtp && dispatch(loginActions.toggleNoOtp())
         handleNoOtpAuth();
       }

@@ -22,7 +22,7 @@ import StarRating from '../../../components/StarRating';
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
 import { getName } from '../../../utils';
 
-const HomeScreen = ({route}) => {
+const HomeScreen = ({route, navigation}) => {
   const theme = useTheme();
   
   const dispatch = myDispatch();

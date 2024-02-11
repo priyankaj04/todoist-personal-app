@@ -53,7 +53,7 @@ const SplashScreen = ({navigation}) => {
     }
 
     const toggleDevEnv = async()=> {
-        
+
         await AsyncStorage.setItem('devEnv', JSON.stringify(!devEnv));
         dispatch(loginActions.toggleDevEnv());
     }
