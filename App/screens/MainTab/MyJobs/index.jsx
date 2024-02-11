@@ -32,10 +32,9 @@ import CurrentlySick from './CurrentlySick'
 import dayjs from 'dayjs';
 
 
-const MyJobsIndex = ({route}) => {
+const MyJobsIndex = () => {
 
   const theme = useTheme();
-  const {navigation} = route.params
 
   const dispatch = myDispatch();
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
@@ -158,7 +157,6 @@ const MyJobsIndex = ({route}) => {
           CardContent,
           CardContent,
         ]}
-        navigation={navigation}
         setExpanded={setExpanded}
         expanded={expanded}
         componentText={componentText}

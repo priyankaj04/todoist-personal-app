@@ -6,7 +6,6 @@ import {
 import styles from '../Styles'
 
 const Messages = ({route}) => {
-  const {navigation} = route.params;
 
   return (
     <View style={styles.container}>

@@ -22,9 +22,12 @@ import {
   Toast
 } from '@ant-design/react-native'
 
-const CurrentlySick = ({navigation}) => {
+import { useNavigation } from '@react-navigation/native';
+
+const CurrentlySick = () => {
   const theme = useTheme();
   const dispatch = myDispatch();
+  const navigation = useNavigation();
 
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);

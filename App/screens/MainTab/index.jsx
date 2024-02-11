@@ -31,62 +31,62 @@ const MainTabScreen = ({route, navigation}) => {
 
   return(
     <Provider>
-    <View style={{ paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
-          tabBarActiveTintColor:"#05375a",
-          headerShown:false
-        }}
-      >
-        <Tab.Screen
-          name="TabHome"
-          component={Home}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({color}) => (
-              <Feather name="home" color={color} size={22} />
-            ),
+      <View style={{ paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
+        <Tab.Navigator
+          initialRouteName="TabHome"
+          screenOptions={{
+            tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
+            tabBarActiveTintColor:"#05375a",
+            headerShown:false
           }}
-          initialParams={{navigation}}
-        />
-        <Tab.Screen
-          name="TabMessages"
-          component={Messages}
-          options={{
-            tabBarLabel: 'Messages',
-            tabBarIcon: ({color}) => (
-              <Feather name="message-square" color={color} size={25} />
-            ),
-          }}
-          initialParams={{navigation}}
-        />
-        <Tab.Screen
-          name="TabMyJobs"
-          component={MyJobs}
-          options={{
-            tabBarLabel: 'My Jobs',
-            tabBarIcon: ({color}) => (
-              <Feather name="folder" color={color} size={22} />
-            ),
-          }}
-          initialParams={{navigation}}
-        />
-        <Tab.Screen
-          name="TabPatients"
-          component={MyPatients}
-          options={{
-            tabBarLabel: 'Patients',
-            tabBarIcon: ({color}) => (
-              <Feather name="users" color={color} size={22} />
-            ),
-          }}
-          initialParams={{navigation}}
-        />
-      </Tab.Navigator>
-    </View>
+        >
+          <Tab.Screen
+            name="TabHome"
+            component={Home}
+            options={{
+              tabBarLabel: 'Home',
+              tabBarIcon: ({color}) => (
+                <Feather name="home" color={color} size={22} />
+              ),
+            }}
+            // initialParams={{mainNavigation: navigation}}
+          />
+          <Tab.Screen
+            name="TabMessages"
+            component={Messages}
+            options={{
+              tabBarLabel: 'Messages',
+              tabBarIcon: ({color}) => (
+                <Feather name="message-square" color={color} size={25} />
+              ),
+            }}
+            // initialParams={{mainNavigation}}
+          />
+          <Tab.Screen
+            name="TabMyJobs"
+            component={MyJobs}
+            options={{
+              tabBarLabel: 'My Jobs',
+              tabBarIcon: ({color}) => (
+                <Feather name="folder" color={color} size={22} />
+              ),
+            }}
+            // initialParams={{mainNavigation}}
+          />
+          <Tab.Screen
+            name="TabPatients"
+            component={MyPatients}
+            options={{
+              tabBarLabel: 'Patients',
+              tabBarIcon: ({color}) => (
+                <Feather name="users" color={color} size={22} />
+              ),
+            }}
+            // initialParams={{mainNavigation}}
+          />
+        </Tab.Navigator>
+      </View>
     </Provider>
   )
   

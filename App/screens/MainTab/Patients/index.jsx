@@ -31,6 +31,7 @@ import { pink800 } from 'react-native-paper/lib/typescript/styles/themes/v2/colo
 import { Image } from 'react-native-animatable';
 
 const Patients = () => {
+  
   const theme = useTheme();
   const dispatch = myDispatch();
 

@@ -57,6 +57,8 @@ const App = () => {
   const dispatch = myDispatch();
 
   const loginData = mySelector(state=>state.Login.value.loginData);
+  const devEnv = mySelector(state=>state.Login.value.devEnv);
+  const noOtp = mySelector(state=>state.Login.value.noOtp);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
   const alert = mySelector(state=>state.Values.value.alert);
   const isDarkTheme = mySelector(state=>state.Values.value.toggleTheme);
@@ -91,7 +93,7 @@ const App = () => {
     try {
 
       const devEnv = await AsyncStorage.getItem('devEnv')
-      if( JSON.parse(devEnv) === true) dispatch(loginActions.toggleDevEnv())
+      if( JSON.parse(devEnv) === true && !devEnv) dispatch(loginActions.toggleDevEnv())
     }
     catch (error) {
 
@@ -108,7 +110,7 @@ const App = () => {
 
       if(JSON.parse(noOtp) === true){
 
-        dispatch(loginActions.toggleNoOtp())
+        !noOtp && dispatch(loginActions.toggleNoOtp())
         handleNoOtpAuth();
       }
       else{

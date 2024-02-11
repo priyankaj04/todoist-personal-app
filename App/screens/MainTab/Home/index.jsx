@@ -24,7 +24,6 @@ import { getName } from '../../../utils';
 
 const HomeScreen = ({route}) => {
   const theme = useTheme();
-  const {navigation} = route.params;
   
   const dispatch = myDispatch();
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
