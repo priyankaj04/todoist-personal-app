@@ -166,7 +166,7 @@ const CurrentlySick = () => {
       status: '',
       startdate: '',
       doctorname: '',
-      contactperson: '',
+      contactperson: true,
       enddate: '',
       lastcommdate:'',
       diagnosis: [],
@@ -187,7 +187,7 @@ const CurrentlySick = () => {
       const updatedCSick = {};
 
       Object.keys(cSick).forEach((key) => {
-        updatedCSick[key] = item[key] || ''; 
+        updatedCSick[key] = (typeof item[key] === 'boolean') ? item[key] : ( item[key] ?? '' ); 
       });
 
       setCSick(updatedCSick);
@@ -196,7 +196,7 @@ const CurrentlySick = () => {
 
     },[])
 
-    const [remarks, setRemarks] = useState(cSick.remarks);
+    const [remarks, setRemarks] = useState(cSick.remarks ?? '');
     const [status, setStatus] = useState(cSick.status);
     const [deleteInitiated, setDeleteInitiated] = useState(false);
     const [deleted, setDeleted] = useState(false);
@@ -251,6 +251,46 @@ const CurrentlySick = () => {
         dispatch(valuesActions.error({error:`Error Sick History delete ${error}`}));
       })
     }
+
+    const saveUpdatedChanges = ()=> {
+
+      const body = {
+        source: 'cm_app',
+        remarks: editedCSick.remarks,
+        details: editedCSick.details,
+        doctorname: editedCSick.doctorname,
+        status: editedCSick.status,
+        startdate: editedCSick.startdate,
+        contactperson: (typeof editedCSick.contactperson === 'boolean') ? editedCSick.contactperson : null ,
+        enddate: editedCSick.enddate,
+        lastcommdate: editedCSick.lastcommdate,
+        history: editedCSick.history,
+        type: editedCSick.type,
+        priority: editedCSick.priority
+      }
+
+      patchTokenService(
+        baseUrl,
+        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE,{sickhistoryid: cSick?.sickhistoryid}),
+        body,
+        loginData.token
+      )
+      .then((res)=>{
+          if(res.status === 1){
+
+            setCSick(editedCSick);
+            showToast('Details updated successfully');
+          }else{
+
+            console.log('res',res)
+            dispatch(valuesActions.statusNot1('Update C Sick Status != 1'));
+          }
+      }).catch((error) => {
+
+        dispatch(valuesActions.error({error:`Error Update C Sick ${error}`}));
+      })
+    }
+
 
     return (
       <View>
@@ -779,7 +819,7 @@ const CurrentlySick = () => {
                   }
                 />
 
-                {/* from date to date */}
+                
                 <View
                   style={{
                     ...styles.row,
@@ -848,7 +888,7 @@ const CurrentlySick = () => {
                   />
                 </View>
 
-                {/* from date to date */}
+                
                 <View
                   style={{
                     ...styles.row,
@@ -1169,7 +1209,6 @@ const CurrentlySick = () => {
                         styles.row,
                         styles.actionBtn,
                         {
-                          color:'#000',
                           marginTop:15,
                           flexWrap: 'wrap',
                           alignItems: 'flex-start',
@@ -1206,29 +1245,29 @@ const CurrentlySick = () => {
               </ScrollView>
 
               <View
+                style={{
+                  ...styles.row,
+                  backgroundColor: '#cfeeff',
+                  marginTop: 10
+                }}
+              >
+                <TouchableOpacity
                   style={{
-                    ...styles.row,
-                    backgroundColor: '#cfeeff',
-                    marginTop: 10
+                    ...styles.actionBtn,
+                    justifyContent:'center',
+                    backgroundColor:theme.colors.primary,
+                    columnGap: 15,
                   }}
+                  onPress={() => saveUpdatedChanges()}
                 >
-                  <TouchableOpacity
-                    style={{
-                      ...styles.actionBtn,
-                      justifyContent:'center',
-                      backgroundColor:theme.colors.primary,
-                      columnGap: 15,
-                    }}
-                    onPress={() => showModal()}
-                  >
-                    <Text style={{...theme.fonts.titleMedium, color: '#fff'}}>Update</Text>
-                    <Feather
-                      name='upload-cloud'
-                      size={20}
-                      color={'#fff'}
-                    />
-                  </TouchableOpacity>
-                </View>
+                  <Text style={{...theme.fonts.titleMedium, color: '#fff'}}>Update</Text>
+                  <Feather
+                    name='upload-cloud'
+                    size={20}
+                    color={'#fff'}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
         </Portal>

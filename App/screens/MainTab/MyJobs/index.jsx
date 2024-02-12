@@ -132,8 +132,25 @@ const MyJobsIndex = () => {
 
   const CardContent = ()=>{
     return(
-      <View style={{padding:10, borderRadius:8, backgroundColor:'blue'}}>
-        <Text style={{color:'#000', fontSize:20}}>kjgjkasgd</Text>
+      <View 
+        style={{
+          padding:10,
+          borderRadius:8,
+          backgroundColor:'#f2f2ff',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin:10,
+          flex:1
+        }}>
+        <Text
+          style={{
+            color:'#000',
+            fontSize:14,
+            textAlign:'center'
+          }}
+        >
+          Coming soon, Yet to be implemented
+        </Text>
       </View>
     )
   }

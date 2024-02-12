@@ -101,6 +101,18 @@ const App = () => {
     }
   }
 
+  const refreshTheToken = async()=>{
+    try {
+
+      const devEnvStored = await AsyncStorage.getItem('devEnv')
+      refreshToken(`https://${JSON.parse(devEnvStored)?'dev':''}api.circle.care/v1`, dispatch, setLoading);
+    }
+    catch (error) {
+
+      console.log('Something went wrong in refresh token', error)
+    }
+  }
+
 
   useEffect(() => {
 
@@ -135,8 +147,8 @@ const App = () => {
                 setLoading(false);
 
               }
-              else {refreshToken(baseUrl, dispatch, setLoading);
-              console.log('baseUrl, dispatch, setLoading',baseUrl, dispatch, setLoading)}
+              else refreshTheToken();
+              
             }
             else setLoading(false);
 
@@ -149,7 +161,9 @@ const App = () => {
       console.log('Error in get noOtp', e)
       setLoading(false);
     })
-  }, []); 
+  },[]);
+
+
 
   if( loading ) {
     return(

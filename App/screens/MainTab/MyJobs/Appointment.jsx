@@ -37,6 +37,7 @@ const Appointments = () => {
   });
 
   const [appointments, setAppointments] = useState([]);
+  const [careManagersAppointments, setCareManagersAppointments] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -45,6 +46,8 @@ const Appointments = () => {
   const [toDate, setToDate] = useState(new Date());
   const [doctors, setDoctors] = useState([]);
   const [careManagers, setCareManagers] = useState([]);
+  const [myAppointments, setMyAppointments] = useState(false);
+  const [myDocId, setMyDocId] = useState('');
 
   useEffect(()=>{
     getService(baseUrl, API_ROUTES.GET_CARE_MANAGERS)
@@ -60,6 +63,27 @@ const Appointments = () => {
 
       dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
     })
+
+    getService(baseUrl, API_ROUTES.GET_ALL_DOCTORS)
+    .then((res)=>{
+        if(res.status === 1){
+
+          res.data.forEach(doc => {
+            if(doc?.email == cmDetails?.email){
+              setMyDocId(doc?.doctorid)
+              return;
+            }
+          });
+
+        }else{
+          
+          dispatch(valuesActions.statusNot1('Get all Doctors Status != 1'));
+        }
+    }).catch((error) => {
+
+      dispatch(valuesActions.error({error:`Error in all Doctors List ${error}`}));
+    })
+
   },[]);
 
   const handleFilter = () => {
@@ -80,14 +104,36 @@ const Appointments = () => {
       filterArray = filterArray.filter(item => item.doctorid === selectedDoctor?.doctorid)
     }
 
+    setCareManagersAppointments(setCareManagersAppointments);
     setFilteredAppointments(filterArray)
   }
 
+  const myAppointmentsFilter = () => {
+    let filterArray = appointments;
+
+    filterArray = filterArray.filter(item => item.doctorid === myDocId)
+
+    setFilteredAppointments(filterArray);
+  }
+
   useEffect(()=>{
+    if(myAppointments) myAppointmentsFilter();
+    else{
+      if(cmDetails.type === 'admin'){
+        setFilteredAppointments(appointments)
+      }else{
+        setFilteredAppointments(careManagersAppointments)
+      }
+    }
+  },[myAppointments, appointments])
+
+
+
+
+  useEffect(()=>{
+    if(myAppointments) return;
     handleFilter()
-  },[appointments, selectedCareManager, selectedDoctor ])
-
-
+  },[appointments, selectedCareManager, selectedDoctor, myAppointments ])
 
   useEffect(()=>{
 
@@ -126,7 +172,7 @@ const Appointments = () => {
     const uniqueDoctors = new Set();
 
     array.forEach(appointment => {
-      const { doctorid, doctorname } = appointment;
+      if(cmDetails?.email === appointment.email )
       uniqueDoctors.add(JSON.stringify({ doctorid, doctorname }));
     });
 
@@ -788,7 +834,10 @@ const Appointments = () => {
               title='Select Care Manager'
               options={careManagers}
               selectedOption={selectedCareManager}
-              onSelect={(option)=> setSelectedCareManager(option)}
+              onSelect={(option)=> {
+                setSelectedCareManager(option)
+                setMyAppointments(false)
+              }}
               value={'email'}
               label={'email'}
               placeholder={'Select Care Manager'}
@@ -803,7 +852,10 @@ const Appointments = () => {
             title='Select Doctor'
             options={doctors}
             selectedOption={selectedDoctor}
-            onSelect={(option)=> setSelectedDoctor(option)}
+            onSelect={(option)=> {
+              setSelectedDoctor(option)
+              setMyAppointments(false)
+            }}
             value={'doctorid'}
             label={'doctorname'}
             placeholder={'Select Doctor'}
@@ -815,10 +867,32 @@ const Appointments = () => {
           <View
             style={{
               ...styles.row,
-              justifyContent: 'flex-end',
-              marginTop: 10
+              justifyContent: 'space-between',
+              marginTop: 15
             }}
           >
+            <TouchableOpacity
+              style={{
+                ...styles.minBtn,
+                columnGap:10,
+                backgroundColor: myAppointments ? theme.colors.primary : '#fff',
+                borderWidth: 1,
+                borderColor: '#ccc'
+              }}
+              onPress={()=>{
+                setMyAppointments(!myAppointments);
+              }}
+            >
+              <Feather
+                name='user-check'
+                size={15}
+                color={ !myAppointments ? theme.colors.primary : '#fff' }
+              />
+              <Text style={{...theme.fonts.titleSmall, color: !myAppointments ? theme.colors.primary : '#fff'}}>
+                My Appointments
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={{
                 ...styles.minBtn,
@@ -828,8 +902,14 @@ const Appointments = () => {
               }}
               onPress={()=>{
                 setSelectedDoctor(null)
-                setSelectedCareManager(null)
-                setFilteredAppointments(appointments)
+                setMyAppointments(false)
+                if(cmDetails.type === 'admin'){
+                  setSelectedCareManager(null);
+                  setFilteredAppointments(appointments)
+                }else{
+                  setFilteredAppointments(careManagersAppointments)
+                }
+                
               }}
             >
               <Feather
@@ -846,6 +926,7 @@ const Appointments = () => {
           <View
             style={{
               ...styles.row,
+              marginTop: 15
             }}
           >
             <Text

@@ -52,7 +52,7 @@ function Picker({
             setValue(item.value);
             setIsFocus(false);
           }}
-          renderLeftIcon={() => renderLeftIcon}
+          renderLeftIcon={() => renderLeftIcon ?? null}
         />
       </View>
     </View>
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 20,
     height: 20,
-    color: '#000'
   },
   inputSearchStyle: {
     height: 40,
