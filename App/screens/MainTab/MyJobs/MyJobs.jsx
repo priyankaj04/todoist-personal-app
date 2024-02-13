@@ -751,10 +751,10 @@ const MyJobs = () => {
                 :
                 <View
                   style={{
-                    marginVertical:15
+                    marginVertical:15,
                   }}
                 >
-                  <Text style={styles.text}>
+                  <Text style={{...styles.text, textAlign:'center'}}>
                     No Jobs found for the day!, change the date or care Manager if admin
                   </Text>
                 </View>

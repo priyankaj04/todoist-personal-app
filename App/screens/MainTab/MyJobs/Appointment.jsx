@@ -995,7 +995,7 @@ const Appointments = () => {
                     marginVertical:15
                   }}
                 >
-                  <Text style={styles.text}>
+                  <Text style={{...styles.text, textAlign:'center'}}>
                     No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
                   </Text>
                 </View>

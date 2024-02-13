@@ -288,10 +288,13 @@ const Patients = () => {
                   :
                   <View 
                     style={{
-                      marginHorizontal:15
+                      marginHorizontal:15,
+                      flex:1,
+                      alignItems:'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    <Text style={styles.title}>
+                    <Text style={styles.textWrapper}>
                       No lives found assigned to you
                     </Text>
                   </View>
@@ -342,10 +345,13 @@ const Patients = () => {
                   :
                   <View
                     style={{
-                      marginHorizontal:15
+                      marginHorizontal:15,
+                      flex:1,
+                      alignItems:'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    <Text style={styles.title}>
+                    <Text style={styles.textWrapper}>
                       { allPatNotFound ?
                         `No patients found`
                         :

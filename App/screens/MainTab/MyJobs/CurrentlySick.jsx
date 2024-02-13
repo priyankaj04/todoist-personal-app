@@ -242,7 +242,7 @@ const CurrentlySick = () => {
 
             setDeleted(true)
           }else{
-            console.log('res',res)
+
             dispatch(valuesActions.statusNot1('Delete Sick History Status != 1'));
           }
       }).catch((error) => {
@@ -1313,7 +1313,7 @@ const CurrentlySick = () => {
               </>
               :
               <View>
-                <Text style={styles.text}>
+                <Text style={{...styles.text, textAlign:'center'}}>
                   Yea! there are no sick patients congrats 
                 </Text>
               </View>

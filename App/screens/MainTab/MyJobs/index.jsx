@@ -90,7 +90,7 @@ const MyJobsIndex = () => {
 
     getService(baseUrl, stringInterpolater(API_ROUTES.HEALTH_PLAN_REMINDERS, {email: cmDetails.email }))
     .then((res)=>{
-      if(res?.data.length > 0){
+      if(res?.data?.length > 0){
         setComponentText((prev)=>({
           ...prev,
           4: `${res.data.length} Health Plan Reminders for the Day ${dayjs().format('DD MMM YYYY')}`
