@@ -21,7 +21,6 @@ import styles from '../Styles'
 import dayjs from 'dayjs';
 
 import {
-  Provider as AntProvider,
   Toast
 } from '@ant-design/react-native';
 
@@ -280,6 +279,7 @@ const CurrentlySick = () => {
 
             setCSick(editedCSick);
             showToast('Details updated successfully');
+            hideModal();
           }else{
 
             console.log('res',res)
@@ -1277,56 +1277,54 @@ const CurrentlySick = () => {
 
   {/* My Jobs */}
   return (
-    <AntProvider>
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{marginHorizontal: 10 }}>
+    <ScrollView 
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={{marginHorizontal: 10 }}>
 
-          {
-            cmDetails.type === 'admin' ?
-            <Dropdown
-              title='Select Care Manager'
-              options={careManagers}
-              selectedOption={selectedCareManager}
-              onSelect={handleSelect}
-              value={'email'}
-              label={'email'}
-              placeholder={'Select Care Manager'}
-              style={{
-                marginBottom: 15
-              }}
-            />
-            : null
-          }
+        {
+          cmDetails.type === 'admin' ?
+          <Dropdown
+            title='Select Care Manager'
+            options={careManagers}
+            selectedOption={selectedCareManager}
+            onSelect={handleSelect}
+            value={'email'}
+            label={'email'}
+            placeholder={'Select Care Manager'}
+            style={{
+              marginBottom: 15
+            }}
+          />
+          : null
+        }
 
-          {
-            !loading.cSick ?
-            <>
-              {
-                cSick?.length > 0 ?
-                <>
-                  {
-                    cSick.map((item, i)=>(
-                      <RenderItem item={item} key={i}/>
-                    ))
-                  }
-                </>
-                :
-                <View>
-                  <Text style={styles.text}>
-                    Yea! there are no sick patients congrats 
-                  </Text>
-                </View>
-              }
-            </>
-            :
-            <Loading theme={theme}/>
-          }
+        {
+          !loading.cSick ?
+          <>
+            {
+              cSick?.length > 0 ?
+              <>
+                {
+                  cSick.map((item, i)=>(
+                    <RenderItem item={item} key={i}/>
+                  ))
+                }
+              </>
+              :
+              <View>
+                <Text style={styles.text}>
+                  Yea! there are no sick patients congrats 
+                </Text>
+              </View>
+            }
+          </>
+          :
+          <Loading theme={theme}/>
+        }
 
-        </View>
-      </ScrollView>
-    </AntProvider>
+      </View>
+    </ScrollView>
   );
 };
 

@@ -29,6 +29,7 @@ import { getService, API_ROUTES, stringInterpolater } from '../../../Server';
 import MyJobs from './MyJobs'
 import Appointment from './Appointment'
 import CurrentlySick from './CurrentlySick'
+import HealthPlanRemi from './HealthPlanRemi'
 import dayjs from 'dayjs';
 
 
@@ -85,6 +86,19 @@ const MyJobsIndex = () => {
     }).catch((error) => {
 
         dispatch(valuesActions.error({error:`Error in My Sick Patients ${error}`}));
+    })
+
+    getService(baseUrl, stringInterpolater(API_ROUTES.HEALTH_PLAN_REMINDERS, {email: cmDetails.email }))
+    .then((res)=>{
+      if(res?.data.length > 0){
+        setComponentText((prev)=>({
+          ...prev,
+          4: `${res.data.length} Health Plan Reminders for the Day ${dayjs().format('DD MMM YYYY')}`
+        }))
+      }
+    }).catch((error) => {
+
+      dispatch(valuesActions.error({error:`Error in Health Plan Reminders ${error}`}));
     })
 
     if(cmDetails.type === 'admin') return;
@@ -190,7 +204,7 @@ const MyJobsIndex = () => {
           Appointment,
           CurrentlySick,
           CardContent,
-          CardContent,
+          HealthPlanRemi,
         ]}
         setExpanded={setExpanded}
         expanded={expanded}

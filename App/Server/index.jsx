@@ -178,8 +178,8 @@ const refreshToken = (baseUrl, dispatch, setLoading)=>{
           getCmDetails(baseUrl, dispatch, decoded.email);
 
         }else{
-
-            dispatch(valuesActions.statusNot1(response.msg));
+          console.info(response.msg, 'Please Login Again')
+          // dispatch(valuesActions.statusNot1(response.msg));
         }
       }).catch((error) => {
           
@@ -227,6 +227,8 @@ const API_ROUTES = {
   MY_SICK_PATIENTS : '/adherence/csick/{email}',
   SICKHISTORY_UPDATE : '/csick/{sickhistoryid}',
   GET_ALL_DOCTORS : '/doctor/all/0',
+  HEALTH_PLAN_REMINDERS : '/adherence/healthplan/reminder/{email}',
+  SEND_H_PLAN_REMINDER : '/healthplan/sendwareminder/{patientid}',
 }
 
 export {

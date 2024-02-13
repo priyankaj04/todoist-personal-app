@@ -1945,6 +1945,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.5.0.tgz"
   "version" "4.5.0"
 
+"@react-native-picker/picker@^2.6.1":
+  "integrity" "sha512-oJftvmLOj6Y6/bF4kPcK6L83yNBALGmqNYugf94BzP0FQGpHBwimVN2ygqkQ2Sn2ZU3pGUZMs0jV6+Gku2GyYg=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.6.1.tgz"
+  "version" "2.6.1"
+
 "@react-native/assets-registry@0.73.1":
   "integrity" "sha512-2FgAbU7uKM5SbbW9QptPPZx8N9Ke2L7bsHb+EhAanZjFZunA9PaYtyjUQ1s7HD+zDVqOQIvjkpXSv7Kejd2tqg=="
   "resolved" "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.73.1.tgz"

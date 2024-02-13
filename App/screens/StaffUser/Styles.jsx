@@ -4,7 +4,7 @@ import { StatusBar } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight
+    paddingTop:Platform.OS === 'ios' ? 50 : StatusBar.currentHeight
   },
   commandButton: {
     padding: 15,
