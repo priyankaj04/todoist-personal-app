@@ -8,6 +8,7 @@ const { width, height } = Dimensions.get('window');
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-native-paper';
+import {vh, vw} from'react-native-css-vh-vw';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,7 +32,7 @@ const MainTabScreen = ({route, navigation}) => {
 
   return(
     <Provider>
-      <View style={{ paddingTop:Platform.OS === 'ios' ? vh(5) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
+      <View style={{ paddingTop:Platform.OS === 'ios' ? vh(6) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
         <Tab.Navigator
           initialRouteName="TabHome"

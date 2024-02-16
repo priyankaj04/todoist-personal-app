@@ -4,14 +4,14 @@ const ImageBaseUrl = (image) => {
   
  const getProfileIcon = (gender, age)=>{
   if(gender == 'male'){
-    if(age <= 18) return ImageBaseUrl(S3Images.boy);
-    else if( age > 18 && age <= 50) return ImageBaseUrl(S3Images.man);
-    else return ImageBaseUrl(S3Images.father);
+    if(age <= 18) return ImageBaseUrl('boy');
+    else if( age > 18 && age <= 50) return ImageBaseUrl('man');
+    else return ImageBaseUrl('father');
   }
   else{
-    if(age <= 18) return ImageBaseUrl(S3Images.girl);
-    else if( age > 18 && age <= 50) return ImageBaseUrl(S3Images.woman);
-    else return ImageBaseUrl(S3Images.mother);
+    if(age <= 18) return ImageBaseUrl('girl');
+    else if( age > 18 && age <= 50) return ImageBaseUrl('woman');
+    else return ImageBaseUrl('mother');
   }
  }
 

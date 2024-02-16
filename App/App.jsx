@@ -4,21 +4,18 @@ import {
   ActivityIndicator,
   Text
 } from 'react-native';
-
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import { DrawerContent } from './components/Drawer';
-
+import { createStackNavigator } from '@react-navigation/stack';
 import MainTabScreen from './screens/MainTab';
 import EditProfile from './screens/StaffUser/Profile';
 
 //! Items screens import
-import CurrentlySick from './screens/Items/CurrentlySick';
+import PatientIndex from './screens/Items/Patient';
+import PdfImageView from './screens/Viewers/PdfImage'
 
 import AsyncStorage from '@react-native-community/async-storage';
-
 import jwtDecode from "jwt-decode";
-
 import {
   Provider as AntModalProvider,
   Button,
@@ -27,12 +24,10 @@ import {
   WhiteSpace,
   WingBlank,
 } from '@ant-design/react-native';
-
 import { postService, API_ROUTES, refreshToken, getCmDetails } from './Server';
-
 import RootStackScreen from './screens/RootStack';
-
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 import { 
   NavigationContainer, 
@@ -52,7 +47,6 @@ import { loginActions, valuesActions, myDispatch, mySelector } from './redux';
 const App = () => {
 
   const [loading, setLoading] = React.useState(true);
-
   const dispatch = myDispatch();
 
   const loginData = mySelector(state=>state.Login.value.loginData);
@@ -206,16 +200,30 @@ const App = () => {
     secondary : '#0237ff',
   }
 
+  const MainDrawer = ()=>{
+    return(
+      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} dispatch={dispatch} />} screenOptions={{headerShown:false}}>
+        <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+      </Drawer.Navigator>
+    )
+  }
+
   return (
     <PaperProvider theme={theme}>
       <AntModalProvider>
         <NavigationContainer theme={theme}>
           { loginData?.email ? (
-              <Drawer.Navigator drawerContent={props => <DrawerContent {...props} dispatch={dispatch} />} screenOptions={{headerShown:false}}>
-                <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-                <Drawer.Screen name="ProfileEdit" component={EditProfile} />
-                <Drawer.Screen name="CurrentlySickItem" component={CurrentlySick} />
-              </Drawer.Navigator>
+              <Stack.Navigator
+                initialRouteName={'MainDrawer'}
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name={'MainDrawer'} component={MainDrawer} />
+                <Stack.Screen name="ProfileEdit" component={EditProfile} />
+                <Stack.Screen name="PatientDetails" component={PatientIndex} />
+                <Stack.Screen name="PdfImageView" component={PdfImageView} />
+              </Stack.Navigator>
             )
             :
             <RootStackScreen />

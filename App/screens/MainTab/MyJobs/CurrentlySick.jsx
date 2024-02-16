@@ -29,12 +29,10 @@ import {
   Portal
 } from 'react-native-paper';
 
-import { useNavigation } from '@react-navigation/native';
 
 const CurrentlySick = () => {
   const theme = useTheme();
   const dispatch = myDispatch();
-  const navigation = useNavigation();
 
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
@@ -305,355 +303,364 @@ const CurrentlySick = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}  
         > 
-          {
-            !deleteInitiated ?
-            <>
-              {
-                expanded ?
-                <>
+          <View
+            style={{
+              margin:2.5,
+              backgroundColor:'#fff',
+              padding:8,
+              borderRadius:4
+            }}
+          >
+            {
+              !deleteInitiated ?
+              <>
+                {
+                  expanded ?
+                  <>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.text,
-                          marginRight:7
-                        }}
-                      >{getName(cSick?.relationship)}</Text>
-                      {
-                        cSick.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
-                      }
-                      {
-                        cSick.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: cSick.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{cSick.gender}</Text>
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
+                      }}
+                    >
+                      <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
+                      <View style={styles.row}>
+                        <Text style={{
+                            ...styles.text,
+                            marginRight:7
+                          }}
+                        >{getName(cSick?.relationship)}</Text>
+                        {
+                          cSick.gender === 'male' &&
+                          <Fontisto
+                            name='male'
+                            size={15}
+                            color={'#830000'}
+                          />
+                        }
+                        {
+                          cSick.gender === 'female' &&
+                          <Fontisto
+                            name='female'
+                            size={15}
+                            color={'#660058'}
+                          />
+                        }
+                        <Text
+                          style={{
+                            ...styles.text,
+                            color: cSick.gender === 'male' ? '#830000' : '#660058'
+                          }}
+                        >{cSick.gender}</Text>
+                      </View>
                     </View>
-                  </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
-                    </Text>
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={styles.title}>
+                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
+                      </Text>
 
-                    <Text style={styles.title}>
-                      {dayjs(cSick.duedate).format('D MMM YYYY')}
-                    </Text>
-                  </View>
+                      <Text style={styles.title}>
+                        {dayjs(cSick.duedate).format('D MMM YYYY')}
+                      </Text>
+                    </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
 
-                    {/* something can be added here */}
-                    
-                  </View>
-
-                  <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-                    <Text style={{...styles.title}}>+{cSick?.mobile}</Text>
-
-                    <View style={{...styles.row, columnGap:15}}>
+                      {/* something can be added here */}
                       
-                      <TouchableOpacity style={{...styles.minBtn}}>
-                        <Text style={{...styles.title}}>Text</Text>
-                        <Fontisto
-                          name='whatsapp'
+                    </View>
+
+                    <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
+                      <Text style={{...styles.title}}>+{cSick?.mobile}</Text>
+
+                      <View style={{...styles.row, columnGap:15}}>
+                        
+                        <TouchableOpacity style={{...styles.minBtn}}>
+                          <Text style={{...styles.title}}>Text</Text>
+                          <Fontisto
+                            name='whatsapp'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{...styles.minBtn}}
+                          onLongPress={()=>Linking.openURL(`tel:+${cSick?.mobile}`)}
+                        >
+                          <Text style={{...styles.title}}>Call</Text>
+                          <Fontisto
+                            name='phone'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                      </View>
+                    </View>
+
+                    { status ?
+                      <Text style={[styles.title, {marginTop: 15}]}>
+                        <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
+                      </Text>
+                      : null
+                    }
+
+                    {
+                      remarks?.length > 0 &&
+                      <>
+                        <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                          Remarks
+                        </Text>
+
+                        <TextInput
+                          style={[
+                            theme.fonts.titleSmall,
+                            { 
+                              marginTop:10,
+                              color:'#535353',
+                              borderWidth:1,
+                              borderRadius: 5,
+                              borderColor: '#ccc',
+                              paddingHorizontal:10,
+                              paddingVertical:5,
+                              backgroundColor: '#fff',
+                            }
+                          ]}
+                          multiline={true}
+                          value={remarks}
+                          onChangeText={(val) => setRemarks(val)}
+                          editable={false}
+                        />
+                      </>
+                    }
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop:20,
+                        columnGap: 20
+                      }}
+                    >
+                      <TouchableOpacity 
+                        style={{...styles.actionBtn, justifyContent:'center'}}
+                        onPress={()=>{
+                          setDeleteInitiated(true);
+                        }}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Delete</Text>
+                        <Feather
+                          name='x-square'
                           size={15}
-                          color={theme.colors.primary}
+                          color={'#a80000'}
                         />
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                        style={{...styles.minBtn}}
-                        onLongPress={()=>Linking.openURL(`tel:+${cSick?.mobile}`)}
+                        style={{...styles.actionBtn, justifyContent:'center'}}
+                        onPress={() => showModal()}
                       >
-                        <Text style={{...styles.title}}>Call</Text>
-                        <Fontisto
-                          name='phone'
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Edit</Text>
+                        <Feather
+                          name='edit'
                           size={15}
                           color={theme.colors.primary}
                         />
                       </TouchableOpacity>
-
                     </View>
-                  </View>
 
-                  { status ?
-                    <Text style={[styles.title, {marginTop: 15}]}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
-                    </Text>
-                    : null
-                  }
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'flex-end',
+                        marginTop:10,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          ...styles.minBtn,
+                          backgroundColor:'transparent'
+                        }}
+                        onPress={()=>setExpanded(false)}
+                      >
+                        <Text style={{
+                            ...styles.details,
+                            ...theme.fonts.titleSmall,
+                            color:theme.colors.primary,
+                          }}>
+                          Minimize
+                        </Text>
+                        <Feather
+                          name='minimize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
 
-                  {
-                    remarks?.length > 0 &&
-                    <>
-                      <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                        Remarks
+                  </>
+                  :
+                  <TouchableOpacity
+                    onPress={()=>{setExpanded(true)}}
+                  >
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
+                      }}
+                    >
+                      <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
+                      <View style={styles.row}>
+                        <Text style={{
+                            ...styles.text,
+                            marginRight:7
+                          }}
+                        >{getName(cSick?.relationship)}</Text>
+                        {
+                          cSick.gender === 'male' &&
+                          <Fontisto
+                            name='male'
+                            size={15}
+                            color={'#830000'}
+                          />
+                        }
+                        {
+                          cSick.gender === 'female' &&
+                          <Fontisto
+                            name='female'
+                            size={15}
+                            color={'#660058'}
+                          />
+                        }
+                        <Text
+                          style={{
+                            ...styles.text,
+                            color: cSick.gender === 'male' ? '#830000' : '#660058'
+                          }}
+                        >{cSick.gender}</Text>
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={styles.title}>
+                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
                       </Text>
 
-                      <TextInput
-                        style={[
-                          theme.fonts.titleSmall,
-                          { 
-                            marginTop:10,
-                            color:'#535353',
-                            borderWidth:1,
-                            borderRadius: 5,
-                            borderColor: '#ccc',
-                            paddingHorizontal:10,
-                            paddingVertical:5,
-                            backgroundColor: '#fff',
-                          }
-                        ]}
-                        multiline={true}
-                        value={remarks}
-                        onChangeText={(val) => setRemarks(val)}
-                        editable={false}
-                      />
-                    </>
-                  }
+                      <Text style={styles.title}>
+                        {dayjs(cSick.duedate).format('D MMM YYYY')}
+                      </Text>
+                    </View>
 
-                  <View
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
+
+                      <View
+                        style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Feather
+                          name='maximize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </View>
+                      
+                    </View>
+
+                  </TouchableOpacity>
+                }
+              </>
+              :
+              <>
+                {
+                  !deleted ?
+                  <>
+                    <Text style={[styles.title, {marginVertical:10}]}>
+                      Are you sure you want to delete once deleted cannot be undone
+                    </Text>
+
+                    <View
                     style={{
                       ...styles.row,
                       justifyContent:'space-between',
                       alignItems:'flex-start',
-                      marginTop:20,
+                      marginTop:5,
                       columnGap: 20
                     }}
-                  >
+                    >
                     <TouchableOpacity 
                       style={{...styles.actionBtn, justifyContent:'center'}}
                       onPress={()=>{
-                        setDeleteInitiated(true);
+                        setDeleteInitiated(false);
                       }}
                     >
-                      <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Delete</Text>
-                      <Feather
-                        name='x-square'
-                        size={15}
-                        color={'#a80000'}
-                      />
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       style={{...styles.actionBtn, justifyContent:'center'}}
-                      onPress={() => showModal()}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Edit</Text>
-                      <Feather
-                        name='edit'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'flex-end',
-                      marginTop:10,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{
-                        ...styles.minBtn,
-                        backgroundColor:'transparent'
+                      onPress={()=>{
+                        deleteSickHistory();
                       }}
-                      onPress={()=>setExpanded(false)}
                     >
-                      <Text style={{
-                          ...styles.details,
-                          ...theme.fonts.titleSmall,
-                          color:theme.colors.primary,
-                        }}>
-                        Minimize
-                      </Text>
-                      <Feather
-                        name='minimize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
                     </TouchableOpacity>
-                  </View>
-
-                </>
-                :
-                <TouchableOpacity
-                  onPress={()=>{setExpanded(true)}}
-                >
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.text,
-                          marginRight:7
-                        }}
-                      >{getName(cSick?.relationship)}</Text>
-                      {
-                        cSick.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
-                      }
-                      {
-                        cSick.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: cSick.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{cSick.gender}</Text>
                     </View>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
+                  </>
+                  :
+                  <Text
+                    style={[
+                      styles.title,
+                      {
+                        marginTop:15,
+                        color:'#044004',
+                        width:'100%',
+                        textAlign:'center'
+                      }
+                    ]}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
-                    </Text>
-
-                    <Text style={styles.title}>
-                      {dayjs(cSick.duedate).format('D MMM YYYY')}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
-
-                    <View
-                      style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
-                      <Feather
-                        name='maximize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </View>
-                    
-                  </View>
-
-                </TouchableOpacity>
-              }
-            </>
-            :
-            <>
-              {
-                !deleted ?
-                <>
-                  <Text style={[styles.title, {marginVertical:10}]}>
-                    Are you sure you want to delete once deleted cannot be undone
+                    Sick History Deleted Successfully!
                   </Text>
-
-                  <View
-                  style={{
-                    ...styles.row,
-                    justifyContent:'space-between',
-                    alignItems:'flex-start',
-                    marginTop:5,
-                    columnGap: 20
-                  }}
-                  >
-                  <TouchableOpacity 
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      setDeleteInitiated(false);
-                    }}
-                  >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      deleteSickHistory();
-                    }}
-                  >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
-                  </TouchableOpacity>
-                  </View>
-                </>
-                :
-                <Text
-                  style={[
-                    styles.title,
-                    {
-                      marginTop:15,
-                      color:'#044004',
-                      width:'100%',
-                      textAlign:'center'
-                    }
-                  ]}
-                >
-                  Sick History Deleted Successfully!
-                </Text>
-              }
-            </>
-          }
+                }
+              </>
+            }
+          </View>
         </LinearGradient>
         <Portal>
           <Modal

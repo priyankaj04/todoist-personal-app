@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     backgroundColor:'#f1f5ff',
     marginBottom:18,
     minHeight:80,
-    padding:10,
     borderRadius:5
   },
   row: {
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap:5,
     padding:5,
-    backgroundColor:'#ffffff',
+    backgroundColor:'#ededed',
     borderRadius:5,
     paddingHorizontal:10,
     zIndex:2

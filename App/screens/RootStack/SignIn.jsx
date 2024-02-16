@@ -45,7 +45,7 @@ const SignInScreen = ({navigation}) => {
         secureTextEntry: true,
         isValidUser: true,
         isValidPassword: true,
-        loginType:'',
+        loginType:null,
     });
 
     const [openPicker, setOpenPicker] = React.useState(false);
@@ -244,6 +244,8 @@ const SignInScreen = ({navigation}) => {
                             style={[styles.textInput, {
                                 color: colors.text
                             }]}
+                            underlineColorAndroid="transparent"
+                            importantForAutofill="noExcludeDescendants"
                             autoCapitalize="none"
                             onChangeText={(val) => textInputChange(val)}
                             onEndEditing={(e)=>handleValidEmail(e.nativeEvent.text)}
@@ -284,6 +286,8 @@ const SignInScreen = ({navigation}) => {
                             style={[styles.textInput, {
                                 color: colors.text
                             }]}
+                            underlineColorAndroid="transparent"
+                            importantForAutofill="noExcludeDescendants"
                             autoCapitalize="none"
                             onChangeText={(val) => handlePasswordChange(val)}
                         />
@@ -324,15 +328,17 @@ const SignInScreen = ({navigation}) => {
                             color={colors.text}
                             size={20}
                         />
-                        <TextInput
-                            editable={false}
-                            placeholder="Select a login type"
-                            placeholderTextColor="#666666"
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            value={data.loginType}
-                        />
+                        <Text
+                            style={{
+                                color: data?.loginType ? colors.text : "#666666",
+                                marginLeft:10,
+                                flex:1,
+                                marginBottom:15
+                            }}
+                        >
+                            {data?.loginType ?? 'Select a login type'}
+                        </Text>
+
                         {data.loginType ? 
                             <Animatable.View
                                 animation="bounceIn"

@@ -35,16 +35,20 @@ const MyJobs = () => {
   });
 
   const [myJobs, setMyJobs] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(()=>{
-    if(cmDetails.type === 'admin' || selectedOption?.email) return;
+    if(cmDetails.type === 'admin' && !selectedOption?.email) return;
+
+    let email = cmDetails?.type === 'admin' ? selectedOption?.email : cmDetails?.email
 
     setLoading((pre)=>({
       ...pre,
       myJobs: true
     }))
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: cmDetails.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD') }))
+    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD') }))
     .then((res)=>{
         if(res.status === 1){
 
@@ -61,7 +65,8 @@ const MyJobs = () => {
 
         dispatch(valuesActions.error({error:`Error in CM Jobs List ${error}`}));
     })
-  },[selectedDate])
+  },[selectedOption, selectedDate])
+
 
   const [careManagers, setCareManagers] = useState([]);
 
@@ -81,39 +86,10 @@ const MyJobs = () => {
     })
   },[])
 
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleSelect = (option) => {
     setSelectedOption(option);
   };
-
-  useEffect(()=>{
-    if(!selectedOption?.email) return;
-
-    setLoading((pre)=>({
-      ...pre,
-      myJobs: true
-    }))
-
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: selectedOption.email, date: selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}))
-    .then((res)=>{
-        if(res.status === 1){
-
-          setLoading((pre)=>({
-            ...pre,
-            myJobs: false
-          }))
-          setMyJobs(res.data)
-        }else{
-          
-          dispatch(valuesActions.statusNot1(res));
-        }
-    }).catch((error) => {
-
-        dispatch(valuesActions.error({error:`Error in Get CM Jobs ${error}`}));
-    })
-  },[selectedOption, selectedDate])
 
   function showToastNoMask(txt) {
     Toast.info({
@@ -287,418 +263,427 @@ const MyJobs = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}  
         > 
-          {
-            !deleteInitiated ?
-            <>
-              {
-                expanded ?
-                <>
+          <View
+            style={{
+              margin:2.5,
+              backgroundColor:'#fff',
+              padding:8,
+              borderRadius:4
+            }}
+          >
+            {
+              !deleteInitiated ?
+              <>
+                {
+                  expanded ?
+                  <>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.title,
-                          marginRight:7
-                        }}
-                      >{getName(pat.careplan)}</Text>
-                      {
-                        pat.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
-                      }
-                      {
-                        pat.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: pat.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{pat.gender}</Text>
-                    </View>
-                    <MaterialIcons
-                      name='delete-outline'
-                      size={25}
-                      color={'#830000'}
-                      onPress={()=>setDeleteInitiated(true)}
-                    />
-                  </View>
-                  
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
-                  </View>
-
-                  <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-                    <Text style={{...styles.title}}>+{pat?.mobile}</Text>
-
-                    <View style={{...styles.row, columnGap:15}}>
-                      
-                      <TouchableOpacity style={{...styles.minBtn}}>
-                        <Text style={{...styles.title}}>Text</Text>
-                        <Fontisto
-                          name='whatsapp'
-                          size={15}
-                          color={theme.colors.primary}
-                        />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={{...styles.minBtn}}
-                        onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
-                      >
-                        <Text style={{...styles.title}}>Call</Text>
-                        <Fontisto
-                          name='phone'
-                          size={15}
-                          color={theme.colors.primary}
-                        />
-                      </TouchableOpacity>
-
-                    </View>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Job Type- </Text> {getName(pat.jobtype)}
-                    </Text>
-
-                    <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
-
-                  <Text style={[styles.details, {fontSize: 14, marginTop:10}]}>
-                    Job Description- {pat.jobtypedescription}
-                  </Text>
-
-                  { status ?
-                    <Text style={[styles.title, {marginTop: 15}]}>
-                      <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
-                    </Text>
-                    : null
-                  }
-
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Remarks
-                  </Text>
-
-                  <TextInput
-                    style={[
-                      theme.fonts.titleSmall,
-                      { 
-                        marginTop:10,
-                        color:'#000',
-                        borderWidth:1,
-                        borderRadius: 5,
-                        borderColor: '#ccc',
-                        paddingHorizontal:10,
-                        paddingVertical:5,
-                        backgroundColor: '#fff',
-                      }
-                    ]}
-                    value={remarks}
-                    onChangeText={(val) => setRemarks(val)}
-                    placeholderTextColor="#848484" 
-                    placeholder='Type remarks here'
-                    onEndEditing={(e)=>updateRemarksOptions(e.nativeEvent.text, 'remarks')}
-                    returnKeyType="done"
-                  />
-
-                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                    Stage
-                  </Text>
-
-                  <Dropdown
-                    style={{
-                      backgroundColor: '#fff',
-                      marginTop: 10,
-                      paddingVertical: 8
-                    }}
-                    options={stageOptions}
-                    selectedOption={selectedStage}
-                    onSelect={(option)=>updateRemarksOptions(option.value, 'stage')}
-                    value={'value'}
-                    label={'label'}
-                    placeholder={'Stage'}
-                    title='Stage'
-                  />
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{...styles.minBtn}}
-                      onPress={()=>handleCopy('Next Action link', `https://actions.circle.care/?id=${pat?.patientid}`)}
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
+                      }}
                     >
-                      <Feather
-                        name='copy'
-                        size={15}
-                        color={theme.colors.primary}
+                      <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
+                      <View style={styles.row}>
+                        <Text style={{
+                            ...styles.title,
+                            marginRight:7
+                          }}
+                        >{getName(pat.careplan)}</Text>
+                        {
+                          pat.gender === 'male' &&
+                          <Fontisto
+                            name='male'
+                            size={15}
+                            color={'#830000'}
+                          />
+                        }
+                        {
+                          pat.gender === 'female' &&
+                          <Fontisto
+                            name='female'
+                            size={15}
+                            color={'#660058'}
+                          />
+                        }
+                        <Text
+                          style={{
+                            ...styles.text,
+                            color: pat.gender === 'male' ? '#830000' : '#660058'
+                          }}
+                        >{pat.gender}</Text>
+                      </View>
+                      <MaterialIcons
+                        name='delete-outline'
+                        size={25}
+                        color={'#830000'}
+                        onPress={()=>setDeleteInitiated(true)}
                       />
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}> Next Actions</Text>
-                    </TouchableOpacity>
+                    </View>
+                    
+                    <View style={{...styles.row, marginTop:10, columnGap:15}}>
+                      <Text style={{...styles.text}}>{pat.brandname}</Text>
+                    </View>
 
-                    {
-                      pat?.jobtype ?
+                    <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
+                      <Text style={{...styles.title}}>+{pat?.mobile}</Text>
+
+                      <View style={{...styles.row, columnGap:15}}>
+                        
+                        <TouchableOpacity style={{...styles.minBtn}}>
+                          <Text style={{...styles.title}}>Text</Text>
+                          <Fontisto
+                            name='whatsapp'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{...styles.minBtn}}
+                          onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
+                        >
+                          <Text style={{...styles.title}}>Call</Text>
+                          <Fontisto
+                            name='phone'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={styles.title}>
+                        <Text style={[styles.details, {fontSize: 14}]}>Job Type- </Text> {getName(pat.jobtype)}
+                      </Text>
+
+                      <Text style={styles.title}>
+                        {dayjs(pat.duedate).format('DD MMM YYYY')}
+                      </Text>
+                    </View>
+
+                    <Text style={[styles.details, {fontSize: 14, marginTop:10}]}>
+                      Job Description- {pat.jobtypedescription}
+                    </Text>
+
+                    { status ?
+                      <Text style={[styles.title, {marginTop: 15}]}>
+                        <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
+                      </Text>
+                      : null
+                    }
+
+                    <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                      Remarks
+                    </Text>
+
+                    <TextInput
+                      style={[
+                        theme.fonts.titleSmall,
+                        { 
+                          marginTop:10,
+                          color:'#000',
+                          borderWidth:1,
+                          borderRadius: 5,
+                          borderColor: '#ccc',
+                          paddingHorizontal:10,
+                          paddingVertical:5,
+                          backgroundColor: '#fff',
+                        }
+                      ]}
+                      value={remarks}
+                      onChangeText={(val) => setRemarks(val)}
+                      placeholderTextColor="#848484" 
+                      placeholder='Type remarks here'
+                      onEndEditing={(e)=>updateRemarksOptions(e.nativeEvent.text, 'remarks')}
+                      returnKeyType="done"
+                    />
+
+                    <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                      Stage
+                    </Text>
+
+                    <Dropdown
+                      style={{
+                        backgroundColor: '#fff',
+                        marginTop: 10,
+                        paddingVertical: 8
+                      }}
+                      options={stageOptions}
+                      selectedOption={selectedStage}
+                      onSelect={(option)=>updateRemarksOptions(option.value, 'stage')}
+                      value={'value'}
+                      label={'label'}
+                      placeholder={'Stage'}
+                      title='Stage'
+                    />
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop:20,
+                        columnGap: 20
+                      }}
+                    >
                       <TouchableOpacity
                         style={{...styles.minBtn}}
-                        onPress={()=>handleCopy('Pre Assessment link', `https://chmequestionnaire.s3.ap-south-1.amazonaws.com/index.html?clinicalid=${pat?.patientid}`)}
+                        onPress={()=>handleCopy('Next Action link', `https://actions.circle.care/?id=${pat?.patientid}`)}
                       >
                         <Feather
                           name='copy'
                           size={15}
                           color={theme.colors.primary}
                         />
-                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Pre Assessment</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}> Next Actions</Text>
                       </TouchableOpacity>
-                      :null
-                    }
-                  
-                  </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity 
-                      style={{...styles.actionBtn}}
-                      onPress={()=>{
-                        updateStatus('completed');
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Completed</Text>
-                      <Feather
-                        name='paperclip'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={{...styles.actionBtn}}
-                      onPress={()=>{
-                        updateStatus('attempted');
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Attempted</Text>
-                      <Feather
-                        name='navigation'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'flex-end',
-                      marginTop:25,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{
-                        ...styles.minBtn,
-                        backgroundColor:'transparent'
-                      }}
-                      onPress={()=>setExpanded(false)}
-                    >
-                      <Text style={{
-                          ...styles.details,
-                          ...theme.fonts.titleSmall,
-                          color:theme.colors.primary,
-                        }}>
-                        Minimize
-                      </Text>
-                      <Feather
-                        name='minimize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                </>
-                :
-                <TouchableOpacity
-                  onPress={()=>{setExpanded(true)}}
-                >
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                    <View style={styles.row}>
-                      <Text style={{
-                          ...styles.title,
-                          marginRight:7
-                        }}
-                      >{getName(pat.careplan)}</Text>
                       {
-                        pat.gender === 'male' &&
-                        <Fontisto
-                          name='male'
-                          size={15}
-                          color={'#830000'}
-                        />
+                        pat?.jobtype ?
+                        <TouchableOpacity
+                          style={{...styles.minBtn}}
+                          onPress={()=>handleCopy('Pre Assessment link', `https://chmequestionnaire.s3.ap-south-1.amazonaws.com/index.html?clinicalid=${pat?.patientid}`)}
+                        >
+                          <Feather
+                            name='copy'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                          <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Pre Assessment</Text>
+                        </TouchableOpacity>
+                        :null
                       }
-                      {
-                        pat.gender === 'female' &&
-                        <Fontisto
-                          name='female'
-                          size={15}
-                          color={'#660058'}
-                        />
-                      }
-                      <Text
-                        style={{
-                          ...styles.text,
-                          color: pat.gender === 'male' ? '#830000' : '#660058'
-                        }}
-                      >{pat.gender}</Text>
+                    
                     </View>
-                  </View>
 
-                  <View style={{...styles.row, marginTop:10, columnGap:15}}>
-                    <Text style={{...styles.text}}>{pat.brandname}</Text>
-                  </View>
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop:20,
+                        columnGap: 20
+                      }}
+                    >
+                      <TouchableOpacity 
+                        style={{...styles.actionBtn}}
+                        onPress={()=>{
+                          updateStatus('completed');
+                        }}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Completed</Text>
+                        <Feather
+                          name='paperclip'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
+                      <TouchableOpacity
+                        style={{...styles.actionBtn}}
+                        onPress={()=>{
+                          updateStatus('attempted');
+                        }}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Mark Attempted</Text>
+                        <Feather
+                          name='navigation'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'flex-end',
+                        marginTop:25,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          ...styles.minBtn,
+                          backgroundColor:'transparent'
+                        }}
+                        onPress={()=>setExpanded(false)}
+                      >
+                        <Text style={{
+                            ...styles.details,
+                            ...theme.fonts.titleSmall,
+                            color:theme.colors.primary,
+                          }}>
+                          Minimize
+                        </Text>
+                        <Feather
+                          name='minimize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                  </>
+                  :
+                  <TouchableOpacity
+                    onPress={()=>{setExpanded(true)}}
                   >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(pat.status ?? 'Not Updated')}
-                    </Text>
 
-                    <Text style={styles.title}>
-                      {dayjs(pat.duedate).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
+                      }}
+                    >
+                      <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
+                      <View style={styles.row}>
+                        <Text style={{
+                            ...styles.title,
+                            marginRight:7
+                          }}
+                        >{getName(pat.careplan)}</Text>
+                        {
+                          pat.gender === 'male' &&
+                          <Fontisto
+                            name='male'
+                            size={15}
+                            color={'#830000'}
+                          />
+                        }
+                        {
+                          pat.gender === 'female' &&
+                          <Fontisto
+                            name='female'
+                            size={15}
+                            color={'#660058'}
+                          />
+                        }
+                        <Text
+                          style={{
+                            ...styles.text,
+                            color: pat.gender === 'male' ? '#830000' : '#660058'
+                          }}
+                        >{pat.gender}</Text>
+                      </View>
+                    </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={styles.title}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Job Type- </Text> {getName(pat.jobtype)}
+                    <View style={{...styles.row, marginTop:10, columnGap:15}}>
+                      <Text style={{...styles.text}}>{pat.brandname}</Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={styles.title}>
+                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(pat.status ?? 'Not Updated')}
+                      </Text>
+
+                      <Text style={styles.title}>
+                        {dayjs(pat.duedate).format('DD MMM YYYY')}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={styles.title}>
+                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Job Type- </Text> {getName(pat.jobtype)}
+                      </Text>
+
+                      <View
+                        style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Feather
+                          name='maximize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </View>
+                      
+                    </View>
+
+                  </TouchableOpacity>
+                }
+              </>
+              :
+              <>
+                {
+                  !deleted ?
+                  <>
+                    <Text style={[styles.title, {marginVertical:10}]}>
+                      Are you sure you want to delete this job!
                     </Text>
 
                     <View
-                      style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop:5,
+                      columnGap: 20
+                    }}
                     >
-                      <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
-                      <Feather
-                        name='maximize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
+                    <TouchableOpacity 
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={()=>{
+                        setDeleteInitiated(false);
+                      }}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={()=>{
+                        deleteCmJob();
+                      }}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
+                    </TouchableOpacity>
                     </View>
-                    
-                  </View>
-
-                </TouchableOpacity>
-              }
-            </>
-            :
-            <>
-              {
-                !deleted ?
-                <>
-                  <Text style={[styles.title, {marginVertical:10}]}>
-                    Are you sure you want to delete this job!
+                  </>
+                  :
+                  <Text
+                    style={[
+                      styles.title,
+                      {
+                        marginTop:15,
+                        color:'#044004',
+                        width:'100%',
+                        textAlign:'center'
+                      }
+                    ]}
+                  >
+                    Job Deleted Successfully!
                   </Text>
-
-                  <View
-                  style={{
-                    ...styles.row,
-                    justifyContent:'space-between',
-                    alignItems:'flex-start',
-                    marginTop:5,
-                    columnGap: 20
-                  }}
-                  >
-                  <TouchableOpacity 
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      setDeleteInitiated(false);
-                    }}
-                  >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      deleteCmJob();
-                    }}
-                  >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
-                  </TouchableOpacity>
-                  </View>
-                </>
-                :
-                <Text
-                  style={[
-                    styles.title,
-                    {
-                      marginTop:15,
-                      color:'#044004',
-                      width:'100%',
-                      textAlign:'center'
-                    }
-                  ]}
-                >
-                  Job Deleted Successfully!
-                </Text>
-              }
-            </>
-          }
+                }
+              </>
+            }
+          </View>
         </LinearGradient>
       </TouchableOpacity>
     )

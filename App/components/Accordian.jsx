@@ -9,7 +9,7 @@ import * as Animatable from 'react-native-animatable';
 //   UIManager.setLayoutAnimationEnabledExperimental(true);
 // }
 
-const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }) => {
+const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText, patient }) => {
 
   const toggleAccordion = () => {
     // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -50,14 +50,14 @@ const AccordionItem = ({ title, Comp, id, expanded, setExpanded, componentText }
 
       { expanded === id && (
         <Animatable.View animation="slideInUp" duration={300} style={{flex:1}}>
-          <Comp/>
+          <Comp patient={patient}/>
         </Animatable.View>
       )}
     </Animatable.View>
   );
 };
 
-const Accordion = ({components, titles,  componentText, expanded, setExpanded }) => {
+const Accordion = ({components, titles,  componentText, expanded, setExpanded, patient={} }) => {
   
   return (
     <View style={styles.container}>
@@ -72,6 +72,7 @@ const Accordion = ({components, titles,  componentText, expanded, setExpanded })
               Comp={comp}
               title={titles[i]} 
               id={i}
+              patient={patient}
               componentText={componentText?.[i]}
               expanded={expanded}
               setExpanded={setExpanded}

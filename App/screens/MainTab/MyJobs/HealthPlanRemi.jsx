@@ -55,10 +55,9 @@ const HealthPlanReminder = () => {
             reminders: false
           }))
 
-          setReminders(res.data)
+          setReminders(res.data);
         }else{
 
-          console.log('res',res)
           setLoading((pre)=>({
             ...pre,
             reminders: false
@@ -140,229 +139,335 @@ const HealthPlanReminder = () => {
           style={styles.patientCard}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}  
-        > 
-          {
-            expanded ?
-            <>
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start'
-                }}
-              >
-                <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                <Text 
+        >
+          <View
+            style={{
+              margin:2.5,
+              backgroundColor:'#fff',
+              padding:8,
+              borderRadius:4
+            }}
+          >
+            {
+              expanded ?
+              <>
+                <View
                   style={{
-                    ...styles.title,
-                    marginRight:7
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start'
                   }}
-                >{getName(pat.careplan)}</Text>
-              </View>
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start',
-                  marginTop: 15
-                }}
-              >
-                <Text style={styles.title}>
-                  <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>+91</Text> {pat.mobile}
-                </Text>
-
-                <Text style={styles.title}>
-                  {dayjs(pat.duedate).format('DD MMM YYYY')}
-                </Text>
-              </View>
-
-              {
-                pat?.messages.length > 1 &&
-                <>
-                {
-                  pat?.messages.map((item)=>(
-                    <>
-                      <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                        {getName(item.type)}
-                      </Text>
-
-                      <TextInput
-                        style={[
-                          theme.fonts.titleSmall,
-                          { 
-                            marginTop:10,
-                            color:'#666666',
-                            borderWidth:1,
-                            borderRadius: 5,
-                            borderColor: '#ccc',
-                            paddingHorizontal:10,
-                            paddingVertical:5,
-                            backgroundColor: '#fff',
-                          }
-                        ]}
-                        multiline={true}
-                        value={item.remarks}
-                        editable={false}
-                      />
-                    </>
-                  ))
-                }
-                </>
-                
-              }
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start',
-                  marginTop:25,
-                  columnGap: 20
-                }}
-              >
-                <TouchableOpacity
-                  style={{...styles.actionBtn}}
-                  onPress={()=>{sendAppointmentsReminder()}}
                 >
-                  <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Send Reminder</Text>
-                  <Feather
-                    name='navigation'
-                    size={15}
-                    color={theme.colors.primary}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'flex-end',
-                  marginTop:25,
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    ...styles.minBtn,
-                    backgroundColor:'transparent'
-                  }}
-                  onPress={()=>setExpanded(false)}
-                >
-                  <Text style={{
-                      ...styles.details,
-                      ...theme.fonts.titleSmall,
-                      color:theme.colors.primary,
-                    }}>
-                    Minimize
-                  </Text>
-                  <Feather
-                    name='minimize'
-                    size={15}
-                    color={theme.colors.primary}
-                  />
-                </TouchableOpacity>
-              </View>
-
-            </>
-            :
-            <TouchableOpacity
-              onPress={()=>{setExpanded(true)}}
-            >
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start'
-                }}
-              >
-                <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-                <Text 
-                  style={{
-                    ...styles.title,
-                    marginRight:7
-                  }}
-                >{getName(pat.careplan)}</Text>
-              </View>
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start',
-                  marginTop: 15
-                }}
-              >
-                <Text style={styles.title}>
-                  <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>+91</Text> {pat.mobile}
-                </Text>
-
-                <Text style={styles.title}>
-                  {dayjs(pat.duedate).format('DD MMM YYYY')}
-                </Text>
-              </View>
-
-              {
-                pat?.messages.length > 1 &&
-                <>
-                {
-                  pat?.messages.map((item)=>(
-                    <>
-                      <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                        {getName(item.type)}
-                      </Text>
-
-                      <TextInput
-                        style={[
-                          theme.fonts.titleSmall,
-                          { 
-                            marginTop:10,
-                            color:'#666666',
-                            borderWidth:1,
-                            borderRadius: 5,
-                            borderColor: '#ccc',
-                            paddingHorizontal:10,
-                            paddingVertical:5,
-                            backgroundColor: '#fff',
-                          }
-                        ]}
-                        multiline={true}
-                        value={item.remarks}
-                        editable={false}
-                      />
-                    </>
-                  ))
-                }
-                </>
-                
-              }
-
-              <View
-                style={{
-                  ...styles.row,
-                  justifyContent:'space-between',
-                  alignItems:'flex-start',
-                  marginTop: 15
-                }}
-              >
-                <Text style={styles.title}>
-                </Text>
+                  <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
+                  <Text 
+                    style={{
+                      ...styles.title,
+                      marginRight:7
+                    }}
+                  >{getName(pat.careplan)}</Text>
+                </View>
 
                 <View
-                  style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                  style={{
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start',
+                    marginTop: 15
+                  }}
                 >
-                  <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
-                  <Feather
-                    name='maximize'
-                    size={15}
-                    color={theme.colors.primary}
-                  />
+                  <Text style={styles.title}>
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>+91</Text> {pat.mobile}
+                  </Text>
+
+                  <Text style={styles.title}>
+                    {dayjs(pat.duedate).format('DD MMM YYYY')}
+                  </Text>
                 </View>
                 
-              </View>
+                {
+                  pat?.healthplan?.remarks &&
+                  <View>
+                  <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                    Remarks
+                  </Text>
 
-            </TouchableOpacity>
-          }
+                  <TextInput
+                    style={[
+                      theme.fonts.titleSmall,
+                      { 
+                        marginTop:10,
+                        color:'#666666',
+                        borderWidth:1,
+                        borderRadius: 5,
+                        borderColor: '#a4a4a4',
+                        paddingHorizontal:10,
+                        paddingVertical:5,
+                        backgroundColor: '#fff',
+                      }
+                    ]}
+                    multiline={true}
+                    value={pat?.healthplan?.remarks}
+                    editable={false}
+                  />
+                </View>
+                }
+
+                {
+                  Object.keys(pat?.healthplan).map((item, i)=>{
+                    const array = ['labplanofaction', 'dietplanofaction', 'mediplanofaction', 'mentalplanofaction', 'fitnessplanofaction', 'followupplanofaction']
+                    const realname = {
+                      mediplanofaction: 'Medication',
+                      labplanofaction: 'Labs',
+                      dietplanofaction: 'Diet',
+                      mentalplanofaction: 'Mental',
+                      fitnessplanofaction: 'Fitness',
+                      followupplanofaction: 'Followup'
+                    }
+                    if(!array.includes(item)) return;
+
+                    const object = pat?.healthplan
+                    if(!object?.[item]?.enabled) return;
+
+                    return(
+                      <View
+                        key={i}
+                        style={{
+                          marginTop: 20,
+                          padding:7,
+                          backgroundColor:'#ffffff',
+                          borderRadius:5,
+                          paddingHorizontal:10,
+                          borderWidth: 1,
+                          flex: 1
+                        }}
+                      >
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent:'space-between',
+                            alignItems:'flex-start',
+                            flex: 1
+                          }}
+                        >
+                          <Text style={styles.title}>
+                            {realname?.[item]}
+                          </Text>
+
+                          <Text style={styles.text}>
+                            {object?.[item].frequency}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent:'space-between',
+                            alignItems:'flex-start',
+                            flex: 1,
+                            marginTop: 10
+                          }}
+                        >
+                          <Text style={styles.text}>
+                            Start- {dayjs(object?.[item]?.startdate).format('DD MMM YYYY')}
+                          </Text>
+
+                          <Text style={styles.text}>
+                            End- {dayjs(object?.[item]?.enddate).format('DD MMM YYYY')}
+                          </Text>
+                        </View>
+                      </View>
+                    )
+                  })
+                }
+                
+                
+
+                {
+                  pat?.messages.length > 0 &&
+                  <>
+                  {
+                    pat?.messages.map((item,i)=>(
+                      <View key={i}>
+                        <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                          {getName(item.type)} Message
+                        </Text>
+
+                        <TextInput
+                          style={[
+                            theme.fonts.titleSmall,
+                            { 
+                              marginTop:10,
+                              color:'#666666',
+                              borderWidth:1,
+                              borderRadius: 5,
+                              borderColor: '#a4a4a4',
+                              paddingHorizontal:10,
+                              paddingVertical:5,
+                              backgroundColor: '#fff',
+                            }
+                          ]}
+                          multiline={true}
+                          value={item.remarks}
+                          editable={false}
+                        />
+                      </View>
+                    ))
+                  }
+                  </>
+                  
+                }
+
+                <View
+                  style={{
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start',
+                    marginTop:25,
+                    columnGap: 20
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{...styles.actionBtn}}
+                    onPress={()=>{sendAppointmentsReminder()}}
+                  >
+                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Send Reminder</Text>
+                    <Feather
+                      name='navigation'
+                      size={15}
+                      color={theme.colors.primary}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    ...styles.row,
+                    justifyContent:'flex-end',
+                    marginTop:25,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      ...styles.minBtn,
+                      backgroundColor:'transparent'
+                    }}
+                    onPress={()=>setExpanded(false)}
+                  >
+                    <Text style={{
+                        ...styles.details,
+                        ...theme.fonts.titleSmall,
+                        color:theme.colors.primary,
+                      }}>
+                      Minimize
+                    </Text>
+                    <Feather
+                      name='minimize'
+                      size={15}
+                      color={theme.colors.primary}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+              </>
+              :
+              <TouchableOpacity
+                onPress={()=>{setExpanded(true)}}
+              >
+
+                <View
+                  style={{
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start'
+                  }}
+                >
+                  <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
+                  <Text 
+                    style={{
+                      ...styles.title,
+                      marginRight:7
+                    }}
+                  >{getName(pat.careplan)}</Text>
+                </View>
+
+                <View
+                  style={{
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start',
+                    marginTop: 15
+                  }}
+                >
+                  <Text style={styles.title}>
+                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>+91</Text> {pat.mobile}
+                  </Text>
+
+                  <Text style={styles.title}>
+                    {dayjs(pat.duedate).format('DD MMM YYYY')}
+                  </Text>
+                </View>
+
+                {
+                  pat?.messages.length > 1 &&
+                  <>
+                  {
+                    pat?.messages.map((item)=>(
+                      <>
+                        <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                          {getName(item.type)}
+                        </Text>
+
+                        <TextInput
+                          style={[
+                            theme.fonts.titleSmall,
+                            { 
+                              marginTop:10,
+                              color:'#666666',
+                              borderWidth:1,
+                              borderRadius: 5,
+                              borderColor: '#ccc',
+                              paddingHorizontal:10,
+                              paddingVertical:5,
+                              backgroundColor: '#fff',
+                            }
+                          ]}
+                          multiline={true}
+                          value={item.remarks}
+                          editable={false}
+                        />
+                      </>
+                    ))
+                  }
+                  </>
+                  
+                }
+
+                <View
+                  style={{
+                    ...styles.row,
+                    justifyContent:'space-between',
+                    alignItems:'flex-start',
+                    marginTop: 15
+                  }}
+                >
+                  <Text style={styles.title}>
+                  </Text>
+
+                  <View
+                    style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                  >
+                    <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                    <Feather
+                      name='maximize'
+                      size={15}
+                      color={theme.colors.primary}
+                    />
+                  </View>
+                  
+                </View>
+
+              </TouchableOpacity>
+            }
+          </View>
         </LinearGradient>
       </TouchableOpacity>
     )

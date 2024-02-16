@@ -205,7 +205,7 @@ const getCmDetails = (baseUrl, dispatch, email )=>{
     }
     
   }).catch((err)=>{
-
+    
     dispatch(valuesActions.error(err));
   })
 }
@@ -229,6 +229,8 @@ const API_ROUTES = {
   GET_ALL_DOCTORS : '/doctor/all/0',
   HEALTH_PLAN_REMINDERS : '/adherence/healthplan/reminder/{email}',
   SEND_H_PLAN_REMINDER : '/healthplan/sendwareminder/{patientid}',
+  PATIENT_DETAILS : '/patient/detailed/patientid/{patientid}',
+  GET_ALL_CORPORATES : '/corporate/all/1'
 }
 
 export {
@@ -243,6 +245,7 @@ export {
   getCmDetails,
   postTokenService,
   putTokenService,
-  patchTokenService
+  patchTokenService,
+  getTokenService
 }
   

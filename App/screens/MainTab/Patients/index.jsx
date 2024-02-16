@@ -24,16 +24,18 @@ import {
   Toast,
   WhiteSpace,
   WingBlank,
-} from '@ant-design/react-native'
+} from '@ant-design/react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from '../Styles'
 import { pink800 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { Image } from 'react-native-animatable';
 
-const Patients = () => {
+const Patients = ({}) => {
   
   const theme = useTheme();
   const dispatch = myDispatch();
+  const navigation = useNavigation();
 
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
   const baseUrl = mySelector(state=>state.Login.value.baseUrl);
@@ -152,12 +154,12 @@ const Patients = () => {
     return (
       <TouchableOpacity
         key={item.index}
-        // onPress={()=>handleCopy('kjaskjd','kajdjk')}
+        onPress={()=>navigation.navigate('PatientDetails', {patient: item})}
       >
         <LinearGradient
           colors={
             pat.careplan === 'vip' ? 
-            ['#e5ac01','#fdf774','#fdf774','#e5ac01'] 
+            ['#c59300','#fdf774','#fdf774','#e5ac01'] 
             : 
             ['#87adff','#cedaff','#cedaff','#87adff']
           }
@@ -167,74 +169,83 @@ const Patients = () => {
         > 
           <View
             style={{
-              ...styles.row,
-              justifyContent:'space-between',
-              alignItems:'flex-start'
+              margin:2.5,
+              backgroundColor:'#fff',
+              padding:8,
+              borderRadius:4
             }}
           >
-            <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
-            <View style={styles.row}>
-              <Text style={{
-                  ...styles.title,
-                  marginRight:7
-                }}
-              >{getName(pat.relationship)}</Text>
-              {
-                pat.gender === 'male' &&
-                <Fontisto
-                  name='male'
-                  size={15}
-                  color={'#830000'}
-                />
-              }
-              {
-                pat.gender === 'female' &&
-                <Fontisto
-                  name='female'
-                  size={15}
-                  color={'#660058'}
-                />
-              }
-              <Text
-                style={{
-                  ...styles.text,
-                  color: pat.gender === 'male' ? '#830000' : '#660058'
-                }}
-              >{pat.gender}</Text>
+            <View
+              style={{
+                ...styles.row,
+                justifyContent:'space-between',
+                alignItems:'flex-start'
+              }}
+            >
+              <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
+              <View style={styles.row}>
+                <Text style={{
+                    ...styles.title,
+                    marginRight:7
+                  }}
+                >{getName(pat.relationship)}</Text>
+                {
+                  pat.gender === 'male' &&
+                  <Fontisto
+                    name='male'
+                    size={15}
+                    color={'#830000'}
+                  />
+                }
+                {
+                  pat.gender === 'female' &&
+                  <Fontisto
+                    name='female'
+                    size={15}
+                    color={'#660058'}
+                  />
+                }
+                <Text
+                  style={{
+                    ...styles.text,
+                    color: pat.gender === 'male' ? '#830000' : '#660058'
+                  }}
+                >{pat.gender}</Text>
+              </View>
             </View>
-          </View>
-          
+            
 
-          <View style={{...styles.row, marginTop:10, columnGap:15}}>
-            <Text style={{...styles.text}}>{pat.pid}</Text>
-          </View>
+            <View style={{...styles.row, marginTop:10, columnGap:15}}>
+              <Text style={{...styles.text}}>{pat.pid}</Text>
+            </View>
 
-          <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-            <Text style={{...styles.title}}>+{pat?.mobile}</Text>
+            <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
+              <Text style={{...styles.title}}>+{pat?.mobile}</Text>
 
-            <View style={{...styles.row, columnGap:15}}>
-              
-              <TouchableOpacity style={{...styles.minBtn}}>
-                <Text style={{...styles.title}}>Text</Text>
-                <Fontisto
-                  name='whatsapp'
-                  size={15}
-                  color={theme.colors.primary}
-                />
-              </TouchableOpacity>
+              <View style={{...styles.row, columnGap:15}}>
+                
+                <TouchableOpacity style={{...styles.minBtn}}>
+                  <Text style={{...styles.title}}>Text</Text>
+                  <Fontisto
+                    name='whatsapp'
+                    size={15}
+                    color={theme.colors.primary}
+                  />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={{...styles.minBtn}}
-                onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
-              >
-                <Text style={{...styles.title}}>Call</Text>
-                <Fontisto
-                  name='phone'
-                  size={15}
-                  color={theme.colors.primary}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{...styles.minBtn}}
+                  onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
+                >
+                  <Text style={{...styles.title}}>Call</Text>
+                  <Fontisto
+                    name='phone'
+                    size={15}
+                    color={theme.colors.primary}
+                  />
+                </TouchableOpacity>
 
+              </View>
             </View>
           </View>
         </LinearGradient>

@@ -168,12 +168,14 @@ const Appointments = () => {
   },[toDate, fromDate])
 
   const getDoctorsLists = (array) => {
-    
+
     const uniqueDoctors = new Set();
 
     array.forEach(appointment => {
-      if(cmDetails?.email === appointment.email )
-      uniqueDoctors.add(JSON.stringify({ doctorid, doctorname }));
+      uniqueDoctors.add(JSON.stringify({ 
+        doctorid:appointment.doctorid,
+        doctorname:appointment.doctorname 
+      }))
     });
 
     const uniqueDoctorsArray = Array.from(uniqueDoctors).map(JSON.parse);
@@ -184,7 +186,6 @@ const Appointments = () => {
   useEffect(()=>{
 
     if(appointments.length < 1) return;
-
     getDoctorsLists(appointments)
   },[appointments])
 
@@ -355,464 +356,472 @@ const Appointments = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}  
         > 
-          {
-            !cancelInitiated ?
-            <>
-              {
-                expanded ?
-                <>
-                
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(pat.patientname)}</Text>
-                    <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  > 
+          <View
+            style={{
+              margin:2.5,
+              backgroundColor:'#fff',
+              padding:8,
+              borderRadius:4
+            }}
+          >
+            {
+              !cancelInitiated ?
+              <>
+                {
+                  expanded ?
+                  <>
+                  
                     <View
                       style={{
-                        ...styles.row
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
                       }}
                     >
-                      <FontAwesome6
-                        name='compass'
-                        size={13}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        Status - {getName(status)}
-                      </Text>
+                      <Text style={styles.title}>{getName(pat.patientname)}</Text>
+                      <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
                     </View>
 
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  > 
                     <View
                       style={{
-                        ...styles.row
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
                       }}
-                    >
-                      <FontAwesome6
-                        name='box-archive'
-                        size={13}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        {getActivity(pat.activityname)}
-                      </Text>
-                    </View>
-                    
-
-                    <Text style={styles.title}>
-                      {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
-                    <View
-                      style={{
-                        ...styles.row
-                      }}
-                    >
-                      <FontAwesome6
-                        name='user-doctor'
-                        size={16}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        {getName(pat.doctorname)}
-                      </Text>
-                    </View>
-                    
-
-                    <Text style={styles.title}>
-                      {formatTime(pat.startime)}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
-
-                    {/* you can add something here */}
-                  </View>
-
-                  <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-                    <Text style={{...styles.title}}>+{pat?.mobile}</Text>
-
-                    <View style={{...styles.row, columnGap:15}}>
-                      
-                      <TouchableOpacity style={{...styles.minBtn}}>
-                        <Text style={{...styles.title}}>Text</Text>
-                        <Fontisto
-                          name='whatsapp'
-                          size={15}
-                          color={theme.colors.primary}
-                        />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={{...styles.minBtn}}
-                        onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
-                      >
-                        <Text style={{...styles.title}}>Call</Text>
-                        <Fontisto
-                          name='phone'
-                          size={15}
-                          color={theme.colors.primary}
-                        />
-                      </TouchableOpacity>
-
-                    </View>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 10,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{
-                        ...styles.actionBtn, 
-                        opacity: status === 'checkedout' ? 1 : 0.5
-                      }}
-                      onPress={()=>{
-                        if(status === 'checkedout') updateAppointment('undo')
-                      }}
-                    >
-                      <Text 
+                    > 
+                      <View
                         style={{
-                          ...theme.fonts.titleSmall,
-                          color: '#000'
-                        }}>
-                          {status === 'checkedout' ? 'Undo' : ''} CheckedOut
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='compass'
+                          size={13}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          Status - {getName(status)}
+                        </Text>
+                      </View>
+
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    > 
+                      <View
+                        style={{
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='box-archive'
+                          size={13}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          {getActivity(pat.activityname)}
+                        </Text>
+                      </View>
+                      
+
+                      <Text style={styles.title}>
+                        {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
                       </Text>
-                      <Feather
-                        name='repeat'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity
-                      style={{...styles.actionBtn}}
-                      onPress={sendAppointmentsReminder}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Send Reminder</Text>
-                      <Feather
-                        name='send'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'center',
-                      alignItems:'center',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity 
-                      style={{...styles.actionBtn, justifyContent:'center'}}
-                      onPress={()=>{
-                        setCancelInitiated(true);
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
                       }}
                     >
-                      <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Cancel Booking</Text>
-                      <Feather
-                        name='x-square'
-                        size={15}
-                        color={'#a80000'}
-                      />
-                    </TouchableOpacity>
-                  </View>
+                      <View
+                        style={{
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='user-doctor'
+                          size={16}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          {getName(pat.doctorname)}
+                        </Text>
+                      </View>
+                      
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:20,
-                      columnGap: 20
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{...styles.minBtn}}
-                      onPress={copyEmrLink}
+                      <Text style={styles.title}>
+                        {formatTime(pat.startime)}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        marginTop: 15
+                      }}
                     >
-                      <Feather
-                        name='copy'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Emr Link</Text>
-                    </TouchableOpacity>
+                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
 
-                    {
-                      pat?.onlinelink ?
+                      {/* you can add something here */}
+                    </View>
+
+                    <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
+                      <Text style={{...styles.title}}>+{pat?.mobile}</Text>
+
+                      <View style={{...styles.row, columnGap:15}}>
+                        
+                        <TouchableOpacity style={{...styles.minBtn}}>
+                          <Text style={{...styles.title}}>Text</Text>
+                          <Fontisto
+                            name='whatsapp'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{...styles.minBtn}}
+                          onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
+                        >
+                          <Text style={{...styles.title}}>Call</Text>
+                          <Fontisto
+                            name='phone'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                        </TouchableOpacity>
+
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop:20,
+                        columnGap: 10,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          ...styles.actionBtn, 
+                          opacity: status === 'checkedout' ? 1 : 0.5
+                        }}
+                        onPress={()=>{
+                          if(status === 'checkedout') updateAppointment('undo')
+                        }}
+                      >
+                        <Text 
+                          style={{
+                            ...theme.fonts.titleSmall,
+                            color: '#000'
+                          }}>
+                            {status === 'checkedout' ? 'Undo' : ''} CheckedOut
+                        </Text>
+                        <Feather
+                          name='repeat'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={{...styles.actionBtn}}
+                        onPress={sendAppointmentsReminder}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Send Reminder</Text>
+                        <Feather
+                          name='send'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'center',
+                        alignItems:'center',
+                        marginTop:20,
+                        columnGap: 20
+                      }}
+                    >
+                      <TouchableOpacity 
+                        style={{...styles.actionBtn, justifyContent:'center'}}
+                        onPress={()=>{
+                          setCancelInitiated(true);
+                        }}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Cancel Booking</Text>
+                        <Feather
+                          name='x-square'
+                          size={15}
+                          color={'#a80000'}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop:20,
+                        columnGap: 20
+                      }}
+                    >
                       <TouchableOpacity
                         style={{...styles.minBtn}}
-                        onPress={()=>handleCopy('Video Call link', pat.onlinelink)}
+                        onPress={copyEmrLink}
                       >
                         <Feather
                           name='copy'
                           size={15}
                           color={theme.colors.primary}
                         />
-                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Video Link</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Emr Link</Text>
                       </TouchableOpacity>
-                      :null
-                    }
-                  
-                  </View>
 
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'flex-end',
-                      marginTop:25,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{
-                        ...styles.minBtn,
-                        backgroundColor:'transparent'
-                      }}
-                      onPress={()=>setExpanded(false)}
-                    >
-                      <Text style={{
-                          ...styles.details,
-                          ...theme.fonts.titleSmall,
-                          color:theme.colors.primary,
-                        }}>
-                        Minimize
-                      </Text>
-                      <Feather
-                        name='minimize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                </>
-                :
-                <TouchableOpacity
-                  onPress={()=>{setExpanded(true)}}
-                >
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start'
-                    }}
-                  >
-                    <Text style={styles.title}>{getName(pat.patientname)}</Text>
-                    <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  > 
-                    <View
-                      style={{
-                        ...styles.row
-                      }}
-                    >
-                      <FontAwesome6
-                        name='compass'
-                        size={13}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        Status - {getName(pat.status)}
-                      </Text>
-                    </View>
-
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  > 
-                    <View
-                      style={{
-                        ...styles.row
-                      }}
-                    >
-                      <FontAwesome6
-                        name='box-archive'
-                        size={13}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        {getActivity(pat.activityname)}
-                      </Text>
-                    </View>
+                      {
+                        pat?.onlinelink ?
+                        <TouchableOpacity
+                          style={{...styles.minBtn}}
+                          onPress={()=>handleCopy('Video Call link', pat.onlinelink)}
+                        >
+                          <Feather
+                            name='copy'
+                            size={15}
+                            color={theme.colors.primary}
+                          />
+                          <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Video Link</Text>
+                        </TouchableOpacity>
+                        :null
+                      }
                     
+                    </View>
 
-                    <Text style={styles.title}>
-                      {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop: 15
-                    }}
-                  >
                     <View
                       style={{
-                        ...styles.row
+                        ...styles.row,
+                        justifyContent:'flex-end',
+                        marginTop:25,
                       }}
                     >
-                      <FontAwesome6
-                        name='user-doctor'
-                        size={16}
-                        color={theme.colors.primary}
-                      />
-                      <Text style={styles.title}>
-                        {getName(pat.doctorname)}
-                      </Text>
+                      <TouchableOpacity
+                        style={{
+                          ...styles.minBtn,
+                          backgroundColor:'transparent'
+                        }}
+                        onPress={()=>setExpanded(false)}
+                      >
+                        <Text style={{
+                            ...styles.details,
+                            ...theme.fonts.titleSmall,
+                            color:theme.colors.primary,
+                          }}>
+                          Minimize
+                        </Text>
+                        <Feather
+                          name='minimize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </TouchableOpacity>
                     </View>
-                    
 
-                    <Text style={styles.title}>
-                      {formatTime(pat.startime)}
-                    </Text>
-                  </View>
-
-                  <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      marginTop: 15
-                    }}
-                  >
-                    <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
-
-                    <View
-                      style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
-                      <Feather
-                        name='maximize'
-                        size={15}
-                        color={theme.colors.primary}
-                      />
-                    </View>
-                  </View>
-
-                </TouchableOpacity>
-              }
-            </>
-            :
-            <>
-              {
-                !cancelled ?
-                <>
-                  <Text style={[styles.title, {marginVertical:10}]}>
-                    Are you sure you want to Cancel this Appointment, once cancelled cannot be undone?
-                  </Text>
-
-                  <View
-                  style={{
-                    ...styles.row,
-                    justifyContent:'space-between',
-                    alignItems:'flex-start',
-                    marginTop:5,
-                    columnGap: 20
-                  }}
-                  >
-                  <TouchableOpacity 
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      setCancelInitiated(false);
-                    }}
-                  >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>No Dont</Text>
-                  </TouchableOpacity>
-
+                  </>
+                  :
                   <TouchableOpacity
-                    style={{...styles.actionBtn, justifyContent:'center'}}
-                    onPress={()=>{
-                      updateAppointment('cancel');
-                    }}
+                    onPress={()=>{setExpanded(true)}}
                   >
-                    <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Cancel!</Text>
-                  </TouchableOpacity>
-                  </View>
-                </>
-                :
-                <Text
-                  style={[
-                    styles.title,
-                    {
-                      marginTop:15,
-                      color:'#044004',
-                      width:'100%',
-                      textAlign:'center'
-                    }
-                  ]}
-                >
-                  Appointment cancelled Successfully!
-                </Text>
-              }
-            </>
-          }
 
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start'
+                      }}
+                    >
+                      <Text style={styles.title}>{getName(pat.patientname)}</Text>
+                      <Text style={{ ...styles.text, }} >{pat.brandname} - {pat?.careplan}</Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    > 
+                      <View
+                        style={{
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='compass'
+                          size={13}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          Status - {getName(pat.status)}
+                        </Text>
+                      </View>
+
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    > 
+                      <View
+                        style={{
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='box-archive'
+                          size={13}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          {getActivity(pat.activityname)}
+                        </Text>
+                      </View>
+                      
+
+                      <Text style={styles.title}>
+                        {dayjs(pat.appointmentdate).format('DD MMM YYYY')}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        alignItems:'flex-start',
+                        marginTop: 15
+                      }}
+                    >
+                      <View
+                        style={{
+                          ...styles.row
+                        }}
+                      >
+                        <FontAwesome6
+                          name='user-doctor'
+                          size={16}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.title}>
+                          {getName(pat.doctorname)}
+                        </Text>
+                      </View>
+                      
+
+                      <Text style={styles.title}>
+                        {formatTime(pat.startime)}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        ...styles.row,
+                        justifyContent:'space-between',
+                        marginTop: 15
+                      }}
+                    >
+                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{pat?.ccownername} </Text>
+
+                      <View
+                        style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                      >
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Feather
+                          name='maximize'
+                          size={15}
+                          color={theme.colors.primary}
+                        />
+                      </View>
+                    </View>
+
+                  </TouchableOpacity>
+                }
+              </>
+              :
+              <>
+                {
+                  !cancelled ?
+                  <>
+                    <Text style={[styles.title, {marginVertical:10}]}>
+                      Are you sure you want to Cancel this Appointment, once cancelled cannot be undone?
+                    </Text>
+
+                    <View
+                    style={{
+                      ...styles.row,
+                      justifyContent:'space-between',
+                      alignItems:'flex-start',
+                      marginTop:5,
+                      columnGap: 20
+                    }}
+                    >
+                    <TouchableOpacity 
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={()=>{
+                        setCancelInitiated(false);
+                      }}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>No Dont</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={{...styles.actionBtn, justifyContent:'center'}}
+                      onPress={()=>{
+                        updateAppointment('cancel');
+                      }}
+                    >
+                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Cancel!</Text>
+                    </TouchableOpacity>
+                    </View>
+                  </>
+                  :
+                  <Text
+                    style={[
+                      styles.title,
+                      {
+                        marginTop:15,
+                        color:'#044004',
+                        width:'100%',
+                        textAlign:'center'
+                      }
+                    ]}
+                  >
+                    Appointment cancelled Successfully!
+                  </Text>
+                }
+              </>
+            }
+          </View>
         </LinearGradient>
       </TouchableOpacity>
     )
