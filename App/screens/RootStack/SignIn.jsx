@@ -26,7 +26,7 @@ import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux
 
 import Users from '../../utils';
 
-import { postService, API_ROUTES, getCmDetails } from '../../Server';
+import { postService, API_ROUTES, getCmDetails } from '../../server';
 
 import AsyncStorage from '@react-native-community/async-storage';
 

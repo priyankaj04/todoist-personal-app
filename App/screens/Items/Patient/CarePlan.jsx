@@ -23,7 +23,7 @@ import dayjs from 'dayjs';
 import * as Animatable from 'react-native-animatable';
 
 import {loginActions, valuesActions, myDispatch, mySelector} from '../../../redux';
-import { getService, getTokenService, API_ROUTES, stringInterpolater } from '../../../Server';
+import { getService, getTokenService, API_ROUTES, stringInterpolater } from '../../../server';
 import {getName, getActivity} from '../../../utils';
 import Assets from '../../../assets';
 import {TitleText, Loading} from '../../../components'

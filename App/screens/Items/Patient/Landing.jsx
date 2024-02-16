@@ -33,7 +33,7 @@ import {
 import {getName} from '../../../utils';
 import {Accordion, TitleText} from '../../../components';
 import Assets from '../../../assets';
-import {getService, API_ROUTES, stringInterpolater} from '../../../Server';
+import {getService, API_ROUTES, stringInterpolater} from '../../../server';
 
 
 const PatientIndex = ({route}) => {

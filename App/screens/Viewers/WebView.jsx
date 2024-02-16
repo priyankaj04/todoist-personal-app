@@ -4,8 +4,8 @@ import {View, StyleSheet, TouchableOpacity,Dimensions, Image,StatusBar,ActivityI
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { vh, vw } from 'react-native-css-vh-vw';
 const { width, height } = Dimensions.get('window');
-import { COLORS, Navigations, screens, } from '../../Constants/index';
-import { FONTS, SIZES, } from '../../Constants/theme';
+import { COLORS, Navigations, screens, } from '../../constants/index';
+import { FONTS, SIZES, } from '../../constants/theme';
 import { track } from '@amplitude/analytics-react-native';
 
 

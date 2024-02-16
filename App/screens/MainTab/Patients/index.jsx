@@ -6,7 +6,7 @@ import { Tabs } from '@ant-design/react-native';
 import {useTheme} from '@react-navigation/native';
 import { vh, vw } from 'react-native-css-vh-vw';
 
-import { getService, API_ROUTES, stringInterpolater } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater } from '../../../server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, SearchBar } from '../../../components'
 import { getName } from '../../../utils';

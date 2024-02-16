@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { getService, postService, putService, deleteService, patchService, API_ROUTES, stringInterpolater, refreshToken } from '../Server'
+import { getService, postService, putService, deleteService, patchService, API_ROUTES, stringInterpolater, refreshToken } from '../server'
 
 const initialValue = {
     loginData:{},

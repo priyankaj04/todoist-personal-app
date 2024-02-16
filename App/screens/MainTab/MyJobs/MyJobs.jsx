@@ -3,7 +3,7 @@ import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, TextInput, Linking } from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService } from '../../../server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, Dropdown, DatePicker } from '../../../components'
 import { getName } from '../../../utils';

@@ -3,14 +3,14 @@ import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, TextInput, Linking } from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, patchTokenService } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, patchTokenService } from '../../../server';
 import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
 import { Loading, Dropdown, DatePicker ,Picker, MultiSelector } from '../../../components';
 import { getName } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import assets from '../../../assets';
 import {vh, vw} from 'react-native-css-vh-vw';
-import { diagnosis } from '../../../Constants'
+import { diagnosis } from '../../../constants'
 
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import Feather from 'react-native-vector-icons/Feather';

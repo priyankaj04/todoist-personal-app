@@ -24,7 +24,7 @@ import StarRating from '../../../components/StarRating';
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
 import { getName } from '../../../utils';
 import { Accordion, Dropdown } from '../../../components';
-import { getService, API_ROUTES, stringInterpolater } from '../../../Server';
+import { getService, API_ROUTES, stringInterpolater } from '../../../server';
 
 import MyJobs from './MyJobs'
 import Appointment from './Appointment'

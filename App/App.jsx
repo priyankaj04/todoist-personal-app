@@ -24,7 +24,7 @@ import {
   WhiteSpace,
   WingBlank,
 } from '@ant-design/react-native';
-import { postService, API_ROUTES, refreshToken, getCmDetails } from './Server';
+import { postService, API_ROUTES, refreshToken, getCmDetails } from './server';
 import RootStackScreen from './screens/RootStack';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
