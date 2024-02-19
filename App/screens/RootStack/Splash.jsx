@@ -8,7 +8,7 @@ import {
     StatusBar,
     Image,
     TextInput,
-    TouchableWithoutFeedback
+    Platform
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -105,7 +105,7 @@ const SplashScreen = ({navigation}) => {
                     <View
                         style={{
                             position: 'absolute',
-                            bottom: 15,
+                            bottom: Platform.OS === 'ios' ? 25 : 15,
                             flexDirection:'row',
                             justifyContent: 'center',
                             width: CssVw(100)

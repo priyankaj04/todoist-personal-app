@@ -40,6 +40,7 @@ import {
 } from 'react-native-paper';
 
 import {loginActions, valuesActions, myDispatch, mySelector} from './redux';
+import {notificationListener, requestUserPermission } from './utils'
 
 const App = () => {
   const [loading, setLoading] = React.useState(true);
@@ -105,43 +106,49 @@ const App = () => {
     checkDevEnv();
 
     AsyncStorage.getItem('noOtp')
-      .then(noOtp => {
-        if (JSON.parse(noOtp) === true) {
-          !noOtp && dispatch(loginActions.toggleNoOtp());
-          handleNoOtpAuth();
-        } else {
-          try {
-            AsyncStorage.getItem('token').then(token => {
-              if (token) {
-                let decoded = jwtDecode(token);
-                if (!(decoded.exp < Date.now() / 1000)) {
-                  dispatch(
-                    loginActions.setLoginData({
-                      email: decoded.email,
-                      type: decoded.type,
-                      token: token,
-                    }),
-                  );
+    .then(noOtp => {
+      if (JSON.parse(noOtp) === true) {
+        !noOtp && dispatch(loginActions.toggleNoOtp());
+        handleNoOtpAuth();
+      } else {
+        try {
+          AsyncStorage.getItem('token').then(token => {
+            if (token) {
+              let decoded = jwtDecode(token);
+              if (!(decoded.exp < Date.now() / 1000)) {
+                dispatch(
+                  loginActions.setLoginData({
+                    email: decoded.email,
+                    type: decoded.type,
+                    token: token,
+                  }),
+                );
 
-                  getCmDetails(baseUrl, dispatch, decoded.email);
+                getCmDetails(baseUrl, dispatch, decoded.email);
 
-                  setLoading(false);
-                } else refreshTheToken();
-              } else setLoading(false);
-            });
-          } catch (e) {
-            dispatch(
-              valuesActions.error({
-                error: `Error in Get AsyncStorage Token ${error}`,
-              }),
-            );
-          }
+                setLoading(false);
+              } else refreshTheToken();
+            } else setLoading(false);
+          });
+        } catch (e) {
+          dispatch(
+            valuesActions.error({
+              error: `Error in Get AsyncStorage Token ${error}`,
+            }),
+          );
         }
-      })
-      .catch(e => {
-        console.log('Error in get noOtp', e);
-        setLoading(false);
-      });
+      }
+    })
+    .catch(e => {
+      console.log('Error in get noOtp', e);
+      setLoading(false);
+    });
+
+    // push notification
+    notificationListener()
+    requestUserPermission()
+    // push notification
+
   }, []);
 
   //! codePush updates

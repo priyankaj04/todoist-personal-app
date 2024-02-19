@@ -1,3 +1,5 @@
+import { requestUserPermission, notificationListener} from  './notification'
+
 function getName(firstName= '', lastName= '') {
     
     if (firstName?.length > 0) {
@@ -43,4 +45,4 @@ function getActivity(activity='') {
     return activity;
 }
 
-export { getName, getActivity }
+export { getName, getActivity, requestUserPermission, notificationListener }

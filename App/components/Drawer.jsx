@@ -132,7 +132,14 @@ export function DrawerContent(props) {
                         />
                     </Drawer.Section>
                 </View>
-                <Paragraph style={{...styles.caption, textAlign:'center', marginTop:10}}>Cp- {cpVersion ?? 0}  App- 1</Paragraph>
+                <Paragraph
+                    style={{
+                        textAlign:'center',
+                        marginTop:10,
+                        fontWeight:'500',
+                        color:'#646161'
+                    }}
+                >App- 1  Cp- {cpVersion ?? 0}</Paragraph>
             </DrawerContentScrollView>
             {/* <Drawer.Section>
                 <TouchableRipple onPress={() => {props.dispatch(valuesActions.setToggleTheme())}}>
