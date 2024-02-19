@@ -6,7 +6,8 @@ const initialValue = {
     devEnv:false,
     noOtp:false,
     baseUrl:`https://api.circle.care/v1`,
-    cmDetails:{}
+    cmDetails:{},
+    cpVersion:null
 }
 
 export const LoginDetails = createSlice({
@@ -20,11 +21,12 @@ export const LoginDetails = createSlice({
             state.value.baseUrl = `https://${state.value.devEnv?'dev':''}api.circle.care/v1`
         },
         toggleNoOtp: (state,action) => {state.value.noOtp = !state.value.noOtp},
-        setCmDetails: (state,action) => {state.value.cmDetails = action.payload}
+        setCmDetails: (state,action) => {state.value.cmDetails = action.payload},
+        setCpVersion: (state,action) => {state.value.cpVersion = action.payload}
     }, 
 });
 
 
-export const {setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCmDetails} = LoginDetails.actions;
+export const {setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCmDetails, setCpVersion} = LoginDetails.actions;
 
 export default LoginDetails.reducer;

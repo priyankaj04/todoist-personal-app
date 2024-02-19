@@ -295,17 +295,17 @@ const SignInScreen = ({navigation}) => {
                             onPress={updateSecureTextEntry}
                         >
                             {data.secureTextEntry ? 
-                            <Feather 
-                                name="eye-off"
-                                color="grey"
-                                size={20}
-                            />
-                            :
-                            <Feather 
-                                name="eye"
-                                color="grey"
-                                size={20}
-                            />
+                                <Feather 
+                                    name="eye"
+                                    color="grey"
+                                    size={20}
+                                />
+                                :
+                                <Feather 
+                                    name="eye-off"
+                                    color="grey"
+                                    size={20}
+                                />
                             }
                         </TouchableOpacity>
                     </View>

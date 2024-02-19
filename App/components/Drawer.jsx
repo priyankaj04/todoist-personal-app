@@ -29,6 +29,7 @@ export function DrawerContent(props) {
     const paperTheme = useTheme();
 
     const cmDetails = mySelector(state=>state.Login.value.cmDetails);
+    const cpVersion = mySelector(state=>state.Login.value.cpVersion);
 
     const signOut = async() => { 
         try {
@@ -131,6 +132,7 @@ export function DrawerContent(props) {
                         />
                     </Drawer.Section>
                 </View>
+                <Paragraph style={{...styles.caption, textAlign:'center', marginTop:10}}>Cp- {cpVersion ?? 0}  App- 1</Paragraph>
             </DrawerContentScrollView>
             {/* <Drawer.Section>
                 <TouchableRipple onPress={() => {props.dispatch(valuesActions.setToggleTheme())}}>

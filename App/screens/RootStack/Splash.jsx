@@ -15,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '@react-navigation/native';
 import assets from '../../assets';
+import {vh as CssVh, vw as CssVw} from'react-native-css-vh-vw';
 
 import { Modal, Portal, Button, Provider } from 'react-native-paper';
 
@@ -30,6 +31,7 @@ const SplashScreen = ({navigation}) => {
     const dispatch = myDispatch();
     const devEnv = mySelector(state=>state.Login.value.devEnv);
     const noOtp = mySelector(state=>state.Login.value.noOtp);
+    const cpVersion = mySelector(state=>state.Login.value.cpVersion);
 
     const showModal = () => setVisible(true);
     const hideModal = () => {
@@ -99,6 +101,17 @@ const SplashScreen = ({navigation}) => {
                             />
                         </LinearGradient>
                     </TouchableOpacity>
+                    </View>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            bottom: 15,
+                            flexDirection:'row',
+                            justifyContent: 'center',
+                            width: CssVw(100)
+                        }}
+                    >
+                        <Text style={styles.text}>CodePush version- {cpVersion ?? 0},  AppVersion- 1</Text>
                     </View>
                 </Animatable.View>
             </View>
