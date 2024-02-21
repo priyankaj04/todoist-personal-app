@@ -137,7 +137,8 @@ export function DrawerContent(props) {
                         textAlign:'center',
                         marginTop:10,
                         fontWeight:'500',
-                        color:'#646161'
+                        color:'#646161',
+                        fontSize: 13
                     }}
                 >App- 1  Cp- {cpVersion ?? 0}</Paragraph>
             </DrawerContentScrollView>

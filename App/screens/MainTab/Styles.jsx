@@ -182,8 +182,15 @@ const styles = StyleSheet.create({
   itemContainerStyle: {
     borderBottomWidth: 1,
     borderColor: '#cfcfcf',
-  }
+  },
   //! Dropdown styles
+  card: {
+    minHeight: 100,
+    padding: 10,
+    borderWidth:2,
+    marginTop:15,
+    borderRadius:5
+  }
 });
 
 export default styles;

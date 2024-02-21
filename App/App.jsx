@@ -214,6 +214,13 @@ const App = () => {
       background: '#ffffff',
       text: '#333333',
       backgroundPrimary: '#143c92',
+      alpha: '#3266E3',
+      beta: '#D6E0F9',
+      gama: '#98B2F1',
+      subtitle: '#5B626F',
+      data: '#1A1F2C',
+      backdrop: '#F0F2F4',
+      border: '#F2F5F9'
     },
   };
 
@@ -226,6 +233,13 @@ const App = () => {
       background: '#333333',
       text: '#ffffff',
       backgroundPrimary: '#143c92',
+      alpha: '#3266E3',
+      beta: '#D6E0F9',
+      gama: '#98B2F1',
+      subtitle: '#5B626F',
+      data: '#1A1F2C',
+      backdrop: '#F0F2F4',
+      border: '#F2F5F9'
     },
   };
 

@@ -197,8 +197,29 @@ const getCmDetails = (baseUrl, dispatch, email )=>{
   .then((res)=>{
 
     if(res.status === 1 && res.data?.[0]){
+      
+      //once i get cm details getting doctor id if exists
 
-      dispatch(loginActions.setCmDetails(res.data?.[0]));
+      getService(baseUrl, API_ROUTES.GET_ALL_DOCTORS)
+      .then((docres)=>{
+          if(docres.status === 1){
+            let myDocId = ''
+
+            docres.data.forEach(doc => {
+              if(doc?.email == res.data?.[0]?.email){
+                myDocId = doc.doctorid
+                return;
+              }
+            });
+            
+            dispatch(loginActions.setCmDetails({...res.data?.[0], mydocid: myDocId}));
+          }else{
+            
+            dispatch(valuesActions.statusNot1('Get all Doctors Status != 1'));
+          }
+      })
+
+      
     }else{
 
       dispatch(valuesActions.statusNot1('Get cm details error'));
