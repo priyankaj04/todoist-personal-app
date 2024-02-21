@@ -10,6 +10,7 @@ import {vh, vw} from'react-native-css-vh-vw';
 //! Items screens import
 import PatientIndex from './screens/Items/Patient';
 import PdfImageView from './screens/Viewers/PdfImage';
+import Appointments from './screens/Items/Appointments';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import jwtDecode from 'jwt-decode';
@@ -277,7 +278,7 @@ const App = () => {
               <Stack.Screen name={'MainDrawer'} component={MainDrawer} />
               <Stack.Screen name="ProfileEdit" component={EditProfile} />
               <Stack.Screen name="PatientDetails" component={PatientIndex} />
-              <Stack.Screen name="PdfImageView" component={PdfImageView} />
+              <Stack.Screen name="Appointments" component={Appointments} />
             </Stack.Navigator>
           ) : (
             <RootStackScreen />

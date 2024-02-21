@@ -6,7 +6,8 @@ import {vh, vw} from'react-native-css-vh-vw';
 
 const Stack = createStackNavigator();
 
-import Landing from './Landing';
+import MyClinicalAppointments from './MyClinicalAppoints';
+import PatientsAppointments from './MyPatAppoints';
 
 function Index({route}) {
 
@@ -22,14 +23,19 @@ function Index({route}) {
       }}
     >
       <Stack.Navigator
-        initialRouteName={'Appointments_Landing'}
+        initialRouteName={'Appointments_MyAppointments'}
         screenOptions={{
           headerShown: false,
         }}
       >
         <Stack.Screen 
-          name={'Appointments_Landing'}
-          component={Landing}
+          name={'Appointments_MyClinicalAppointments'}
+          component={MyClinicalAppointments}
+          initialParams={{appointments: appointments}}
+        />
+        <Stack.Screen 
+          name={'Appointments_MyPatientAppointments'}
+          component={PatientsAppointments}
           initialParams={{appointments: appointments}}
         />
       </Stack.Navigator>

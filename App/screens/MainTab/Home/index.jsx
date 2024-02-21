@@ -20,14 +20,16 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import StarRating from '../../../components/StarRating';
 import dayjs from 'dayjs';
 import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
 
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
 import { getName } from '../../../utils';
 import assets from '../../../assets';
 import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, postTokenService } from '../../../server';
 
-const HomeScreen = ({route, navigation}) => {
+const HomeScreen = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
   
   const dispatch = myDispatch();
   const cmDetails = mySelector(state=>state.Login.value.cmDetails);
@@ -126,6 +128,11 @@ const HomeScreen = ({route, navigation}) => {
           duration={400}
         >
           <TouchableOpacity
+            onPress={()=>navigation.navigate('Appointments', {
+                screen: 'Appointments_MyPatientAppointments',
+                params: { appointments: careManagersAppointments },
+              })
+            }
             style={{
               borderColor: theme.colors.border,
               ...styles.card
@@ -137,7 +144,11 @@ const HomeScreen = ({route, navigation}) => {
                 justifyContent:'space-between'
               }}
             >
-              <View>
+              <View
+                style={{
+                  flex:1
+                }}
+              >
                 <Text
                   style={{
                     color: theme.colors.subtitle,
@@ -149,10 +160,10 @@ const HomeScreen = ({route, navigation}) => {
                 <Text
                   style={{
                     color: 'green',
-                    ...theme.fonts.titleMedium,
+                    ...theme.fonts.labelLarge,
                   }}
                 >
-                  {careManagersAppointments.length} appointments for the day
+                  {`${careManagersAppointments.length} Appointment${careManagersAppointments.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`}
                 </Text>
                 
               </View>
@@ -169,7 +180,7 @@ const HomeScreen = ({route, navigation}) => {
         </Animatable.View>
       }
 
-      {/* my appointments card */}
+      {/* my clinical appointments card */}
       {
         myAppointments.length > 0 &&
         <Animatable.View
@@ -181,6 +192,11 @@ const HomeScreen = ({route, navigation}) => {
               borderColor: theme.colors.border,
               ...styles.card
             }}
+            onPress={()=>navigation.navigate('Appointments', {
+                screen: 'Appointments_MyClinicalAppointments',
+                params: { appointments: myAppointments },
+              })
+            }
           >
             <View
               style={{
@@ -188,7 +204,11 @@ const HomeScreen = ({route, navigation}) => {
                 justifyContent:'space-between'
               }}
             >
-              <View>
+              <View
+                style={{
+                  flex:1
+                }}
+              >
                 <Text
                   style={{
                     color: theme.colors.subtitle,
@@ -200,10 +220,10 @@ const HomeScreen = ({route, navigation}) => {
                 <Text
                   style={{
                     color: 'green',
-                    ...theme.fonts.titleMedium,
+                    ...theme.fonts.labelLarge,
                   }}
                 >
-                  {myAppointments.length} appointments for the day
+                  {`${myAppointments.length} Appointment${myAppointments.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`}
                 </Text>
                 
               </View>
