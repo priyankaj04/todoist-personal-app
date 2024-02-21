@@ -337,7 +337,7 @@ const MyJobs = () => {
                           <Fontisto
                             name='whatsapp'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -349,7 +349,7 @@ const MyJobs = () => {
                           <Fontisto
                             name='phone'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -445,7 +445,7 @@ const MyJobs = () => {
                         <Feather
                           name='copy'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={{...theme.fonts.titleSmall, color: '#000'}}> Next Actions</Text>
                       </TouchableOpacity>
@@ -459,7 +459,7 @@ const MyJobs = () => {
                           <Feather
                             name='copy'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                           <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Pre Assessment</Text>
                         </TouchableOpacity>
@@ -487,7 +487,7 @@ const MyJobs = () => {
                         <Feather
                           name='paperclip'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
 
@@ -501,7 +501,7 @@ const MyJobs = () => {
                         <Feather
                           name='navigation'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -523,14 +523,14 @@ const MyJobs = () => {
                         <Text style={{
                             ...styles.details,
                             ...theme.fonts.titleSmall,
-                            color:theme.colors.primary,
+                            color:theme.colors.backgroundPrimary,
                           }}>
                           Minimize
                         </Text>
                         <Feather
                           name='minimize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -616,11 +616,11 @@ const MyJobs = () => {
                       <View
                         style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
                       >
-                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.backgroundPrimary}}>Expand</Text>
                         <Feather
                           name='maximize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </View>
                       

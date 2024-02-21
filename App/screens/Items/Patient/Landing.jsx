@@ -140,14 +140,14 @@ const PatientIndex = ({route}) => {
           }}
         >
           <TitleText
-            title='First Name'
-            text={pat.firstname}
+            title='Name'
+            text={getName(pat.firstname, pat?.lastname)}
             theme={theme}
           />
 
           <TitleText
-            title='Last Name'
-            text={pat.lastname}
+            title='Mobile'
+            text={`+${pat.mobile}`}
             theme={theme}
             style={{
               marginTop: 15

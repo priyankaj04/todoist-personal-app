@@ -18,7 +18,7 @@ console.log(url)
       {
         title != 'Questionnaire' &&
         <TouchableOpacity style={styles.appBar}  onPress={()=>{ navigation.goBack()}}>
-          <Text style={styles.appBarText}> <Icon name={'chevron-left'} style={{fontSize: 16,color:COLORS.primary}}/>{' '}</Text>
+          <Text style={styles.appBarText}> <Icon name={'chevron-left'} style={{fontSize: 16,color:COLORS.backgroundPrimary}}/>{' '}</Text>
           <Text style={styles.appBarText}> {title}</Text>
         </TouchableOpacity>
       }

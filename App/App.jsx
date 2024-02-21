@@ -213,7 +213,7 @@ const App = () => {
       ...PaperDefaultTheme.colors,
       background: '#ffffff',
       text: '#333333',
-      primary: '#143c92',
+      backgroundPrimary: '#143c92',
     },
   };
 
@@ -225,7 +225,7 @@ const App = () => {
       ...PaperDarkTheme.colors,
       background: '#333333',
       text: '#ffffff',
-      primary: '#143c92',
+      backgroundPrimary: '#143c92',
     },
   };
 

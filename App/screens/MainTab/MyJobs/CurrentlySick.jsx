@@ -398,7 +398,7 @@ const CurrentlySick = () => {
                           <Fontisto
                             name='whatsapp'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -410,7 +410,7 @@ const CurrentlySick = () => {
                           <Fontisto
                             name='phone'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -484,7 +484,7 @@ const CurrentlySick = () => {
                         <Feather
                           name='edit'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -506,14 +506,14 @@ const CurrentlySick = () => {
                         <Text style={{
                             ...styles.details,
                             ...theme.fonts.titleSmall,
-                            color:theme.colors.primary,
+                            color:theme.colors.backgroundPrimary,
                           }}>
                           Minimize
                         </Text>
                         <Feather
                           name='minimize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -593,11 +593,11 @@ const CurrentlySick = () => {
                       <View
                         style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
                       >
-                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.backgroundPrimary}}>Expand</Text>
                         <Feather
                           name='maximize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </View>
                       
@@ -1262,7 +1262,7 @@ const CurrentlySick = () => {
                   style={{
                     ...styles.actionBtn,
                     justifyContent:'center',
-                    backgroundColor:theme.colors.primary,
+                    backgroundColor:theme.colors.backgroundPrimary,
                     columnGap: 15,
                   }}
                   onPress={() => saveUpdatedChanges()}

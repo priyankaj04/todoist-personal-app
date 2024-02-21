@@ -1,6 +1,6 @@
 {
   "name": "CareManagerApp",
-  "displayName": "CareManagerApp",
+  "displayName": "Care Manager",
   "packagerOpts": {
     "config": "metro.config.js"
   }

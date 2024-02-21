@@ -229,7 +229,7 @@ const Patients = ({}) => {
                   <Fontisto
                     name='whatsapp'
                     size={15}
-                    color={theme.colors.primary}
+                    color={theme.colors.backgroundPrimary}
                   />
                 </TouchableOpacity>
 
@@ -241,7 +241,7 @@ const Patients = ({}) => {
                   <Fontisto
                     name='phone'
                     size={15}
-                    color={theme.colors.primary}
+                    color={theme.colors.backgroundPrimary}
                   />
                 </TouchableOpacity>
 
@@ -263,7 +263,7 @@ const Patients = ({}) => {
         <Tabs
           tabs={tabs}
           tabBarTextStyle={{color:theme.colors.text, ...styles.title}}
-          tabBarUnderlineStyle={{backgroundColor:theme.colors.primary}}
+          tabBarUnderlineStyle={{backgroundColor:theme.colors.backgroundPrimary}}
           swipeable={true}
         >
           {/* My Patients */}

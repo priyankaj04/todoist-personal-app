@@ -398,7 +398,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='compass'
                           size={13}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           Status - {getName(status)}
@@ -423,7 +423,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='box-archive'
                           size={13}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           {getActivity(pat.activityname)}
@@ -452,7 +452,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='user-doctor'
                           size={16}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           {getName(pat.doctorname)}
@@ -487,7 +487,7 @@ const Appointments = () => {
                           <Fontisto
                             name='whatsapp'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -499,7 +499,7 @@ const Appointments = () => {
                           <Fontisto
                             name='phone'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                         </TouchableOpacity>
 
@@ -534,7 +534,7 @@ const Appointments = () => {
                         <Feather
                           name='repeat'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
 
@@ -546,7 +546,7 @@ const Appointments = () => {
                         <Feather
                           name='send'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -591,7 +591,7 @@ const Appointments = () => {
                         <Feather
                           name='copy'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Emr Link</Text>
                       </TouchableOpacity>
@@ -605,7 +605,7 @@ const Appointments = () => {
                           <Feather
                             name='copy'
                             size={15}
-                            color={theme.colors.primary}
+                            color={theme.colors.backgroundPrimary}
                           />
                           <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Copy Video Link</Text>
                         </TouchableOpacity>
@@ -631,14 +631,14 @@ const Appointments = () => {
                         <Text style={{
                             ...styles.details,
                             ...theme.fonts.titleSmall,
-                            color:theme.colors.primary,
+                            color:theme.colors.backgroundPrimary,
                           }}>
                           Minimize
                         </Text>
                         <Feather
                           name='minimize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </TouchableOpacity>
                     </View>
@@ -676,7 +676,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='compass'
                           size={13}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           Status - {getName(pat.status)}
@@ -701,7 +701,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='box-archive'
                           size={13}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           {getActivity(pat.activityname)}
@@ -730,7 +730,7 @@ const Appointments = () => {
                         <FontAwesome6
                           name='user-doctor'
                           size={16}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                         <Text style={styles.title}>
                           {getName(pat.doctorname)}
@@ -755,11 +755,11 @@ const Appointments = () => {
                       <View
                         style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
                       >
-                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.primary}}>Expand</Text>
+                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.backgroundPrimary}}>Expand</Text>
                         <Feather
                           name='maximize'
                           size={15}
-                          color={theme.colors.primary}
+                          color={theme.colors.backgroundPrimary}
                         />
                       </View>
                     </View>
@@ -884,7 +884,7 @@ const Appointments = () => {
               style={{
                 ...styles.minBtn,
                 columnGap:10,
-                backgroundColor: myAppointments ? theme.colors.primary : '#fff',
+                backgroundColor: myAppointments ? theme.colors.backgroundPrimary : '#fff',
                 borderWidth: 1,
                 borderColor: '#ccc'
               }}
@@ -895,9 +895,9 @@ const Appointments = () => {
               <Feather
                 name='user-check'
                 size={15}
-                color={ !myAppointments ? theme.colors.primary : '#fff' }
+                color={ !myAppointments ? theme.colors.backgroundPrimary : '#fff' }
               />
-              <Text style={{...theme.fonts.titleSmall, color: !myAppointments ? theme.colors.primary : '#fff'}}>
+              <Text style={{...theme.fonts.titleSmall, color: !myAppointments ? theme.colors.backgroundPrimary : '#fff'}}>
                 My Appointments
               </Text>
             </TouchableOpacity>
@@ -924,7 +924,7 @@ const Appointments = () => {
               <Feather
                 name='copy'
                 size={15}
-                color={theme.colors.primary}
+                color={theme.colors.backgroundPrimary}
               />
               <Text style={{...theme.fonts.titleSmall, color: '#000'}}>
                 Clear

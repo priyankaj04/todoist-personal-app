@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">CareManagerApp</string>
+    <string name="app_name">Care Manager</string>
     <string moduleConfig="true" name="CodePushDeploymentKey">4IOXRB9RJNJae4iB0Z78--YpU60spoqot5LKi</string>
 </resources>

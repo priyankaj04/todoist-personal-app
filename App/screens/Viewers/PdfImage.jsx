@@ -28,11 +28,11 @@ const PdfImage = ({route, navigation }) => {
     <View style={{backgroundColor:'#fff',flex:1}}>
        <View style={styles.appBar}>
         <TouchableOpacity  onPress={()=>{ navigation.goBack()}} style={{ flexDirection:'row', alignItems :'center',}}>
-            <Text style={styles.appBarText}> <Icon name={'chevron-left'} style={{fontSize: 16,color:theme.colors.primary}}/>{' '}</Text>
+            <Text style={styles.appBarText}> <Icon name={'chevron-left'} style={{fontSize: 16,color:theme.colors.backgroundPrimary}}/>{' '}</Text>
             <Text style={styles.appBarText}> {title}</Text>
         </TouchableOpacity>
         
-        <FontAwesome5Icon onPress={() => Linking.openURL(link)} name="download" size={15} color={theme.colors.primary} style={{marginRight:15}} />
+        <FontAwesome5Icon onPress={() => Linking.openURL(link)} name="download" size={15} color={theme.colors.backgroundPrimary} style={{marginRight:15}} />
       </View>
       {
         link ?

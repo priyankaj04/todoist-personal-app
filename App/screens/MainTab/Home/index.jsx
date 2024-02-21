@@ -57,6 +57,7 @@ const HomeScreen = ({route, navigation}) => {
           // onPress={() => navigation.openDrawer()}
         />
       </View>
+      
 
     </ScrollView>
   );
