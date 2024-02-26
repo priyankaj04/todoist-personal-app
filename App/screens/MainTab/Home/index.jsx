@@ -106,7 +106,7 @@ const HomeScreen = () => {
             paddingLeft: 15
           }}
         >
-          Hi {cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'}!
+          Hi {cmDetails?.name ? getName(cmDetails?.name) : 'Circle Pi'}!
         </Text>
         <Ionicons
           style={{

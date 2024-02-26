@@ -22,7 +22,7 @@ end
 
 production = ENV["PRODUCTION"] == "1"
 
-target 'CareManagerApp' do
+target 'CirclePiApp' do
   config = use_native_modules!
   # pod 'Firebase', :modular_headers => true
   # pod 'FirebaseCore', :modular_headers => true
@@ -53,7 +53,7 @@ target 'CareManagerApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'CareManagerAppTests' do
+  target 'CirclePiAppTests' do
     inherit! :complete
     # Pods for testing
   end

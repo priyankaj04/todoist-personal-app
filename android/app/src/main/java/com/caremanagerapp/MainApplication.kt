@@ -1,4 +1,4 @@
-package com.caremanagerapp
+package com.CirclePiApp
 
 import android.app.Application
 import com.facebook.react.PackageList

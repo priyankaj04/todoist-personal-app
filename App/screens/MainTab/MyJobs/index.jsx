@@ -191,7 +191,7 @@ const MyJobsIndex = () => {
                 paddingVertical:10,
               }}
             >
-              {cmDetails?.name ? getName(cmDetails?.name) : 'Care Manager'} Jobs!
+              {cmDetails?.name ? getName(cmDetails?.name) : 'Circle Pi'} Jobs!
             </Text>
             <Text style={{color:'green', ...theme.fonts.titleMedium,}}>{devEnv && 'Dev'}</Text>
           </View>

@@ -81,11 +81,11 @@ const HealthPlanReminder = () => {
           setCareManagers(res.data)
         }else{
           
-          dispatch(valuesActions.statusNot1('Get Care Managers List Status != 1'));
+          dispatch(valuesActions.statusNot1('Get Circle Pis List Status != 1'));
         }
     }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
+      dispatch(valuesActions.error({error:`Error in Get Circle Pis List ${error}`}));
     })
   },[])
 
@@ -483,13 +483,13 @@ const HealthPlanReminder = () => {
         {
           cmDetails.type === 'admin' ?
           <Dropdown
-            title='Select Care Manager'
+            title='Select Circle Pi'
             options={careManagers}
             selectedOption={selectedOption}
             onSelect={handleSelect}
             value={'email'}
             label={'email'}
-            placeholder={'Select Care Manager'}
+            placeholder={'Select Circle Pi'}
             style={{marginBottom:15}}
           />
           : null

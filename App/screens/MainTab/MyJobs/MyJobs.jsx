@@ -78,11 +78,11 @@ const MyJobs = () => {
           setCareManagers(res.data)
         }else{
           
-          dispatch(valuesActions.statusNot1('Get Care Managers List Status != 1'));
+          dispatch(valuesActions.statusNot1('Get Circle Pis List Status != 1'));
         }
     }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
+      dispatch(valuesActions.error({error:`Error in Get Circle Pis List ${error}`}));
     })
   },[])
 
@@ -700,13 +700,13 @@ const MyJobs = () => {
           {
             cmDetails.type === 'admin' ?
             <Dropdown
-              title='Select Care Manager'
+              title='Select Circle Pi'
               options={careManagers}
               selectedOption={selectedOption}
               onSelect={handleSelect}
               value={'email'}
               label={'email'}
-              placeholder={'Select Care Manager'}
+              placeholder={'Select Circle Pi'}
             />
             : null
           }
@@ -740,7 +740,7 @@ const MyJobs = () => {
                   }}
                 >
                   <Text style={{...styles.text, textAlign:'center'}}>
-                    No Jobs found for the day!, change the date or care Manager if admin
+                    No Jobs found for the day!, change the date or Circle Pi if admin
                   </Text>
                 </View>
 

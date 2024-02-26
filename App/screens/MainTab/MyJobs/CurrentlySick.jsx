@@ -57,11 +57,11 @@ const CurrentlySick = () => {
           setCareManagers(res.data)
         }else{
           
-          dispatch(valuesActions.statusNot1('Get Care Managers List Status != 1'));
+          dispatch(valuesActions.statusNot1('Get Circle Pis List Status != 1'));
         }
     }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
+      dispatch(valuesActions.error({error:`Error in Get Circle Pis List ${error}`}));
     })
 
     getService(baseUrl, API_ROUTES.GET_ALL_DOCTORS)
@@ -1137,7 +1137,7 @@ const CurrentlySick = () => {
                   title='Source'
                   placeholder='Select source'
                   data={[
-                    { value: 'caremanager', label: 'Care Manager' },
+                    { value: 'caremanager', label: 'Circle Pi' },
                     { value: 'hrdept', label: 'HR Dept' },
                     { value: 'managementdept', label: 'Management Dept' },
                     { value: 'insurancedept', label: 'Insurance Dept' },
@@ -1292,13 +1292,13 @@ const CurrentlySick = () => {
         {
           cmDetails.type === 'admin' ?
           <Dropdown
-            title='Select Care Manager'
+            title='Select Circle Pi'
             options={careManagers}
             selectedOption={selectedCareManager}
             onSelect={handleSelect}
             value={'email'}
             label={'email'}
-            placeholder={'Select Care Manager'}
+            placeholder={'Select Circle Pi'}
             style={{
               marginBottom: 15
             }}

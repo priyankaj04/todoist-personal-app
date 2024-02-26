@@ -1,6 +1,6 @@
 {
-  "name": "CareManagerApp",
-  "displayName": "Care Manager",
+  "name": "CirclePiApp",
+  "displayName": "Circle Pi",
   "packagerOpts": {
     "config": "metro.config.js"
   }

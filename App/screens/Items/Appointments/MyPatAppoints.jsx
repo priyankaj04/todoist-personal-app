@@ -861,7 +861,7 @@ const MyAppointments = ({route}) => {
                 }}
               >
                 <Text style={{...styles.text, textAlign:'center'}}>
-                  No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
+                  No appointments found for the searched day or filter, select different Date, Circle Pi or Doctor
                 </Text>
               </View>
 

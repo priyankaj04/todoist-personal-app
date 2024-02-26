@@ -57,11 +57,11 @@ const Appointments = () => {
           setCareManagers(res.data)
         }else{
           
-          dispatch(valuesActions.statusNot1('Get Care Managers List Status != 1'));
+          dispatch(valuesActions.statusNot1('Get Circle Pis List Status != 1'));
         }
     }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Get Care Managers List ${error}`}));
+      dispatch(valuesActions.error({error:`Error in Get Circle Pis List ${error}`}));
     })
 
     getService(baseUrl, API_ROUTES.GET_ALL_DOCTORS)
@@ -840,7 +840,7 @@ const Appointments = () => {
           {
             cmDetails.type === 'admin' ?
             <Dropdown
-              title='Select Care Manager'
+              title='Select Circle Pi'
               options={careManagers}
               selectedOption={selectedCareManager}
               onSelect={(option)=> {
@@ -849,7 +849,7 @@ const Appointments = () => {
               }}
               value={'email'}
               label={'email'}
-              placeholder={'Select Care Manager'}
+              placeholder={'Select Circle Pi'}
               style={{
                 marginTop: 5
               }}
@@ -1005,7 +1005,7 @@ const Appointments = () => {
                   }}
                 >
                   <Text style={{...styles.text, textAlign:'center'}}>
-                    No appointments found for the searched day or filter, select different Date, Care Manager or Doctor
+                    No appointments found for the searched day or filter, select different Date, Circle Pi or Doctor
                   </Text>
                 </View>
 

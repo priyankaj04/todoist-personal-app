@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "977771334191",
-    "project_id": "caremanagerapp",
-    "storage_bucket": "caremanagerapp.appspot.com"
+    "project_id": "CirclePiApp",
+    "storage_bucket": "CirclePiApp.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:977771334191:android:6d73ea1ee6eda87b6c94da",
         "android_client_info": {
-          "package_name": "com.caremanagerapp"
+          "package_name": "com.CirclePiApp"
         }
       },
       "oauth_client": [],

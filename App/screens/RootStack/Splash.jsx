@@ -85,7 +85,7 @@ const SplashScreen = ({navigation}) => {
                 >
                     <Text style={[styles.title, {
                         color: colors.text
-                    }]}>Hi, Care Manager! Let's get started with our app!</Text>
+                    }]}>Hi, Circle Pi! Let's get started with our app!</Text>
                     <Text style={styles.text}>Sign in with your account</Text>
                     <View style={styles.button}>
                     <TouchableOpacity onPress={()=>{navigation.navigate('SignInScreen');}}>
