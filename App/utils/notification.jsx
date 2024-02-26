@@ -1,5 +1,5 @@
 //Firebase notification services
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 
 const requestUserPermission = async () => {
@@ -12,10 +12,10 @@ const requestUserPermission = async () => {
 };
 
 const GetFCMToken = async () => {
-  const FCMToken = await AsyncStorage.getItem('fcmToken'); console.log("FCMTOKEN Token",FCMToken)
+  const FCMToken = await AsyncStorage.getItem('fcmToken'); console.log("FCMTOKEN Token", FCMToken)
   if (!FCMToken) {
     try {
-      const fcmToken = await messaging().getToken(); 
+      const fcmToken = await messaging().getToken();
       if (fcmToken) {
         console.log('NEW GENERATED FCM TOKEN: ', fcmToken);
         await AsyncStorage.setItem('fcmToken', fcmToken);
@@ -40,9 +40,10 @@ const GetFCMToken = async () => {
 //   }
 // }
 
-const notificationListener = async (setSelectedTab, dispatch, navigationRef) => { console.log('called')
+const notificationListener = async (setSelectedTab, dispatch, navigationRef) => {
+  console.log('called')
   messaging().onNotificationOpenedApp(async (remoteMessage) => {
-    console.log( 'Notification caused app to open from background state:', remoteMessage.notification );
+    console.log('Notification caused app to open from background state:', remoteMessage.notification);
   });
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
@@ -56,14 +57,14 @@ const notificationListener = async (setSelectedTab, dispatch, navigationRef) => 
   // Check whether an initial notification is available
   messaging().getInitialNotification().then((remoteMessage) => {
     if (remoteMessage) {
-      console.log( 'Notification caused app to open from quit state:', remoteMessage );
+      console.log('Notification caused app to open from quit state:', remoteMessage);
     }
   });
 
   // messaging().onNotificationOpenedApp(remoteMessage => {
   //   NavigateToPage(setSelectedTab, dispatch, navigationRef, remoteMessage?.data?.navigateto, remoteMessage?.data?.url ?? '', remoteMessage?.data?.title ?? '')
   // });
-  
+
   // // Also, handle the initial notification when the app is not open
   // messaging().getInitialNotification().then(remoteMessage => {
   //   if (remoteMessage) {

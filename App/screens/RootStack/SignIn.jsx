@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { 
-    View, 
-    Text, 
-    TouchableOpacity, 
+import {
+    View,
+    Text,
+    TouchableOpacity,
     TextInput,
     Platform,
-    StyleSheet ,
+    StyleSheet,
     StatusBar,
     ActivityIndicator,
     KeyboardAvoidingView,
@@ -28,13 +28,13 @@ import Users from '../../utils';
 
 import { postService, API_ROUTES, getCmDetails } from '../../server';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({ navigation }) => {
 
     const dispatch = myDispatch();
-    const baseUrl = mySelector(state=>state.Login.value.baseUrl);
-    const noOtp = mySelector(state=>state.Login.value.noOtp);
+    const baseUrl = mySelector(state => state.Login.value.baseUrl);
+    const noOtp = mySelector(state => state.Login.value.noOtp);
 
     const [loading, setLoading] = useState(false)
 
@@ -45,7 +45,7 @@ const SignInScreen = ({navigation}) => {
         secureTextEntry: true,
         isValidUser: true,
         isValidPassword: true,
-        loginType:null,
+        loginType: null,
     });
 
     const [openPicker, setOpenPicker] = React.useState(false);
@@ -67,7 +67,7 @@ const SignInScreen = ({navigation}) => {
     const textInputChange = (val) => {
         const emailRegex = /\S+@\S+\.\S+/;
 
-        if(emailRegex.test(val)) {
+        if (emailRegex.test(val)) {
             setData({
                 ...data,
                 email: val,
@@ -85,7 +85,7 @@ const SignInScreen = ({navigation}) => {
     }
 
     const handlePasswordChange = (val) => {
-        if( val.trim().length >= 4 ) {
+        if (val.trim().length >= 4) {
             setData({
                 ...data,
                 password: val,
@@ -109,7 +109,7 @@ const SignInScreen = ({navigation}) => {
 
     const handleValidEmail = (val) => {
         const emailRegex = /\S+@\S+\.\S+/;
-    
+
         if (emailRegex.test(val)) {
             setData({
                 ...data,
@@ -123,7 +123,7 @@ const SignInScreen = ({navigation}) => {
         }
     }
 
-    const updateUserData = async(userData) => { 
+    const updateUserData = async (userData) => {
         try {
             await AsyncStorage.setItem('email', userData.email);
             await AsyncStorage.setItem('refreshToken', userData.rt);
@@ -139,15 +139,15 @@ const SignInScreen = ({navigation}) => {
 
             getCmDetails(baseUrl, dispatch, userData.email);
 
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
 
-    const noOtpLogin = async(email,loginType) => {
+    const noOtpLogin = async (email, loginType) => {
 
         try {
-            await AsyncStorage.setItem('loginData', JSON.stringify({email:email, type:loginType}) );
+            await AsyncStorage.setItem('loginData', JSON.stringify({ email: email, type: loginType }));
 
             dispatch(loginActions.setLoginData({
                 email: email,
@@ -157,255 +157,255 @@ const SignInScreen = ({navigation}) => {
 
             getCmDetails(baseUrl, dispatch, email);
 
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
 
     const loginHandle = (email, password, loginType) => {
 
-        if(noOtp){ noOtpLogin(email,loginType); return; }
+        if (noOtp) { noOtpLogin(email, loginType); return; }
 
         setLoading(true);
 
         let req_body = {
-            "email":email,
-            "password":password,
-            "type":loginType
+            "email": email,
+            "password": password,
+            "type": loginType
         }
 
         postService(baseUrl, API_ROUTES.VERIFY_USER, req_body).then((response) => {
-            if(response.status === 1){
+            if (response.status === 1) {
 
                 updateUserData(response);
-            }else{
+            } else {
                 dispatch(valuesActions.statusNot1(response.msg));
             }
             setLoading(false);
         }).catch((error) => {
 
-            dispatch(valuesActions.error({error:`Error in Verify User ${error}`}));
+            dispatch(valuesActions.error({ error: `Error in Verify User ${error}` }));
         })
     }
 
-    useEffect(()=>{
-        if(Object.values(data).every(value =>value && value !== '')) setAllEntered(true);
+    useEffect(() => {
+        if (Object.values(data).every(value => value && value !== '')) setAllEntered(true);
         else setAllEntered(false);
-    },[data])
+    }, [data])
 
     const handlePressOutside = () => {
         Keyboard.dismiss();
     };
 
-    const renderItem = (item,i) => {
+    const renderItem = (item, i) => {
         return (
             <TouchableOpacity
                 style={[
                     styles.item,
-                    {backgroundColor: data.loginType == item ? '#143c92' : '#f6f6f6'}
+                    { backgroundColor: data.loginType == item ? '#143c92' : '#f6f6f6' }
                 ]}
                 key={i}
-                onPress={()=>{
-                    setData({...data, loginType:item});
+                onPress={() => {
+                    setData({ ...data, loginType: item });
                     setOpenPicker(false)
                 }}
             >
-                <Text style={{fontSize:15, color:data.loginType == item ? '#fff' :'#000'}}>  {item}</Text>
+                <Text style={{ fontSize: 15, color: data.loginType == item ? '#fff' : '#000' }}>  {item}</Text>
             </TouchableOpacity>
         );
     };
 
     return (
-    <TouchableWithoutFeedback onPress={handlePressOutside}>
-        <View style={styles.container}>
-            <StatusBar translucent backgroundColor="transparent" />
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}} >
-                <View style={styles.header}>
-                    <Text style={styles.text_header}>Welcome!</Text>
-                </View>
-                <Animatable.View 
-                    animation="fadeInUpBig"
-                    style={[styles.footer, {
-                        backgroundColor: colors.background
-                    }]}
-                >
-                    <Text style={[styles.text_footer, {
-                        color: colors.text
-                    }]}>Registered Email</Text>
-                    <View style={styles.action}>
-                        <FontAwesome 
-                            name="user-o"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <TextInput 
-                            placeholder="Your ch email"
-                            placeholderTextColor="#666666"
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            underlineColorAndroid="transparent"
-                            importantForAutofill="noExcludeDescendants"
-                            autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
-                            onEndEditing={(e)=>handleValidEmail(e.nativeEvent.text)}
-                        />
-                        {data.check_textInputChange ? 
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather 
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                        : null}
+        <TouchableWithoutFeedback onPress={handlePressOutside}>
+            <View style={styles.container}>
+                <StatusBar translucent backgroundColor="transparent" />
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }} >
+                    <View style={styles.header}>
+                        <Text style={styles.text_header}>Welcome!</Text>
                     </View>
-                    { data.isValidUser ? null : 
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Please enter a valid email.</Text>
-                        </Animatable.View>
-                    }
-                    
-
-                    <Text style={[styles.text_footer, {
-                        color: colors.text,
-                        marginTop: 20
-                    }]}>Password</Text>
-                    <View style={styles.action}>
-                        <Feather 
-                            name="lock"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <TextInput 
-                            placeholder="Your Password"
-                            placeholderTextColor="#666666"
-                            secureTextEntry={data.secureTextEntry ? true : false}
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            underlineColorAndroid="transparent"
-                            importantForAutofill="noExcludeDescendants"
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlePasswordChange(val)}
-                        />
-                        <TouchableOpacity
-                            onPress={updateSecureTextEntry}
-                        >
-                            {data.secureTextEntry ? 
-                                <Feather 
-                                    name="eye"
-                                    color="grey"
-                                    size={20}
-                                />
-                                :
-                                <Feather 
-                                    name="eye-off"
-                                    color="grey"
-                                    size={20}
-                                />
-                            }
-                        </TouchableOpacity>
-                    </View>
-                    { data.isValidPassword ? null : 
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Password must be min 4 characters long.</Text>
-                        </Animatable.View>
-                    }
-
-                    <Text style={[styles.text_footer, {
-                        color: colors.text,
-                        marginTop: 20
-                    }]}>Login Type</Text>
-                    <TouchableOpacity
-                        style={styles.action}
-                        onPress={()=>setOpenPicker(!openPicker)}
+                    <Animatable.View
+                        animation="fadeInUpBig"
+                        style={[styles.footer, {
+                            backgroundColor: colors.background
+                        }]}
                     >
-                        <Feather 
-                            name="at-sign"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <Text
-                            style={{
-                                color: data?.loginType ? colors.text : "#666666",
-                                marginLeft:10,
-                                flex:1,
-                                marginBottom:15
-                            }}
-                        >
-                            {data?.loginType ?? 'Select a login type'}
-                        </Text>
-
-                        {data.loginType ? 
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather 
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                        : null}
-                    </TouchableOpacity>
-
-                    {
-                        openPicker &&
-                        <View
-                            style={{
-                                borderRadius:8,
-                                height:250,
-                            }}>
-                            <ScrollView
-                                showsVerticalScrollIndicator={false}
-                            >
-                                <View
-                                    style={{
-                                        backgroundColor:'#f5f5f5',
-                                        borderRadius:8
-                                    }}
+                        <Text style={[styles.text_footer, {
+                            color: colors.text
+                        }]}>Registered Email</Text>
+                        <View style={styles.action}>
+                            <FontAwesome
+                                name="user-o"
+                                color={colors.text}
+                                size={20}
+                            />
+                            <TextInput
+                                placeholder="Your ch email"
+                                placeholderTextColor="#666666"
+                                style={[styles.textInput, {
+                                    color: colors.text
+                                }]}
+                                underlineColorAndroid="transparent"
+                                importantForAutofill="noExcludeDescendants"
+                                autoCapitalize="none"
+                                onChangeText={(val) => textInputChange(val)}
+                                onEndEditing={(e) => handleValidEmail(e.nativeEvent.text)}
+                            />
+                            {data.check_textInputChange ?
+                                <Animatable.View
+                                    animation="bounceIn"
                                 >
-                                    {loginTypes.map((item,i)=>renderItem(item,i))}
-                                </View>
-                                <View
-                                    style={{
-                                        paddingBottom:80
-                                    }}
-                                />
-                            </ScrollView>
+                                    <Feather
+                                        name="check-circle"
+                                        color="green"
+                                        size={20}
+                                    />
+                                </Animatable.View>
+                                : null}
                         </View>
-                    }
-                    
-                    
-                    <View style={styles.buttonView}>
-                        <View style={styles.button}>
+                        {data.isValidUser ? null :
+                            <Animatable.View animation="fadeInLeft" duration={500}>
+                                <Text style={styles.errorMsg}>Please enter a valid email.</Text>
+                            </Animatable.View>
+                        }
+
+
+                        <Text style={[styles.text_footer, {
+                            color: colors.text,
+                            marginTop: 20
+                        }]}>Password</Text>
+                        <View style={styles.action}>
+                            <Feather
+                                name="lock"
+                                color={colors.text}
+                                size={20}
+                            />
+                            <TextInput
+                                placeholder="Your Password"
+                                placeholderTextColor="#666666"
+                                secureTextEntry={data.secureTextEntry ? true : false}
+                                style={[styles.textInput, {
+                                    color: colors.text
+                                }]}
+                                underlineColorAndroid="transparent"
+                                importantForAutofill="noExcludeDescendants"
+                                autoCapitalize="none"
+                                onChangeText={(val) => handlePasswordChange(val)}
+                            />
                             <TouchableOpacity
-                                style={styles.signIn}
-                                onPress={() => {allEntered && loginHandle( data.email, data.password, data.loginType )}}
+                                onPress={updateSecureTextEntry}
                             >
-                            <LinearGradient
-                                colors={
-                                    allEntered ?
-                                    ['#3c68c7', '#143c92']
+                                {data.secureTextEntry ?
+                                    <Feather
+                                        name="eye"
+                                        color="grey"
+                                        size={20}
+                                    />
                                     :
-                                    ['#bbc0ca', '#767676']
+                                    <Feather
+                                        name="eye-off"
+                                        color="grey"
+                                        size={20}
+                                    />
                                 }
-                                style={styles.signIn}
-                            >
-                                {   
-                                    !loading ?
-                                    <Text style={[styles.textSign, { color:'#fff' }]}>Sign In</Text>
-                                    :
-                                    <ActivityIndicator size="small" color={'#fff'}/>
-                                }
-                            </LinearGradient>
                             </TouchableOpacity>
-                            
-                            {/* sign up button commented */}
-                            {/* <TouchableOpacity
+                        </View>
+                        {data.isValidPassword ? null :
+                            <Animatable.View animation="fadeInLeft" duration={500}>
+                                <Text style={styles.errorMsg}>Password must be min 4 characters long.</Text>
+                            </Animatable.View>
+                        }
+
+                        <Text style={[styles.text_footer, {
+                            color: colors.text,
+                            marginTop: 20
+                        }]}>Login Type</Text>
+                        <TouchableOpacity
+                            style={styles.action}
+                            onPress={() => setOpenPicker(!openPicker)}
+                        >
+                            <Feather
+                                name="at-sign"
+                                color={colors.text}
+                                size={20}
+                            />
+                            <Text
+                                style={{
+                                    color: data?.loginType ? colors.text : "#666666",
+                                    marginLeft: 10,
+                                    flex: 1,
+                                    marginBottom: 15
+                                }}
+                            >
+                                {data?.loginType ?? 'Select a login type'}
+                            </Text>
+
+                            {data.loginType ?
+                                <Animatable.View
+                                    animation="bounceIn"
+                                >
+                                    <Feather
+                                        name="check-circle"
+                                        color="green"
+                                        size={20}
+                                    />
+                                </Animatable.View>
+                                : null}
+                        </TouchableOpacity>
+
+                        {
+                            openPicker &&
+                            <View
+                                style={{
+                                    borderRadius: 8,
+                                    height: 250,
+                                }}>
+                                <ScrollView
+                                    showsVerticalScrollIndicator={false}
+                                >
+                                    <View
+                                        style={{
+                                            backgroundColor: '#f5f5f5',
+                                            borderRadius: 8
+                                        }}
+                                    >
+                                        {loginTypes.map((item, i) => renderItem(item, i))}
+                                    </View>
+                                    <View
+                                        style={{
+                                            paddingBottom: 80
+                                        }}
+                                    />
+                                </ScrollView>
+                            </View>
+                        }
+
+
+                        <View style={styles.buttonView}>
+                            <View style={styles.button}>
+                                <TouchableOpacity
+                                    style={styles.signIn}
+                                    onPress={() => { allEntered && loginHandle(data.email, data.password, data.loginType) }}
+                                >
+                                    <LinearGradient
+                                        colors={
+                                            allEntered ?
+                                                ['#3c68c7', '#143c92']
+                                                :
+                                                ['#bbc0ca', '#767676']
+                                        }
+                                        style={styles.signIn}
+                                    >
+                                        {
+                                            !loading ?
+                                                <Text style={[styles.textSign, { color: '#fff' }]}>Sign In</Text>
+                                                :
+                                                <ActivityIndicator size="small" color={'#fff'} />
+                                        }
+                                    </LinearGradient>
+                                </TouchableOpacity>
+
+                                {/* sign up button commented */}
+                                {/* <TouchableOpacity
                                 onPress={() => navigation.navigate('SignUpScreen')}
                                 style={[styles.signIn, {
                                     borderColor: '#143c92',
@@ -417,12 +417,12 @@ const SignInScreen = ({navigation}) => {
                                     color: '#143c92'
                                 }]}>Sign Up</Text>
                             </TouchableOpacity> */}
+                            </View>
                         </View>
-                    </View>
-                </Animatable.View>
-            </KeyboardAvoidingView>
-        </View>
-    </TouchableWithoutFeedback>
+                    </Animatable.View>
+                </KeyboardAvoidingView>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -430,8 +430,8 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1, 
-      backgroundColor: '#143c92'
+        flex: 1,
+        backgroundColor: '#143c92'
     },
     header: {
         flex: 1,
@@ -474,15 +474,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         paddingTop: 5
     },
-    buttonView:{
-        flex:1,
+    buttonView: {
+        flex: 1,
     },
     button: {
         alignItems: 'center',
         marginTop: 50,
-        width:'100%',
-        position:'absolute',
-        bottom:0
+        width: '100%',
+        position: 'absolute',
+        bottom: 0
     },
     signIn: {
         width: '100%',
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        width:width-40,
-        borderRadius:8
+        width: width - 40,
+        borderRadius: 8
     },
-  });
+});

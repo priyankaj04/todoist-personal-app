@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Text, Platform, StatusBar} from 'react-native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {DrawerContent} from './components/Drawer';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator, Text, Platform, StatusBar } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DrawerContent } from './components/Drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import MainTabScreen from './screens/MainTab';
 import EditProfile from './screens/StaffUser/Profile';
-import {vh, vw} from'react-native-css-vh-vw';
+import { vh, vw } from 'react-native-css-vh-vw';
 
 //! Items screens import
 import PatientIndex from './screens/Items/Patient';
 import PdfImageView from './screens/Viewers/PdfImage';
 import Appointments from './screens/Items/Appointments';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import {
   Provider as AntModalProvider,
@@ -22,7 +22,7 @@ import {
   Progress,
   WingBlank,
 } from '@ant-design/react-native';
-import {postService, API_ROUTES, refreshToken, getCmDetails} from './server';
+import { postService, API_ROUTES, refreshToken, getCmDetails } from './server';
 import RootStackScreen from './screens/RootStack';
 import codePush from 'react-native-code-push';
 const Drawer = createDrawerNavigator();
@@ -40,8 +40,8 @@ import {
   MD3DarkTheme as PaperDarkTheme,
 } from 'react-native-paper';
 
-import {loginActions, valuesActions, myDispatch, mySelector} from './redux';
-import {notificationListener, requestUserPermission } from './utils'
+import { loginActions, valuesActions, myDispatch, mySelector } from './redux';
+import { notificationListener, requestUserPermission } from './utils'
 
 const App = () => {
   const [loading, setLoading] = React.useState(true);
@@ -107,43 +107,43 @@ const App = () => {
     checkDevEnv();
 
     AsyncStorage.getItem('noOtp')
-    .then(noOtp => {
-      if (JSON.parse(noOtp) === true) {
-        !noOtp && dispatch(loginActions.toggleNoOtp());
-        handleNoOtpAuth();
-      } else {
-        try {
-          AsyncStorage.getItem('token').then(token => {
-            if (token) {
-              let decoded = jwtDecode(token);
-              if (!(decoded.exp < Date.now() / 1000)) {
-                dispatch(
-                  loginActions.setLoginData({
-                    email: decoded.email,
-                    type: decoded.type,
-                    token: token,
-                  }),
-                );
+      .then(noOtp => {
+        if (JSON.parse(noOtp) === true) {
+          !noOtp && dispatch(loginActions.toggleNoOtp());
+          handleNoOtpAuth();
+        } else {
+          try {
+            AsyncStorage.getItem('token').then(token => {
+              if (token) {
+                let decoded = jwtDecode(token);
+                if (!(decoded.exp < Date.now() / 1000)) {
+                  dispatch(
+                    loginActions.setLoginData({
+                      email: decoded.email,
+                      type: decoded.type,
+                      token: token,
+                    }),
+                  );
 
-                getCmDetails(baseUrl, dispatch, decoded.email);
+                  getCmDetails(baseUrl, dispatch, decoded.email);
 
-                setLoading(false);
-              } else refreshTheToken();
-            } else setLoading(false);
-          });
-        } catch (e) {
-          dispatch(
-            valuesActions.error({
-              error: `Error in Get AsyncStorage Token ${error}`,
-            }),
-          );
+                  setLoading(false);
+                } else refreshTheToken();
+              } else setLoading(false);
+            });
+          } catch (e) {
+            dispatch(
+              valuesActions.error({
+                error: `Error in Get AsyncStorage Token ${error}`,
+              }),
+            );
+          }
         }
-      }
-    })
-    .catch(e => {
-      console.log('Error in get noOtp', e);
-      setLoading(false);
-    });
+      })
+      .catch(e => {
+        console.log('Error in get noOtp', e);
+        setLoading(false);
+      });
 
     // push notification
     notificationListener()
@@ -191,8 +191,8 @@ const App = () => {
           break;
       }
     },
-    ({receivedBytes, totalBytes}) => {
-      setProgress(Math.round((receivedBytes/totalBytes)*100))
+    ({ receivedBytes, totalBytes }) => {
+      setProgress(Math.round((receivedBytes / totalBytes) * 100))
     },
   );
 
@@ -200,7 +200,7 @@ const App = () => {
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -259,7 +259,7 @@ const App = () => {
         drawerContent={props => (
           <DrawerContent {...props} dispatch={dispatch} />
         )}
-        screenOptions={{headerShown: false}}>
+        screenOptions={{ headerShown: false }}>
         <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
       </Drawer.Navigator>
     );

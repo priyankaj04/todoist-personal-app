@@ -17,7 +17,7 @@ import {
 } from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import assets from '../assets';
 
@@ -28,33 +28,33 @@ export function DrawerContent(props) {
 
     const paperTheme = useTheme();
 
-    const cmDetails = mySelector(state=>state.Login.value.cmDetails);
-    const cpVersion = mySelector(state=>state.Login.value.cpVersion);
+    const cmDetails = mySelector(state => state.Login.value.cmDetails);
+    const cpVersion = mySelector(state => state.Login.value.cpVersion);
 
-    const signOut = async() => { 
+    const signOut = async () => {
         try {
             await AsyncStorage.removeItem('loginData');
             await AsyncStorage.removeItem('refreshToken');
             await AsyncStorage.removeItem('token');
 
             props.dispatch(loginActions.logOut());
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
 
-    return(
-        <View style={{flex:1}}>
+    return (
+        <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
-                        <View style={{flexDirection:'row',marginTop: 15}}>
-                            <Avatar.Image 
-                                source={ cmDetails?.profilepic ? {uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
+                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                            <Avatar.Image
+                                source={cmDetails?.profilepic ? { uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
                                 size={50}
                             />
-                            <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={styles.title}>{ getName(cmDetails?.name) }</Title>
+                            <View style={{ marginLeft: 15, flexDirection: 'column' }}>
+                                <Title style={styles.title}>{getName(cmDetails?.name)}</Title>
                                 <Caption style={styles.caption}>{cmDetails?.email}</Caption>
                             </View>
                         </View>
@@ -66,78 +66,78 @@ export function DrawerContent(props) {
                             </View>
                             <View style={styles.section}>
                                 <Caption style={styles.caption}>Ut- </Caption>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>{ getName(cmDetails?.type) }</Paragraph>
+                                <Paragraph style={[styles.paragraph, styles.caption]}>{getName(cmDetails?.type)}</Paragraph>
                             </View>
                         </View>
                     </View>
 
                     <Drawer.Section style={styles.drawerSection}>
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                    name="account-outline" 
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
+                                    name="account-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
                             label="Profile"
-                            onPress={() => {props.navigation.navigate('ProfileEdit')}}
+                            onPress={() => { props.navigation.navigate('ProfileEdit') }}
                         />
                     </Drawer.Section>
 
                     <Drawer.Section>
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                    name="account-check-outline" 
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
+                                    name="account-check-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
                             label="All Patients"
-                            // onPress={() => {props.navigation.navigate('Profile')}}
+                        // onPress={() => {props.navigation.navigate('Profile')}}
                         />
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                    name="bookmark-outline" 
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
+                                    name="bookmark-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
                             label="Care Stories"
-                            // onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                        // onPress={() => {props.navigation.navigate('BookmarkScreen')}}
                         />
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                    name="account-settings-outline" 
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
+                                    name="account-settings-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
                             label="Settings"
-                            // onPress={() => {props.navigation.navigate('SettingScreen')}}
+                        // onPress={() => {props.navigation.navigate('SettingScreen')}}
                         />
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                    name="account-check-outline" 
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
+                                    name="account-check-outline"
                                     color={color}
                                     size={size}
                                 />
                             )}
                             label="Support"
-                            // onPress={() => {props.navigation.navigate('SupportScreen')}}
+                        // onPress={() => {props.navigation.navigate('SupportScreen')}}
                         />
                     </Drawer.Section>
                 </View>
                 <Paragraph
                     style={{
-                        textAlign:'center',
-                        marginTop:10,
-                        fontWeight:'500',
-                        color:'#646161',
+                        textAlign: 'center',
+                        marginTop: 10,
+                        fontWeight: '500',
+                        color: '#646161',
                         fontSize: 13
                     }}
                 >App- 1  Cp- {cpVersion ?? 0}</Paragraph>
@@ -152,11 +152,11 @@ export function DrawerContent(props) {
                     </View>
                 </TouchableRipple>
             </Drawer.Section> */}
-            <TouchableRipple onPress={signOut} style={{ paddingVertical:10}}>
+            <TouchableRipple onPress={signOut} style={{ paddingVertical: 10 }}>
                 <View style={styles.preference}>
-                    <Text style={{color:paperTheme.colors.text, ...paperTheme.fonts.titleSmall}}>Sign Out</Text>
+                    <Text style={{ color: paperTheme.colors.text, ...paperTheme.fonts.titleSmall }}>Sign Out</Text>
                     <View pointerEvents="none">
-                        <Icon name="exit-to-app" color={paperTheme.colors.text} size={20} style={{ paddingRight:10}}/>
+                        <Icon name="exit-to-app" color={paperTheme.colors.text} size={20} style={{ paddingRight: 10 }} />
                     </View>
                 </View>
             </TouchableRipple>
@@ -166,47 +166,47 @@ export function DrawerContent(props) {
 
 const styles = StyleSheet.create({
     drawerContent: {
-      flex: 1,
+        flex: 1,
     },
     userInfoSection: {
-      paddingLeft: 20,
+        paddingLeft: 20,
     },
     title: {
-      fontSize: 16,
-      marginTop: 3,
-      fontWeight: 'bold',
+        fontSize: 16,
+        marginTop: 3,
+        fontWeight: 'bold',
     },
     caption: {
-      fontSize: 14,
-      lineHeight: 14,
+        fontSize: 14,
+        lineHeight: 14,
     },
     row: {
-      marginTop: 20,
-      flexDirection: 'row',
-      alignItems: 'center',
+        marginTop: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     column: {
         marginTop: 20,
         flexDirection: 'column',
         justifyContent: 'center',
-        rowGap:10
+        rowGap: 10
     },
     section: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginRight: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 15,
     },
     paragraph: {
-      fontWeight: 'bold',
-      marginRight: 3,
+        fontWeight: 'bold',
+        marginRight: 3,
     },
     drawerSection: {
-      marginTop: 15,
+        marginTop: 15,
     },
     preference: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
     },
-  });
+});
