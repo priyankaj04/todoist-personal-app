@@ -9,7 +9,6 @@ import { vh, vw } from 'react-native-css-vh-vw';
 
 //! Items screens import
 import PatientIndex from './screens/Items/Patient';
-import PdfImageView from './screens/Viewers/PdfImage';
 import Appointments from './screens/Items/Appointments';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';

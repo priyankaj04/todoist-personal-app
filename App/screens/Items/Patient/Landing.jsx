@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 
 import styles from './Styles';
-import {useTheme} from '@react-navigation/native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,23 +30,23 @@ import {
   myDispatch,
   mySelector,
 } from '../../../redux';
-import {getName} from '../../../utils';
-import {Accordion, TitleText} from '../../../components';
+import { getName } from '../../../utils';
+import { Accordion, TitleText } from '../../../components';
 import Assets from '../../../assets';
-import {getService, API_ROUTES, stringInterpolater} from '../../../server';
+import { getService, API_ROUTES, stringInterpolater } from '../../../server';
 
 
-const PatientIndex = ({route}) => {
+const PatientIndex = ({ route }) => {
 
   const navigation = useNavigation();
   const theme = useTheme();
-  const {patient} = route.params;
+  const { patient } = route.params;
   const pat = patient.item;
 
   const dispatch = myDispatch();
   const baseUrl = mySelector(state => state.Login.value.baseUrl);
   const devEnv = mySelector(state => state.Login.value.devEnv);
-  const cmDetails = mySelector(state => state.Login.value.cmDetails);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
 
   const components = [
     {
@@ -70,8 +70,8 @@ const PatientIndex = ({route}) => {
   return (
     <Animatable.View
       style={{
-        marginHorizontal:10,
-        flex:1,
+        marginHorizontal: 10,
+        flex: 1,
       }}
       animation="fadeInUp"
       duration={700}
@@ -83,7 +83,7 @@ const PatientIndex = ({route}) => {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          paddingBottom:5
+          paddingBottom: 5
         }}>
         <Feather name="chevron-left" size={23} color={'#676767'} />
         <Text
@@ -95,23 +95,23 @@ const PatientIndex = ({route}) => {
           Patient Details!
         </Text>
         <Text style={{
-            color: 'green', 
-            ...theme.fonts.titleMedium,
-            marginLeft: 15
-          }}
+          color: 'green',
+          ...theme.fonts.titleMedium,
+          marginLeft: 15
+        }}
         >
           {devEnv && 'Dev'}
         </Text>
       </TouchableOpacity>
 
-      <View 
+      <View
         style={{
           ...styles.row,
           justifyContent: 'center',
-          columnGap:20,
-          marginBottom:15
+          columnGap: 20,
+          marginBottom: 15
         }}
-      > 
+      >
         <View
           style={{
             ...styles.column,
@@ -120,10 +120,10 @@ const PatientIndex = ({route}) => {
           <Image
             source={
               pat.profilepic
-                ? {uri: pat.profilepic}
+                ? { uri: pat.profilepic }
                 : Assets.getProfileIcon(pat.gender, pat.age)
             }
-            style={{...styles.profilePic}}
+            style={{ ...styles.profilePic }}
           />
           <Text
             style={{
@@ -157,15 +157,15 @@ const PatientIndex = ({route}) => {
       </View>
 
       {
-        components.map((comp,i)=>{
-          return(
+        components.map((comp, i) => {
+          return (
             <View
               style={styles.accordionItem}
               key={i}
             >
-              <TouchableOpacity onPress={()=>{navigation.navigate(comp.navigateTo, {patient})}}>
+              <TouchableOpacity onPress={() => { navigation.navigate(comp.navigateTo, { patient }) }}>
                 <View style={styles.header}>
-                  <Text style={{...styles.title, fontSize: 16 }}>{comp.title}</Text>
+                  <Text style={{ ...styles.title, fontSize: 16 }}>{comp.title}</Text>
                   <Feather name="chevron-down" color={'#000'} size={18} />
                 </View>
               </TouchableOpacity>
@@ -173,7 +173,7 @@ const PatientIndex = ({route}) => {
           )
         })
       }
-      
+
     </Animatable.View>
   );
 };

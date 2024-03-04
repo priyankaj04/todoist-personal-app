@@ -1,12 +1,11 @@
-import {createSlice} from '@reduxjs/toolkit';
-import { getService, postService, putService, deleteService, patchService, API_ROUTES, stringInterpolater, refreshToken } from '../server'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialValue = {
-    loginData:{},
+    loginData:{email:'priyanka@circlehealth.in'},
     devEnv:false,
     noOtp:false,
     baseUrl:`https://api.circle.care/v1`,
-    cmDetails:{},
+    corporateDetails:{},
     cpVersion:null
 }
 
@@ -21,12 +20,12 @@ export const LoginDetails = createSlice({
             state.value.baseUrl = `https://${state.value.devEnv?'dev':''}api.circle.care/v1`
         },
         toggleNoOtp: (state,action) => {state.value.noOtp = !state.value.noOtp},
-        setCmDetails: (state,action) => {state.value.cmDetails = action.payload},
+        setCorporateDetails: (state, action) => { state.value.corporateDetails = action.payload},
         setCpVersion: (state,action) => {state.value.cpVersion = action.payload}
     }, 
 });
 
 
-export const {setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCmDetails, setCpVersion} = LoginDetails.actions;
+export const { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion} = LoginDetails.actions;
 
 export default LoginDetails.reducer;
