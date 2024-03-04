@@ -1,15 +1,15 @@
 /* tslint:disable:no-console */
 import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, TextInput, Linking } from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { getService, API_ROUTES, stringInterpolater, putTokenService, patchService, deleteService, patchTokenService } from '../../../server';
-import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
-import { Loading, Dropdown, DatePicker ,Picker, MultiSelector } from '../../../components';
+import { mySelector, myDispatch, valuesActions, } from '../../../redux';
+import { Loading, Dropdown, DatePicker, Picker, MultiSelector } from '../../../components';
 import { getName } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
 import assets from '../../../assets';
-import {vh, vw} from 'react-native-css-vh-vw';
+import { vh, vw } from 'react-native-css-vh-vw';
 import { diagnosis } from '../../../constants'
 
 import Fontisto from 'react-native-vector-icons/Fontisto'
@@ -34,11 +34,11 @@ const CurrentlySick = () => {
   const theme = useTheme();
   const dispatch = myDispatch();
 
-  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
-  const baseUrl = mySelector(state=>state.Login.value.baseUrl);
-  const loginData = mySelector(state=>state.Login.value.loginData);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
+  const baseUrl = mySelector(state => state.Login.value.baseUrl);
+  const loginData = mySelector(state => state.Login.value.loginData);
 
-  const [loading, setLoading]= useState({
+  const [loading, setLoading] = useState({
     cSick: cmDetails.type === 'admin' ? false : true,
   });
   //set loading true and used time out because of loading animation glitch
@@ -48,42 +48,42 @@ const CurrentlySick = () => {
   const [careManagers, setCareManagers] = useState([]);
   const [doctors, setDoctors] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
 
     getService(baseUrl, API_ROUTES.GET_CARE_MANAGERS)
-    .then((res)=>{
-        if(res.status === 1){
+      .then((res) => {
+        if (res.status === 1) {
 
           setCareManagers(res.data)
-        }else{
-          
+        } else {
+
           dispatch(valuesActions.statusNot1('Get Circle Pis List Status != 1'));
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Get Circle Pis List ${error}`}));
-    })
+        dispatch(valuesActions.error({ error: `Error in Get Circle Pis List ${error}` }));
+      })
 
     getService(baseUrl, API_ROUTES.GET_ALL_DOCTORS)
-    .then((res)=>{
-        if(res.status === 1){
+      .then((res) => {
+        if (res.status === 1) {
           let list = []
           res.data.map((item) => list.push(
             {
-              label:item.firstname + " " + item.lastname ?? '',
-              value:item.firstname + " " + item.lastname ?? ''
+              label: item.firstname + " " + item.lastname ?? '',
+              value: item.firstname + " " + item.lastname ?? ''
             }
           ));
           setDoctors(list)
-        }else{
-          
+        } else {
+
           dispatch(valuesActions.statusNot1('Get all Doctors Status != 1'));
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in all Doctors List ${error}`}));
-    })
-  },[])
+        dispatch(valuesActions.error({ error: `Error in all Doctors List ${error}` }));
+      })
+  }, [])
 
   const [selectedCareManager, setSelectedCareManager] = useState(null);
 
@@ -91,44 +91,44 @@ const CurrentlySick = () => {
     setSelectedCareManager(option);
   };
 
-  useEffect(()=>{
-    if(cmDetails.type === 'admin' && !selectedCareManager?.email) return;
+  useEffect(() => {
+    if (cmDetails.type === 'admin' && !selectedCareManager?.email) return;
 
     let email = selectedCareManager?.email ?? cmDetails.email
-    
-    setLoading((pre)=>({
+
+    setLoading((pre) => ({
       ...pre,
       cSick: true
     }))
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, {email: email}))
-    .then((res)=>{
-        if(res.status === 1){
+    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, { email: email }))
+      .then((res) => {
+        if (res.status === 1) {
 
-          setTimeout(()=>{
-            setLoading((pre)=>({
+          setTimeout(() => {
+            setLoading((pre) => ({
               ...pre,
               cSick: false
             }))
 
             setCSick(res.data)
-          },500)
-        }else if(res.status === 0){
+          }, 500)
+        } else if (res.status === 0) {
 
-          setTimeout(()=>{
-            setLoading((pre)=>({
+          setTimeout(() => {
+            setLoading((pre) => ({
               ...pre,
               cSick: false
             }))
 
             setCSick(null)
-          },500)
+          }, 500)
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in My Sick Patients ${error}`}));
-    })
-  },[selectedCareManager])
+        dispatch(valuesActions.error({ error: `Error in My Sick Patients ${error}` }));
+      })
+  }, [selectedCareManager])
 
   function showToastNoMask(txt) {
     Toast.info({
@@ -137,7 +137,7 @@ const CurrentlySick = () => {
     })
   }
 
-  const handleCopy = async (title,text) => {
+  const handleCopy = async (title, text) => {
     try {
       await Clipboard.setString(text);
       showToastNoMask(`${title} Copied to clipboard`);
@@ -148,16 +148,16 @@ const CurrentlySick = () => {
 
   //the main card the renders all the jobs
   //all the actions that happens, happens in this card
-  const RenderItem = ({item}) => {
-    
-    const [cSick, setCSick]=useState({
+  const RenderItem = ({ item }) => {
+
+    const [cSick, setCSick] = useState({
       firstname: '',
       lastname: '',
       gender: '',
       ccownername: '',
       relationship: '',
-      pid:'',
-      sickhistoryid:'',
+      pid: '',
+      sickhistoryid: '',
       patientid: '',
       mobile: '',
       status: '',
@@ -165,7 +165,7 @@ const CurrentlySick = () => {
       doctorname: '',
       contactperson: true,
       enddate: '',
-      lastcommdate:'',
+      lastcommdate: '',
       diagnosis: [],
       history: '',
       details: {
@@ -177,21 +177,21 @@ const CurrentlySick = () => {
       priority: '',
     });
 
-    const [editedCSick, setEditedCSick]=useState({});
+    const [editedCSick, setEditedCSick] = useState({});
 
-    useEffect(()=>{
+    useEffect(() => {
 
       const updatedCSick = {};
 
       Object.keys(cSick).forEach((key) => {
-        updatedCSick[key] = (typeof item[key] === 'boolean') ? item[key] : ( item[key] ?? '' ); 
+        updatedCSick[key] = (typeof item[key] === 'boolean') ? item[key] : (item[key] ?? '');
       });
 
       setCSick(updatedCSick);
 
       setEditedCSick(updatedCSick)
 
-    },[])
+    }, [])
 
     const [remarks, setRemarks] = useState(cSick.remarks ?? '');
     const [status, setStatus] = useState(cSick.status);
@@ -199,19 +199,19 @@ const CurrentlySick = () => {
     const [deleted, setDeleted] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
-    const [modalVisible, setModalVisible]=useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
 
     function replaceOrAppendText(text, replacement) {
-      if(text.length < 2) return
+      if (text.length < 2) return
 
       const match = text.match(/\[.*?\]/);
       if (match) {
-          const newText = text.replace(/\[.*?\]/g, `[${replacement}]`);
-          return newText;
+        const newText = text.replace(/\[.*?\]/g, `[${replacement}]`);
+        return newText;
       } else {
-          return `${text} [${replacement}]`;
+        return `${text} [${replacement}]`;
       }
     }
 
@@ -222,7 +222,7 @@ const CurrentlySick = () => {
       })
     }
 
-    const deleteSickHistory = ()=> {
+    const deleteSickHistory = () => {
 
       const body = {
         status: "delete",
@@ -231,25 +231,25 @@ const CurrentlySick = () => {
 
       patchTokenService(
         baseUrl,
-        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE,{sickhistoryid: cSick?.sickhistoryid}),
+        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE, { sickhistoryid: cSick?.sickhistoryid }),
         body,
         loginData.token
       )
-      .then((res)=>{
-          if(res.status === 1){
+        .then((res) => {
+          if (res.status === 1) {
 
             setDeleted(true)
-          }else{
+          } else {
 
             dispatch(valuesActions.statusNot1('Delete Sick History Status != 1'));
           }
-      }).catch((error) => {
+        }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error Sick History delete ${error}`}));
-      })
+          dispatch(valuesActions.error({ error: `Error Sick History delete ${error}` }));
+        })
     }
 
-    const saveUpdatedChanges = ()=> {
+    const saveUpdatedChanges = () => {
 
       const body = {
         source: 'cm_app',
@@ -258,7 +258,7 @@ const CurrentlySick = () => {
         doctorname: editedCSick.doctorname,
         status: editedCSick.status,
         startdate: editedCSick.startdate,
-        contactperson: (typeof editedCSick.contactperson === 'boolean') ? editedCSick.contactperson : null ,
+        contactperson: (typeof editedCSick.contactperson === 'boolean') ? editedCSick.contactperson : null,
         enddate: editedCSick.enddate,
         lastcommdate: editedCSick.lastcommdate,
         history: editedCSick.history,
@@ -268,25 +268,25 @@ const CurrentlySick = () => {
 
       patchTokenService(
         baseUrl,
-        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE,{sickhistoryid: cSick?.sickhistoryid}),
+        stringInterpolater(API_ROUTES.SICKHISTORY_UPDATE, { sickhistoryid: cSick?.sickhistoryid }),
         body,
         loginData.token
       )
-      .then((res)=>{
-          if(res.status === 1){
+        .then((res) => {
+          if (res.status === 1) {
 
             setCSick(editedCSick);
             showToast('Details updated successfully');
             hideModal();
-          }else{
+          } else {
 
-            console.log('res',res)
+            console.log('res', res)
             dispatch(valuesActions.statusNot1('Update C Sick Status != 1'));
           }
-      }).catch((error) => {
+        }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error Update C Sick ${error}`}));
-      })
+          dispatch(valuesActions.error({ error: `Error Update C Sick ${error}` }));
+        })
     }
 
 
@@ -294,371 +294,371 @@ const CurrentlySick = () => {
       <View>
         <LinearGradient
           colors={
-            cSick.careplan === 'vip' ? 
-            ['#e5ac01','#fdf774','#fdf774','#e5ac01'] 
-            : 
-            ['#87adff','#cedaff','#cedaff','#87adff']
+            cSick.careplan === 'vip' ?
+              ['#e5ac01', '#fdf774', '#fdf774', '#e5ac01']
+              :
+              ['#87adff', '#cedaff', '#cedaff', '#87adff']
           }
           style={styles.patientCard}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}  
-        > 
+          end={{ x: 1, y: 1 }}
+        >
           <View
             style={{
-              margin:2.5,
-              backgroundColor:'#fff',
-              padding:8,
-              borderRadius:4
+              margin: 2.5,
+              backgroundColor: '#fff',
+              padding: 8,
+              borderRadius: 4
             }}
           >
             {
               !deleteInitiated ?
-              <>
-                {
-                  expanded ?
-                  <>
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start'
-                      }}
-                    >
-                      <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
-                      <View style={styles.row}>
-                        <Text style={{
-                            ...styles.text,
-                            marginRight:7
-                          }}
-                        >{getName(cSick?.relationship)}</Text>
-                        {
-                          cSick.gender === 'male' &&
-                          <Fontisto
-                            name='male'
-                            size={15}
-                            color={'#830000'}
-                          />
-                        }
-                        {
-                          cSick.gender === 'female' &&
-                          <Fontisto
-                            name='female'
-                            size={15}
-                            color={'#660058'}
-                          />
-                        }
-                        <Text
-                          style={{
-                            ...styles.text,
-                            color: cSick.gender === 'male' ? '#830000' : '#660058'
-                          }}
-                        >{cSick.gender}</Text>
-                      </View>
-                    </View>
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start',
-                        marginTop: 15
-                      }}
-                    >
-                      <Text style={styles.title}>
-                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
-                      </Text>
-
-                      <Text style={styles.title}>
-                        {dayjs(cSick.duedate).format('D MMM YYYY')}
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start',
-                        marginTop: 15
-                      }}
-                    >
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
-
-                      {/* something can be added here */}
-                      
-                    </View>
-
-                    <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-                      <Text style={{...styles.title}}>+{cSick?.mobile}</Text>
-
-                      <View style={{...styles.row, columnGap:15}}>
-                        
-                        <TouchableOpacity style={{...styles.minBtn}}>
-                          <Text style={{...styles.title}}>Text</Text>
-                          <Fontisto
-                            name='whatsapp'
-                            size={15}
-                            color={theme.colors.backgroundPrimary}
-                          />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          style={{...styles.minBtn}}
-                          onLongPress={()=>Linking.openURL(`tel:+${cSick?.mobile}`)}
-                        >
-                          <Text style={{...styles.title}}>Call</Text>
-                          <Fontisto
-                            name='phone'
-                            size={15}
-                            color={theme.colors.backgroundPrimary}
-                          />
-                        </TouchableOpacity>
-
-                      </View>
-                    </View>
-
-                    { status ?
-                      <Text style={[styles.title, {marginTop: 15}]}>
-                        <Text style={[styles.details, {fontSize: 14}]}>Status- </Text> {getName(status)}
-                      </Text>
-                      : null
-                    }
-
-                    {
-                      remarks?.length > 0 &&
+                <>
+                  {
+                    expanded ?
                       <>
-                        <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                          Remarks
-                        </Text>
 
-                        <TextInput
-                          style={[
-                            theme.fonts.titleSmall,
-                            { 
-                              marginTop:10,
-                              color:'#535353',
-                              borderWidth:1,
-                              borderRadius: 5,
-                              borderColor: '#ccc',
-                              paddingHorizontal:10,
-                              paddingVertical:5,
-                              backgroundColor: '#fff',
-                            }
-                          ]}
-                          multiline={true}
-                          value={remarks}
-                          onChangeText={(val) => setRemarks(val)}
-                          editable={false}
-                        />
-                      </>
-                    }
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start',
-                        marginTop:20,
-                        columnGap: 20
-                      }}
-                    >
-                      <TouchableOpacity 
-                        style={{...styles.actionBtn, justifyContent:'center'}}
-                        onPress={()=>{
-                          setDeleteInitiated(true);
-                        }}
-                      >
-                        <Text style={{...theme.fonts.titleSmall, color: '#a80000'}}>Delete</Text>
-                        <Feather
-                          name='x-square'
-                          size={15}
-                          color={'#a80000'}
-                        />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={{...styles.actionBtn, justifyContent:'center'}}
-                        onPress={() => showModal()}
-                      >
-                        <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Edit</Text>
-                        <Feather
-                          name='edit'
-                          size={15}
-                          color={theme.colors.backgroundPrimary}
-                        />
-                      </TouchableOpacity>
-                    </View>
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'flex-end',
-                        marginTop:10,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={{
-                          ...styles.minBtn,
-                          backgroundColor:'transparent'
-                        }}
-                        onPress={()=>setExpanded(false)}
-                      >
-                        <Text style={{
-                            ...styles.details,
-                            ...theme.fonts.titleSmall,
-                            color:theme.colors.backgroundPrimary,
-                          }}>
-                          Minimize
-                        </Text>
-                        <Feather
-                          name='minimize'
-                          size={15}
-                          color={theme.colors.backgroundPrimary}
-                        />
-                      </TouchableOpacity>
-                    </View>
-
-                  </>
-                  :
-                  <TouchableOpacity
-                    onPress={()=>{setExpanded(true)}}
-                  >
-
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start'
-                      }}
-                    >
-                      <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
-                      <View style={styles.row}>
-                        <Text style={{
-                            ...styles.text,
-                            marginRight:7
-                          }}
-                        >{getName(cSick?.relationship)}</Text>
-                        {
-                          cSick.gender === 'male' &&
-                          <Fontisto
-                            name='male'
-                            size={15}
-                            color={'#830000'}
-                          />
-                        }
-                        {
-                          cSick.gender === 'female' &&
-                          <Fontisto
-                            name='female'
-                            size={15}
-                            color={'#660058'}
-                          />
-                        }
-                        <Text
+                        <View
                           style={{
-                            ...styles.text,
-                            color: cSick.gender === 'male' ? '#830000' : '#660058'
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start'
                           }}
-                        >{cSick.gender}</Text>
-                      </View>
-                    </View>
+                        >
+                          <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
+                          <View style={styles.row}>
+                            <Text style={{
+                              ...styles.text,
+                              marginRight: 7
+                            }}
+                            >{getName(cSick?.relationship)}</Text>
+                            {
+                              cSick.gender === 'male' &&
+                              <Fontisto
+                                name='male'
+                                size={15}
+                                color={'#830000'}
+                              />
+                            }
+                            {
+                              cSick.gender === 'female' &&
+                              <Fontisto
+                                name='female'
+                                size={15}
+                                color={'#660058'}
+                              />
+                            }
+                            <Text
+                              style={{
+                                ...styles.text,
+                                color: cSick.gender === 'male' ? '#830000' : '#660058'
+                              }}
+                            >{cSick.gender}</Text>
+                          </View>
+                        </View>
 
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start',
-                        marginTop: 15
-                      }}
-                    >
-                      <Text style={styles.title}>
-                        <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
-                      </Text>
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 15
+                          }}
+                        >
+                          <Text style={styles.title}>
+                            <Text style={[styles.details, { fontSize: 14, fontWeight: 500 }]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
+                          </Text>
 
-                      <Text style={styles.title}>
-                        {dayjs(cSick.duedate).format('D MMM YYYY')}
-                      </Text>
-                    </View>
+                          <Text style={styles.title}>
+                            {dayjs(cSick.duedate).format('D MMM YYYY')}
+                          </Text>
+                        </View>
 
-                    <View
-                      style={{
-                        ...styles.row,
-                        justifyContent:'space-between',
-                        alignItems:'flex-start',
-                        marginTop: 15
-                      }}
-                    >
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>{getName(cSick.ccownername)}</Text>
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 15
+                          }}
+                        >
+                          <Text style={[styles.details, { fontSize: 14, fontWeight: 500 }]}>{getName(cSick.ccownername)}</Text>
 
-                      <View
-                        style={{...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal:0}}
+                          {/* something can be added here */}
+
+                        </View>
+
+                        <View style={{ ...styles.row, marginTop: 10, justifyContent: 'space-between' }}>
+                          <Text style={{ ...styles.title }}>+{cSick?.mobile}</Text>
+
+                          <View style={{ ...styles.row, columnGap: 15 }}>
+
+                            <TouchableOpacity style={{ ...styles.minBtn }}>
+                              <Text style={{ ...styles.title }}>Text</Text>
+                              <Fontisto
+                                name='whatsapp'
+                                size={15}
+                                color={theme.colors.backgroundPrimary}
+                              />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              style={{ ...styles.minBtn }}
+                              onLongPress={() => Linking.openURL(`tel:+${cSick?.mobile}`)}
+                            >
+                              <Text style={{ ...styles.title }}>Call</Text>
+                              <Fontisto
+                                name='phone'
+                                size={15}
+                                color={theme.colors.backgroundPrimary}
+                              />
+                            </TouchableOpacity>
+
+                          </View>
+                        </View>
+
+                        {status ?
+                          <Text style={[styles.title, { marginTop: 15 }]}>
+                            <Text style={[styles.details, { fontSize: 14 }]}>Status- </Text> {getName(status)}
+                          </Text>
+                          : null
+                        }
+
+                        {
+                          remarks?.length > 0 &&
+                          <>
+                            <Text style={[theme.fonts.titleSmall, { color: '#000', marginTop: 15 }]}>
+                              Remarks
+                            </Text>
+
+                            <TextInput
+                              style={[
+                                theme.fonts.titleSmall,
+                                {
+                                  marginTop: 10,
+                                  color: '#535353',
+                                  borderWidth: 1,
+                                  borderRadius: 5,
+                                  borderColor: '#ccc',
+                                  paddingHorizontal: 10,
+                                  paddingVertical: 5,
+                                  backgroundColor: '#fff',
+                                }
+                              ]}
+                              multiline={true}
+                              value={remarks}
+                              onChangeText={(val) => setRemarks(val)}
+                              editable={false}
+                            />
+                          </>
+                        }
+
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 20,
+                            columnGap: 20
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{ ...styles.actionBtn, justifyContent: 'center' }}
+                            onPress={() => {
+                              setDeleteInitiated(true);
+                            }}
+                          >
+                            <Text style={{ ...theme.fonts.titleSmall, color: '#a80000' }}>Delete</Text>
+                            <Feather
+                              name='x-square'
+                              size={15}
+                              color={'#a80000'}
+                            />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={{ ...styles.actionBtn, justifyContent: 'center' }}
+                            onPress={() => showModal()}
+                          >
+                            <Text style={{ ...theme.fonts.titleSmall, color: '#000' }}>Edit</Text>
+                            <Feather
+                              name='edit'
+                              size={15}
+                              color={theme.colors.backgroundPrimary}
+                            />
+                          </TouchableOpacity>
+                        </View>
+
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'flex-end',
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{
+                              ...styles.minBtn,
+                              backgroundColor: 'transparent'
+                            }}
+                            onPress={() => setExpanded(false)}
+                          >
+                            <Text style={{
+                              ...styles.details,
+                              ...theme.fonts.titleSmall,
+                              color: theme.colors.backgroundPrimary,
+                            }}>
+                              Minimize
+                            </Text>
+                            <Feather
+                              name='minimize'
+                              size={15}
+                              color={theme.colors.backgroundPrimary}
+                            />
+                          </TouchableOpacity>
+                        </View>
+
+                      </>
+                      :
+                      <TouchableOpacity
+                        onPress={() => { setExpanded(true) }}
                       >
-                        <Text style={{...theme.fonts.titleSmall, color: theme.colors.backgroundPrimary}}>Expand</Text>
-                        <Feather
-                          name='maximize'
-                          size={15}
-                          color={theme.colors.backgroundPrimary}
-                        />
-                      </View>
-                      
-                    </View>
 
-                  </TouchableOpacity>
-                }
-              </>
-              :
-              <>
-                {
-                  !deleted ?
-                  <>
-                    <Text style={[styles.title, {marginVertical:10}]}>
-                      Are you sure you want to delete once deleted cannot be undone
-                    </Text>
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start'
+                          }}
+                        >
+                          <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
+                          <View style={styles.row}>
+                            <Text style={{
+                              ...styles.text,
+                              marginRight: 7
+                            }}
+                            >{getName(cSick?.relationship)}</Text>
+                            {
+                              cSick.gender === 'male' &&
+                              <Fontisto
+                                name='male'
+                                size={15}
+                                color={'#830000'}
+                              />
+                            }
+                            {
+                              cSick.gender === 'female' &&
+                              <Fontisto
+                                name='female'
+                                size={15}
+                                color={'#660058'}
+                              />
+                            }
+                            <Text
+                              style={{
+                                ...styles.text,
+                                color: cSick.gender === 'male' ? '#830000' : '#660058'
+                              }}
+                            >{cSick.gender}</Text>
+                          </View>
+                        </View>
 
-                    <View
-                    style={{
-                      ...styles.row,
-                      justifyContent:'space-between',
-                      alignItems:'flex-start',
-                      marginTop:5,
-                      columnGap: 20
-                    }}
-                    >
-                    <TouchableOpacity 
-                      style={{...styles.actionBtn, justifyContent:'center'}}
-                      onPress={()=>{
-                        setDeleteInitiated(false);
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Cancel</Text>
-                    </TouchableOpacity>
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 15
+                          }}
+                        >
+                          <Text style={styles.title}>
+                            <Text style={[styles.details, { fontSize: 14, fontWeight: 500 }]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
+                          </Text>
 
-                    <TouchableOpacity
-                      style={{...styles.actionBtn, justifyContent:'center'}}
-                      onPress={()=>{
-                        deleteSickHistory();
-                      }}
-                    >
-                      <Text style={{...theme.fonts.titleSmall, color: '#000'}}>Yes Delete!</Text>
-                    </TouchableOpacity>
-                    </View>
-                  </>
-                  :
-                  <Text
-                    style={[
-                      styles.title,
-                      {
-                        marginTop:15,
-                        color:'#044004',
-                        width:'100%',
-                        textAlign:'center'
-                      }
-                    ]}
-                  >
-                    Sick History Deleted Successfully!
-                  </Text>
-                }
-              </>
+                          <Text style={styles.title}>
+                            {dayjs(cSick.duedate).format('D MMM YYYY')}
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 15
+                          }}
+                        >
+                          <Text style={[styles.details, { fontSize: 14, fontWeight: 500 }]}>{getName(cSick.ccownername)}</Text>
+
+                          <View
+                            style={{ ...styles.minBtn, backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                          >
+                            <Text style={{ ...theme.fonts.titleSmall, color: theme.colors.backgroundPrimary }}>Expand</Text>
+                            <Feather
+                              name='maximize'
+                              size={15}
+                              color={theme.colors.backgroundPrimary}
+                            />
+                          </View>
+
+                        </View>
+
+                      </TouchableOpacity>
+                  }
+                </>
+                :
+                <>
+                  {
+                    !deleted ?
+                      <>
+                        <Text style={[styles.title, { marginVertical: 10 }]}>
+                          Are you sure you want to delete once deleted cannot be undone
+                        </Text>
+
+                        <View
+                          style={{
+                            ...styles.row,
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginTop: 5,
+                            columnGap: 20
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{ ...styles.actionBtn, justifyContent: 'center' }}
+                            onPress={() => {
+                              setDeleteInitiated(false);
+                            }}
+                          >
+                            <Text style={{ ...theme.fonts.titleSmall, color: '#000' }}>Cancel</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={{ ...styles.actionBtn, justifyContent: 'center' }}
+                            onPress={() => {
+                              deleteSickHistory();
+                            }}
+                          >
+                            <Text style={{ ...theme.fonts.titleSmall, color: '#000' }}>Yes Delete!</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </>
+                      :
+                      <Text
+                        style={[
+                          styles.title,
+                          {
+                            marginTop: 15,
+                            color: '#044004',
+                            width: '100%',
+                            textAlign: 'center'
+                          }
+                        ]}
+                      >
+                        Sick History Deleted Successfully!
+                      </Text>
+                  }
+                </>
             }
           </View>
         </LinearGradient>
@@ -667,10 +667,10 @@ const CurrentlySick = () => {
             visible={modalVisible}
             onDismiss={hideModal}
             contentContainerStyle={{
-              flex:1,
-              margin:10,
-              borderRadius:8,
-              backgroundColor:"#fff"
+              flex: 1,
+              margin: 10,
+              borderRadius: 8,
+              backgroundColor: "#fff"
             }}
           >
             <View
@@ -678,13 +678,13 @@ const CurrentlySick = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: 15,
-                flex:1,
+                flex: 1,
               }}
             >
               <View style={styles.header}>
                 <Text
                   style={{
-                    color:theme.colors.text,
+                    color: theme.colors.text,
                     ...theme.fonts.titleMedium,
                   }}
                 >
@@ -692,8 +692,8 @@ const CurrentlySick = () => {
                 </Text>
                 <Ionicons
                   style={{
-                    textAlign:'right',
-                    flex:1,
+                    textAlign: 'right',
+                    flex: 1,
                   }}
                   name="close"
                   size={25}
@@ -702,22 +702,22 @@ const CurrentlySick = () => {
                 />
               </View>
 
-              <ScrollView style={{width: vw(100)-50}}>
-                
+              <ScrollView style={{ width: vw(100) - 50 }}>
+
                 <View
                   style={{
                     ...styles.row,
-                    justifyContent:'space-between',
-                    alignItems:'flex-start',
-                    marginTop:15
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginTop: 15
                   }}
                 >
                   <Text style={styles.title}>{getName(cSick.firstname, cSick.lastname)}</Text>
                   <View style={styles.row}>
                     <Text style={{
-                        ...styles.text,
-                        marginRight:7
-                      }}
+                      ...styles.text,
+                      marginRight: 7
+                    }}
                     >{getName(cSick?.relationship)}</Text>
                     {
                       cSick.gender === 'male' &&
@@ -747,50 +747,50 @@ const CurrentlySick = () => {
                 <View
                   style={{
                     ...styles.row,
-                    justifyContent:'space-between',
-                    alignItems:'flex-start',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
                     marginTop: 15
                   }}
                 >
                   <View>
                     <Text style={styles.textWrapper}>
-                      <Text style={[styles.details, {fontSize: 14, fontWeight:500}]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
+                      <Text style={[styles.details, { fontSize: 14, fontWeight: 500 }]}>Status- </Text> {getName(cSick.status ?? 'Not Updated')}
                     </Text>
                   </View>
-                  
+
                   <View>
                     <Text style={styles.textWrapper}>
                       {dayjs(cSick.duedate).format('D MMM YYYY')}
                     </Text>
                   </View>
-                  
+
                 </View>
 
-                <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                <Text style={[theme.fonts.titleSmall, { color: '#000', marginTop: 15 }]}>
                   Remarks
                 </Text>
 
                 <TextInput
                   style={[
                     theme.fonts.titleSmall,
-                    { 
-                      marginTop:10,
-                      color:'#000',
-                      borderWidth:1,
+                    {
+                      marginTop: 10,
+                      color: '#000',
+                      borderWidth: 1,
                       borderRadius: 5,
-                      paddingHorizontal:10,
-                      paddingVertical:5,
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
                       backgroundColor: '#fff',
                     }
                   ]}
                   multiline={true}
                   value={remarks}
-                  onChange={(text)=> setRemarks(text)}
-                  onEndEditing={(e) =>{
+                  onChange={(text) => setRemarks(text)}
+                  onEndEditing={(e) => {
                     const val = e.nativeEvent.text;
                     const text = replaceOrAppendText(val, dayjs().format('DD-MM-YYYY'));
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       remarks: text
                     }))
@@ -798,20 +798,20 @@ const CurrentlySick = () => {
                   }}
                 />
 
-                <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                <Text style={[theme.fonts.titleSmall, { color: '#000', marginTop: 15 }]}>
                   History
                 </Text>
 
                 <TextInput
                   style={[
                     theme.fonts.titleSmall,
-                    { 
-                      marginTop:10,
-                      color:'#000',
-                      borderWidth:1,
+                    {
+                      marginTop: 10,
+                      color: '#000',
+                      borderWidth: 1,
                       borderRadius: 5,
-                      paddingHorizontal:10,
-                      paddingVertical:5,
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
                       backgroundColor: '#fff',
                     }
                   ]}
@@ -819,14 +819,14 @@ const CurrentlySick = () => {
                   value={editedCSick?.history}
                   onChangeText={(text) =>
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       history: text
                     }))
                   }
                 />
 
-                
+
                 <View
                   style={{
                     ...styles.row,
@@ -854,14 +854,14 @@ const CurrentlySick = () => {
                 <View
                   style={{
                     ...styles.row,
-                    columnGap:10
+                    columnGap: 10
                   }}
                 >
                   <DatePicker
                     label="Select Date"
                     value={editedCSick?.startdate}
-                    onChange={(val)=>
-                      setEditedCSick((editedCSick)=>({
+                    onChange={(val) =>
+                      setEditedCSick((editedCSick) => ({
                         ...editedCSick,
                         startdate: val
                       }))
@@ -878,8 +878,8 @@ const CurrentlySick = () => {
                   <DatePicker
                     label="Select Date"
                     value={editedCSick?.endate}
-                    onChange={(val)=>
-                      setEditedCSick((editedCSick)=>({
+                    onChange={(val) =>
+                      setEditedCSick((editedCSick) => ({
                         ...editedCSick,
                         enddate: val
                       }))
@@ -895,7 +895,7 @@ const CurrentlySick = () => {
                   />
                 </View>
 
-                
+
                 <View
                   style={{
                     ...styles.row,
@@ -910,7 +910,7 @@ const CurrentlySick = () => {
                     }}
                   >
                     <Text
-                      style={[theme.fonts.titleSmall, {color:'#000'}]}
+                      style={[theme.fonts.titleSmall, { color: '#000' }]}
                     >
                       Last Comm... date
                     </Text>
@@ -918,8 +918,8 @@ const CurrentlySick = () => {
                     <DatePicker
                       label="Select Date"
                       value={editedCSick?.lastcommdate}
-                      onChange={(val)=>
-                        setEditedCSick((editedCSick)=>({
+                      onChange={(val) =>
+                        setEditedCSick((editedCSick) => ({
                           ...editedCSick,
                           lastcommdate: val
                         }))
@@ -936,7 +936,7 @@ const CurrentlySick = () => {
                       }}
                     />
                   </View>
-                  
+
                   <View
                     style={{
                       flex: 1,
@@ -944,7 +944,7 @@ const CurrentlySick = () => {
                   >
                     <Picker
                       theme={theme}
-                      style={{marginTop:0}}
+                      style={{ marginTop: 0 }}
                       title='Patient responded'
                       placeholder='Select response'
                       data={[
@@ -952,16 +952,16 @@ const CurrentlySick = () => {
                         { value: 'no', label: 'No' },
                       ]}
                       value={editedCSick?.details?.patientresponse}
-                      setValue={(value) =>(
+                      setValue={(value) => (
 
-                        setEditedCSick((editedCSick)=>({
+                        setEditedCSick((editedCSick) => ({
                           ...editedCSick,
                           details: {
                             ...editedCSick.details,
                             patientresponse: value
                           }
                         }))
-                      )}  
+                      )}
                     />
                   </View>
 
@@ -969,7 +969,7 @@ const CurrentlySick = () => {
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Status'
                   placeholder='Select status'
                   data={[
@@ -982,95 +982,95 @@ const CurrentlySick = () => {
                     { value: 'expired', label: 'Expired' },
                   ]}
                   value={editedCSick?.status}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       status: value
                     }))
-                  )}  
+                  )}
                 />
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Treating Doctor'
                   placeholder='Select treating'
                   data={[
                     {
-                      label:'In house',
+                      label: 'In house',
                       value: 'inhouse'
                     },
                     {
-                      label:'Outside house',
+                      label: 'Outside house',
                       value: 'outhouse'
                     },
                   ]}
                   value={editedCSick?.details?.treatingdoc}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       details: {
                         ...editedCSick.details,
                         treatingdoc: value
                       }
                     }))
-                  )}  
+                  )}
                 />
 
                 {
                   editedCSick?.details?.treatingdoc == 'inhouse' ?
-                  <Picker
-                    theme={theme}
-                    style={{marginTop: 20}}
-                    title='Doctor Name'
-                    placeholder='Select a Doctor'
-                    data={doctors}
-                    value={editedCSick?.doctorname}
-                    setValue={(value) =>(
-
-                      setEditedCSick((editedCSick)=>({
-                        ...editedCSick,
-                        doctorname: value
-                      }))
-                    )}  
-                  />
-                  :
-                  <>
-                    <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
-                      Doctor Name
-                    </Text>
-
-                    <TextInput
-                      style={[
-                        theme.fonts.titleSmall,
-                        { 
-                          marginTop:10,
-                          color:'#000',
-                          borderWidth:1,
-                          borderRadius: 5,
-                          paddingHorizontal:10,
-                          paddingVertical:5,
-                          backgroundColor: '#fff',
-                        }
-                      ]}
-                      multiline={true}
+                    <Picker
+                      theme={theme}
+                      style={{ marginTop: 20 }}
+                      title='Doctor Name'
+                      placeholder='Select a Doctor'
+                      data={doctors}
                       value={editedCSick?.doctorname}
-                      onChangeText={(text) =>
+                      setValue={(value) => (
 
-                        setEditedCSick((editedCSick)=>({
+                        setEditedCSick((editedCSick) => ({
                           ...editedCSick,
-                          doctorname: text
+                          doctorname: value
                         }))
-                      }
+                      )}
                     />
-                  </>
+                    :
+                    <>
+                      <Text style={[theme.fonts.titleSmall, { color: '#000', marginTop: 15 }]}>
+                        Doctor Name
+                      </Text>
+
+                      <TextInput
+                        style={[
+                          theme.fonts.titleSmall,
+                          {
+                            marginTop: 10,
+                            color: '#000',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                            paddingVertical: 5,
+                            backgroundColor: '#fff',
+                          }
+                        ]}
+                        multiline={true}
+                        value={editedCSick?.doctorname}
+                        onChangeText={(text) =>
+
+                          setEditedCSick((editedCSick) => ({
+                            ...editedCSick,
+                            doctorname: text
+                          }))
+                        }
+                      />
+                    </>
                 }
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Priority'
                   placeholder='Select priority'
                   data={[
@@ -1080,18 +1080,18 @@ const CurrentlySick = () => {
                     { value: 5, label: 'Critical Priority' },
                   ]}
                   value={editedCSick?.priority}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       priority: value
                     }))
-                  )}  
+                  )}
                 />
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Contact person same as patient'
                   placeholder='Select'
                   data={[
@@ -1099,18 +1099,18 @@ const CurrentlySick = () => {
                     { value: false, label: 'No' },
                   ]}
                   value={editedCSick?.contactperson}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       contactperson: value
                     }))
-                  )}  
+                  )}
                 />
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Patient Intention'
                   placeholder='Select intent'
                   data={[
@@ -1119,21 +1119,21 @@ const CurrentlySick = () => {
                     { value: 'episodic', label: 'Episodic' },
                   ]}
                   value={editedCSick?.details?.patientintent}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       details: {
                         ...editedCSick.details,
                         patientintent: value
                       }
                     }))
-                  )}  
+                  )}
                 />
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Source'
                   placeholder='Select source'
                   data={[
@@ -1143,21 +1143,21 @@ const CurrentlySick = () => {
                     { value: 'insurancedept', label: 'Insurance Dept' },
                   ]}
                   value={editedCSick?.details?.source}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       details: {
                         ...editedCSick.details,
                         source: value
                       }
                     }))
-                  )}  
+                  )}
                 />
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Managed as'
                   placeholder='Select managed'
                   data={[
@@ -1167,9 +1167,9 @@ const CurrentlySick = () => {
                     { value: 'managed_in_ip', label: 'Managed in IP' },
                   ]}
                   value={editedCSick?.details?.managedas}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       details: {
                         ...editedCSick.details,
@@ -1181,7 +1181,7 @@ const CurrentlySick = () => {
 
                 <Picker
                   theme={theme}
-                  style={{marginTop:20}}
+                  style={{ marginTop: 20 }}
                   title='Managed as'
                   placeholder='Select managed'
                   data={[
@@ -1191,9 +1191,9 @@ const CurrentlySick = () => {
                     { value: 'managed_in_ip', label: 'Managed in IP' },
                   ]}
                   value={editedCSick?.details?.managedas}
-                  setValue={(value) =>(
+                  setValue={(value) => (
 
-                    setEditedCSick((editedCSick)=>({
+                    setEditedCSick((editedCSick) => ({
                       ...editedCSick,
                       details: {
                         ...editedCSick.details,
@@ -1206,7 +1206,7 @@ const CurrentlySick = () => {
                 {
                   cSick?.diagnosis &&
                   <View>
-                    <Text style={[theme.fonts.titleSmall, {color:'#000', marginTop:15}]}>
+                    <Text style={[theme.fonts.titleSmall, { color: '#000', marginTop: 15 }]}>
                       Diagnosis
                     </Text>
 
@@ -1216,7 +1216,7 @@ const CurrentlySick = () => {
                         styles.row,
                         styles.actionBtn,
                         {
-                          marginTop:15,
+                          marginTop: 15,
                           flexWrap: 'wrap',
                           alignItems: 'flex-start',
                           columnGap: 20,
@@ -1225,17 +1225,17 @@ const CurrentlySick = () => {
                       ]}
                     >
                       {
-                        cSick?.diagnosis?.map((item, i)=>
+                        cSick?.diagnosis?.map((item, i) =>
                           <Text
                             key={i}
-                           style={[
-                            theme.fonts.bodySmall,
-                            {
-                              color:'#3f3f3f',
-                              marginTop:10
-                            },
-                            styles.textWrapper
-                          ]}>
+                            style={[
+                              theme.fonts.bodySmall,
+                              {
+                                color: '#3f3f3f',
+                                marginTop: 10
+                              },
+                              styles.textWrapper
+                            ]}>
                             {item}
                           </Text>
                         )
@@ -1243,9 +1243,9 @@ const CurrentlySick = () => {
                     </View>
                   </View>
                 }
-                
 
-                <Text style={[theme.fonts.titleSmall, {color:'#9d9d9d', marginTop:15}]}>
+
+                <Text style={[theme.fonts.titleSmall, { color: '#9d9d9d', marginTop: 15 }]}>
                   To edit Diagnosis open Chadmin.circle.care
                 </Text>
 
@@ -1261,13 +1261,13 @@ const CurrentlySick = () => {
                 <TouchableOpacity
                   style={{
                     ...styles.actionBtn,
-                    justifyContent:'center',
-                    backgroundColor:theme.colors.backgroundPrimary,
+                    justifyContent: 'center',
+                    backgroundColor: theme.colors.backgroundPrimary,
                     columnGap: 15,
                   }}
                   onPress={() => saveUpdatedChanges()}
                 >
-                  <Text style={{...theme.fonts.titleMedium, color: '#fff'}}>Update</Text>
+                  <Text style={{ ...theme.fonts.titleMedium, color: '#fff' }}>Update</Text>
                   <Feather
                     name='upload-cloud'
                     size={20}
@@ -1282,52 +1282,52 @@ const CurrentlySick = () => {
     )
   };
 
-  {/* My Jobs */}
+  {/* My Jobs */ }
   return (
-    <ScrollView 
+    <ScrollView
       showsVerticalScrollIndicator={false}
     >
-      <View style={{marginHorizontal: 10 }}>
+      <View style={{ marginHorizontal: 10 }}>
 
         {
           cmDetails.type === 'admin' ?
-          <Dropdown
-            title='Select Circle Pi'
-            options={careManagers}
-            selectedOption={selectedCareManager}
-            onSelect={handleSelect}
-            value={'email'}
-            label={'email'}
-            placeholder={'Select Circle Pi'}
-            style={{
-              marginBottom: 15
-            }}
-          />
-          : null
+            <Dropdown
+              title='Select Circle Pi'
+              options={careManagers}
+              selectedOption={selectedCareManager}
+              onSelect={handleSelect}
+              value={'email'}
+              label={'email'}
+              placeholder={'Select Circle Pi'}
+              style={{
+                marginBottom: 15
+              }}
+            />
+            : null
         }
 
         {
           !loading.cSick ?
-          <>
-            {
-              cSick?.length > 0 ?
-              <>
-                {
-                  cSick.map((item, i)=>(
-                    <RenderItem item={item} key={i}/>
-                  ))
-                }
-              </>
-              :
-              <View>
-                <Text style={{...styles.text, textAlign:'center'}}>
-                  Yea! there are no sick patients congrats 
-                </Text>
-              </View>
-            }
-          </>
-          :
-          <Loading theme={theme}/>
+            <>
+              {
+                cSick?.length > 0 ?
+                  <>
+                    {
+                      cSick.map((item, i) => (
+                        <RenderItem item={item} key={i} />
+                      ))
+                    }
+                  </>
+                  :
+                  <View>
+                    <Text style={{ ...styles.text, textAlign: 'center' }}>
+                      Yea! there are no sick patients congrats
+                    </Text>
+                  </View>
+              }
+            </>
+            :
+            <Loading theme={theme} />
         }
 
       </View>

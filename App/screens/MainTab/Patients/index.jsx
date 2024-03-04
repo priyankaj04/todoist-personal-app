@@ -3,11 +3,11 @@ import React, { useEffect, useState, memo } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, FlatList, Linking } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Tabs } from '@ant-design/react-native';
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import { vh, vw } from 'react-native-css-vh-vw';
 
 import { getService, API_ROUTES, stringInterpolater } from '../../../server';
-import { mySelector, myDispatch, valuesActions,  } from '../../../redux';
+import { mySelector, myDispatch, valuesActions, } from '../../../redux';
 import { Loading, SearchBar } from '../../../components'
 import { getName } from '../../../utils';
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,18 +31,18 @@ import styles from '../Styles'
 import { pink800 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { Image } from 'react-native-animatable';
 
-const Patients = ({}) => {
-  
+const Patients = ({ }) => {
+
   const theme = useTheme();
   const dispatch = myDispatch();
   const navigation = useNavigation();
 
-  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
-  const baseUrl = mySelector(state=>state.Login.value.baseUrl);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
+  const baseUrl = mySelector(state => state.Login.value.baseUrl);
 
-  const [loading, setLoading]= useState({
-    myPatient:true,
-    allPatients:false
+  const [loading, setLoading] = useState({
+    myPatient: true,
+    allPatients: false
   })
 
   const [myPatients, setMyPatients] = useState([]);
@@ -72,7 +72,7 @@ const Patients = ({}) => {
     })
   }
 
-  const handleCopy = async (title,text) => {
+  const handleCopy = async (title, text) => {
     try {
       await Clipboard.setString(text);
       showToastNoMask(`${title} Copied to clipboard`);
@@ -81,113 +81,113 @@ const Patients = ({}) => {
     }
   };
 
-  useEffect(()=>{
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_MY_PATIENTS, {email: cmDetails.email}))
-    .then((res)=>{
-        if(res.status === 1){
+  useEffect(() => {
+    getService(baseUrl, stringInterpolater(API_ROUTES.GET_MY_PATIENTS, { email: cmDetails.email }))
+      .then((res) => {
+        if (res.status === 1) {
 
-          setLoading((pre)=>({
+          setLoading((pre) => ({
             ...pre,
             myPatient: false
           }))
           setMyPatients(res.data)
           setFiltered(res.data)
-        }else{
-          
+        } else {
+
           dispatch(valuesActions.statusNot1(res));
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Getting My Patients ${error}`}));
-    })
-  },[])
+        dispatch(valuesActions.error({ error: `Error in Getting My Patients ${error}` }));
+      })
+  }, [])
 
-  const getPatients= (value)=>{
+  const getPatients = (value) => {
     setAllPatNotFound(false);
-    setLoading((pre)=>({
+    setLoading((pre) => ({
       ...pre,
       allPatients: true
     }));
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_PATIENTS, {text: value}))
-    .then((res)=>{
-        if(res.status === 1){
+    getService(baseUrl, stringInterpolater(API_ROUTES.GET_PATIENTS, { text: value }))
+      .then((res) => {
+        if (res.status === 1) {
 
-          setLoading((pre)=>({
+          setLoading((pre) => ({
             ...pre,
             allPatients: false
           }))
           setAllPatients(res.data)
-        }else{
+        } else {
 
-          setLoading((pre)=>({
+          setLoading((pre) => ({
             ...pre,
             allPatients: false
           }))
           setAllPatNotFound(true);
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in Getting My Patients by Search Text ${error}`}));
-    })
+        dispatch(valuesActions.error({ error: `Error in Getting My Patients by Search Text ${error}` }));
+      })
   }
 
   const filter = () => {
-		if (searchText !== "") {
+    if (searchText !== "") {
 
-			const result = myPatients?.filter(
+      const result = myPatients?.filter(
 
-				(person) =>
-					person?.firstname?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
-					person?.mobile?.toLowerCase()?.includes(searchText?.toLowerCase())
-			);
+        (person) =>
+          person?.firstname?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
+          person?.mobile?.toLowerCase()?.includes(searchText?.toLowerCase())
+      );
 
-			setFiltered(result);
-		} else {
+      setFiltered(result);
+    } else {
 
-			setFiltered(myPatients);
-		}
-	};
+      setFiltered(myPatients);
+    }
+  };
 
   const RenderItem = (item) => {
     const pat = item.item
     return (
       <TouchableOpacity
         key={item.index}
-        onPress={()=>navigation.navigate('PatientDetails', {patient: item})}
+        onPress={() => navigation.navigate('PatientDetails', { patient: item })}
       >
         <LinearGradient
           colors={
-            pat.careplan === 'vip' ? 
-            ['#c59300','#fdf774','#fdf774','#e5ac01'] 
-            : 
-            ['#87adff','#cedaff','#cedaff','#87adff']
+            pat.careplan === 'vip' ?
+              ['#c59300', '#fdf774', '#fdf774', '#e5ac01']
+              :
+              ['#87adff', '#cedaff', '#cedaff', '#87adff']
           }
           style={styles.patientCard}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}  
-        > 
+          end={{ x: 1, y: 1 }}
+        >
           <View
             style={{
-              margin:2.5,
-              backgroundColor:'#fff',
-              padding:8,
-              borderRadius:4
+              margin: 2.5,
+              backgroundColor: '#fff',
+              padding: 8,
+              borderRadius: 4
             }}
           >
             <View
               style={{
                 ...styles.row,
-                justifyContent:'space-between',
-                alignItems:'flex-start'
+                justifyContent: 'space-between',
+                alignItems: 'flex-start'
               }}
             >
               <Text style={styles.title}>{getName(pat.firstname, pat.lastname)}</Text>
               <View style={styles.row}>
                 <Text style={{
-                    ...styles.title,
-                    marginRight:7
-                  }}
+                  ...styles.title,
+                  marginRight: 7
+                }}
                 >{getName(pat.relationship)}</Text>
                 {
                   pat.gender === 'male' &&
@@ -213,19 +213,19 @@ const Patients = ({}) => {
                 >{pat.gender}</Text>
               </View>
             </View>
-            
 
-            <View style={{...styles.row, marginTop:10, columnGap:15}}>
-              <Text style={{...styles.text}}>{pat.pid}</Text>
+
+            <View style={{ ...styles.row, marginTop: 10, columnGap: 15 }}>
+              <Text style={{ ...styles.text }}>{pat.pid}</Text>
             </View>
 
-            <View style={{...styles.row, marginTop:10, justifyContent:'space-between'}}>
-              <Text style={{...styles.title}}>+{pat?.mobile}</Text>
+            <View style={{ ...styles.row, marginTop: 10, justifyContent: 'space-between' }}>
+              <Text style={{ ...styles.title }}>+{pat?.mobile}</Text>
 
-              <View style={{...styles.row, columnGap:15}}>
-                
-                <TouchableOpacity style={{...styles.minBtn}}>
-                  <Text style={{...styles.title}}>Text</Text>
+              <View style={{ ...styles.row, columnGap: 15 }}>
+
+                <TouchableOpacity style={{ ...styles.minBtn }}>
+                  <Text style={{ ...styles.title }}>Text</Text>
                   <Fontisto
                     name='whatsapp'
                     size={15}
@@ -234,10 +234,10 @@ const Patients = ({}) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={{...styles.minBtn}}
-                  onLongPress={()=>Linking.openURL(`tel:+${pat?.mobile}`)}
+                  style={{ ...styles.minBtn }}
+                  onLongPress={() => Linking.openURL(`tel:+${pat?.mobile}`)}
                 >
-                  <Text style={{...styles.title}}>Call</Text>
+                  <Text style={{ ...styles.title }}>Call</Text>
                   <Fontisto
                     name='phone'
                     size={15}
@@ -253,21 +253,21 @@ const Patients = ({}) => {
     )
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     filter()
-  },[searchText])
+  }, [searchText])
 
   return (
     <Provider>
-      <View style={{ flex: 1, backgroundColor:'#fff' }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Tabs
           tabs={tabs}
-          tabBarTextStyle={{color:theme.colors.text, ...styles.title}}
-          tabBarUnderlineStyle={{backgroundColor:theme.colors.backgroundPrimary}}
+          tabBarTextStyle={{ color: theme.colors.text, ...styles.title }}
+          tabBarUnderlineStyle={{ backgroundColor: theme.colors.backgroundPrimary }}
           swipeable={true}
         >
           {/* My Patients */}
-          <View style={{flex:1}}>
+          <View style={{ flex: 1 }}>
             <SearchBar
               placeholder='Search...'
               defaultValue=""
@@ -283,42 +283,42 @@ const Patients = ({}) => {
             />
             {
               !loading.myPatient ?
-              <>
-                {
-                  filtered?.length > 0 ?
-                  <FlatList 
-                    data={filtered}
-                    renderItem={RenderItem}
-                    keyExtractor={item => item.patientid}
-                    style={{
-                      marginHorizontal:15,
-                      paddingVertical:10
-                    }}
-                    showsVerticalScrollIndicator={false}
-                  />
-                  :
-                  <View 
-                    style={{
-                      marginHorizontal:15,
-                      flex:1,
-                      alignItems:'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text style={styles.textWrapper}>
-                      No lives found assigned to you
-                    </Text>
-                  </View>
+                <>
+                  {
+                    filtered?.length > 0 ?
+                      <FlatList
+                        data={filtered}
+                        renderItem={RenderItem}
+                        keyExtractor={item => item.patientid}
+                        style={{
+                          marginHorizontal: 15,
+                          paddingVertical: 10
+                        }}
+                        showsVerticalScrollIndicator={false}
+                      />
+                      :
+                      <View
+                        style={{
+                          marginHorizontal: 15,
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Text style={styles.textWrapper}>
+                          No lives found assigned to you
+                        </Text>
+                      </View>
 
-                }
-              </>
-              :
-              <Loading theme={theme}/>
+                  }
+                </>
+                :
+                <Loading theme={theme} />
             }
           </View>
 
           {/* All Patients */}
-          <View style={{flex:1}}>
+          <View style={{ flex: 1 }}>
             <SearchBar
               placeholder='Search...'
               defaultValue=""
@@ -330,51 +330,51 @@ const Patients = ({}) => {
               showCancelButton={true}
               cancelText="Cancel"
               disabled={false}
-              ListFooterComponent={()=>
-                <View style={{height:80}}/>
+              ListFooterComponent={() =>
+                <View style={{ height: 80 }} />
               }
               theme={theme}
             />
             {
               !loading.allPatients ?
-              <>
-                {
-                  allPatients?.length > 0 ?
-                  <FlatList 
-                    data={allPatients}
-                    renderItem={RenderItem}
-                    keyExtractor={item => item.patientid}
-                    style={{
-                      marginHorizontal:15,
-                      paddingVertical:10
-                    }}
-                    ListFooterComponent={()=>
-                      <View style={{height:80}}/>
-                    }
-                    showsVerticalScrollIndicator={false}
-                  />
-                  :
-                  <View
-                    style={{
-                      marginHorizontal:15,
-                      flex:1,
-                      alignItems:'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text style={styles.textWrapper}>
-                      { allPatNotFound ?
-                        `No patients found`
-                        :
-                        `Search for patient Name or Mobile number`
-                      }
-                    </Text>
-                  </View>
+                <>
+                  {
+                    allPatients?.length > 0 ?
+                      <FlatList
+                        data={allPatients}
+                        renderItem={RenderItem}
+                        keyExtractor={item => item.patientid}
+                        style={{
+                          marginHorizontal: 15,
+                          paddingVertical: 10
+                        }}
+                        ListFooterComponent={() =>
+                          <View style={{ height: 80 }} />
+                        }
+                        showsVerticalScrollIndicator={false}
+                      />
+                      :
+                      <View
+                        style={{
+                          marginHorizontal: 15,
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Text style={styles.textWrapper}>
+                          {allPatNotFound ?
+                            `No patients found`
+                            :
+                            `Search for patient Name or Mobile number`
+                          }
+                        </Text>
+                      </View>
 
-                }
-              </>
-              :
-              <Loading theme={theme}/>
+                  }
+                </>
+                :
+                <Loading theme={theme} />
             }
           </View>
         </Tabs>

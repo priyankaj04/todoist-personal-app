@@ -28,7 +28,7 @@ export function DrawerContent(props) {
 
     const paperTheme = useTheme();
 
-    const cmDetails = mySelector(state => state.Login.value.cmDetails);
+    const cmDetails = mySelector(state => state.Login.value.corporateDetails);
     const cpVersion = mySelector(state => state.Login.value.cpVersion);
 
     const signOut = async () => {

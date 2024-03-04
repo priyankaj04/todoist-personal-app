@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {useTheme} from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -29,12 +29,12 @@ import { getName } from '../../utils';
 
 import styles from './Styles'
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
 
-  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
 
   const [image, setImage] = useState('https://api.adorable.io/avatars/80/abott@adorable.png');
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -64,7 +64,7 @@ const Profile = ({navigation}) => {
 
   const renderInner = () => (
     <View style={styles.panel}>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Text style={styles.panelTitle}>Upload Photo</Text>
         <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
       </View>
@@ -95,8 +95,8 @@ const Profile = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={{margin: 20}} >
-        <View style={{alignItems: 'center'}}>
+      <Animated.View style={{ margin: 20 }} >
+        <View style={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={() => fall.value = 0}>
             <View
               style={{
@@ -107,9 +107,9 @@ const Profile = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <ImageBackground
-                source={ cmDetails?.profilepic ? {uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
-                style={{height: 100, width: 100, backgroundColor:'#e1e1e1', borderRadius:50}}
-                imageStyle={{borderRadius: 15}}>
+                source={cmDetails?.profilepic ? { uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
+                style={{ height: 100, width: 100, backgroundColor: '#e1e1e1', borderRadius: 50 }}
+                imageStyle={{ borderRadius: 15 }}>
                 {/* <View
                   style={{
                     flex: 1,
@@ -133,7 +133,7 @@ const Profile = ({navigation}) => {
               </ImageBackground>
             </View>
           </TouchableOpacity>
-          <Text style={{marginVertical: 10, fontSize: 18, fontWeight: 'bold', color: colors.text}}>
+          <Text style={{ marginVertical: 10, fontSize: 18, fontWeight: 'bold', color: colors.text }}>
             {getName(cmDetails?.type)}
           </Text>
         </View>
@@ -188,7 +188,7 @@ const Profile = ({navigation}) => {
             ]}
           />
         </View>
-        
+
         {/* <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
           <Text style={styles.panelButtonTitle}>Submit</Text>
         </TouchableOpacity> */}

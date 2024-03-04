@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import styles from '../Styles'
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 
 import Swiper from 'react-native-swiper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -38,129 +38,129 @@ const MyJobsIndex = () => {
   const theme = useTheme();
 
   const dispatch = myDispatch();
-  const baseUrl = mySelector(state=>state.Login.value.baseUrl);
-  const devEnv = mySelector(state=>state.Login.value.devEnv);
-  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
+  const baseUrl = mySelector(state => state.Login.value.baseUrl);
+  const devEnv = mySelector(state => state.Login.value.devEnv);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
 
-  const[componentText, setComponentText] = useState({});
+  const [componentText, setComponentText] = useState({});
   const [expanded, setExpanded] = useState(-1);
- 
-  useEffect(()=>{
 
-    getService(baseUrl, stringInterpolater( API_ROUTES.GET_APPOINTMENTS, { fromdate: dayjs().format('YYYY-MM-DD'), todate: dayjs().format('YYYY-MM-DD') }))
-    .then((res)=>{
-      if(res.status === 1){
+  useEffect(() => {
 
-        if(res.data.length > 0 ){
+    getService(baseUrl, stringInterpolater(API_ROUTES.GET_APPOINTMENTS, { fromdate: dayjs().format('YYYY-MM-DD'), todate: dayjs().format('YYYY-MM-DD') }))
+      .then((res) => {
+        if (res.status === 1) {
 
-          if(cmDetails.type === 'admin'){
+          if (res.data.length > 0) {
 
-            setComponentText((prev)=>({
-              ...prev,
-              1: `${res.data.length} Appointments found for the day ${dayjs().format('DD MMM YYYY')}`
-            }))
+            if (cmDetails.type === 'admin') {
 
-          }else handleFilter(res.data)
-          
+              setComponentText((prev) => ({
+                ...prev,
+                1: `${res.data.length} Appointments found for the day ${dayjs().format('DD MMM YYYY')}`
+              }))
+
+            } else handleFilter(res.data)
+
+          }
+
+
+        } else {
+
+          dispatch(valuesActions.statusNot1('Get Appointments List Status != 1'));
         }
+      }).catch((error) => {
 
-          
-      }else{
-          
-        dispatch(valuesActions.statusNot1('Get Appointments List Status != 1'));
-      }
-    }).catch((error) => {
+        dispatch(valuesActions.error({ error: `Error in get Appointments List ${error}` }));
+      })
 
-        dispatch(valuesActions.error({error:`Error in get Appointments List ${error}`}));
-    })
+    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, { email: cmDetails.email }))
+      .then((res) => {
+        if (res.status === 1) {
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.MY_SICK_PATIENTS, {email: cmDetails.email}))
-    .then((res)=>{
-        if(res.status === 1){
-
-          setComponentText((prev)=>({
+          setComponentText((prev) => ({
             ...prev,
             2: `${res.data.length} Currently Sick Patient${res.data.length > 1 ? 's' : ''} found`
           }))
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in My Sick Patients ${error}`}));
-    })
+        dispatch(valuesActions.error({ error: `Error in My Sick Patients ${error}` }));
+      })
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.HEALTH_PLAN_REMINDERS, {email: cmDetails.email }))
-    .then((res)=>{
-      if(res?.data?.length > 0){
-        setComponentText((prev)=>({
-          ...prev,
-          4: `${res.data.length} Health Plan Reminders for the Day ${dayjs().format('DD MMM YYYY')}`
-        }))
-      }
-    }).catch((error) => {
+    getService(baseUrl, stringInterpolater(API_ROUTES.HEALTH_PLAN_REMINDERS, { email: cmDetails.email }))
+      .then((res) => {
+        if (res?.data?.length > 0) {
+          setComponentText((prev) => ({
+            ...prev,
+            4: `${res.data.length} Health Plan Reminders for the Day ${dayjs().format('DD MMM YYYY')}`
+          }))
+        }
+      }).catch((error) => {
 
-      dispatch(valuesActions.error({error:`Error in Health Plan Reminders ${error}`}));
-    })
+        dispatch(valuesActions.error({ error: `Error in Health Plan Reminders ${error}` }));
+      })
 
-    if(cmDetails.type === 'admin') return;
+    if (cmDetails.type === 'admin') return;
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, {email: cmDetails.email, date: dayjs().format('YYYY-MM-DD') }))
-    .then((res)=>{
-        if(res.status === 1){
-          
-          if(res.data.length > 0 ){
-            setComponentText((prev)=>({
+    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CM_JOBS, { email: cmDetails.email, date: dayjs().format('YYYY-MM-DD') }))
+      .then((res) => {
+        if (res.status === 1) {
+
+          if (res.data.length > 0) {
+            setComponentText((prev) => ({
               ...prev,
               0: `${res.data.length} Jobs found for the day ${dayjs().format('DD MMM YYYY')}`
             }))
           }
-        }else{
-          
+        } else {
+
           dispatch(valuesActions.statusNot1('Get CM Jobs List Status != 1'));
         }
-    }).catch((error) => {
+      }).catch((error) => {
 
-        dispatch(valuesActions.error({error:`Error in CM Jobs List ${error}`}));
-    })
+        dispatch(valuesActions.error({ error: `Error in CM Jobs List ${error}` }));
+      })
 
-  },[])
+  }, [])
 
   const handleFilter = (appointments) => {
 
     let filterArray = appointments;
-    
+
     let email = cmDetails.email;
 
     if (email) {
       filterArray = filterArray.filter(item => item.ccownername === email)
     }
 
-    if(filterArray.length > 0 ){
+    if (filterArray.length > 0) {
 
-      setComponentText((prev)=>({
+      setComponentText((prev) => ({
         ...prev,
         1: `${filterArray.length} Appointment${filterArray.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`
       }))
     }
-    
+
   }
 
-  const CardContent = ()=>{
-    return(
-      <View 
+  const CardContent = () => {
+    return (
+      <View
         style={{
-          padding:10,
-          borderRadius:8,
-          backgroundColor:'#f2f2ff',
+          padding: 10,
+          borderRadius: 8,
+          backgroundColor: '#f2f2ff',
           alignItems: 'center',
           justifyContent: 'center',
-          margin:10,
-          flex:1
+          margin: 10,
+          flex: 1
         }}>
         <Text
           style={{
-            color:'#000',
-            fontSize:14,
-            textAlign:'center'
+            color: '#000',
+            fontSize: 14,
+            textAlign: 'center'
           }}
         >
           Coming soon, Yet to be implemented
@@ -178,26 +178,26 @@ const MyJobsIndex = () => {
           style={styles.header}>
           <View
             style={{
-              display:'flex',
-              flexDirection:'row',
-              columnGap:10,
-              alignItems:'center'
+              display: 'flex',
+              flexDirection: 'row',
+              columnGap: 10,
+              alignItems: 'center'
             }}
           >
             <Text
               style={{
-                color:theme.colors.text,
+                color: theme.colors.text,
                 ...theme.fonts.titleMedium,
-                paddingVertical:10,
+                paddingVertical: 10,
               }}
             >
               {cmDetails?.name ? getName(cmDetails?.name) : 'Circle Pi'} Jobs!
             </Text>
-            <Text style={{color:'green', ...theme.fonts.titleMedium,}}>{devEnv && 'Dev'}</Text>
+            <Text style={{ color: 'green', ...theme.fonts.titleMedium, }}>{devEnv && 'Dev'}</Text>
           </View>
         </TouchableOpacity>
       }
-      
+
       <Accordion
         components={[
           MyJobs,

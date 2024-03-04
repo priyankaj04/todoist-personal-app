@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 
 import styles from '../Styles'
 
@@ -30,44 +30,44 @@ import { getService, API_ROUTES, stringInterpolater, putTokenService, patchServi
 const HomeScreen = () => {
   const theme = useTheme();
   const navigation = useNavigation();
-  
+
   const dispatch = myDispatch();
-  const cmDetails = mySelector(state=>state.Login.value.cmDetails);
-  const baseUrl = mySelector(state=>state.Login.value.baseUrl);
+  const cmDetails = mySelector(state => state.Login.value.corporateDetails);
+  const baseUrl = mySelector(state => state.Login.value.baseUrl);
 
   const [appointments, setAppointments] = useState([]);
   const [careManagersAppointments, setCareManagersAppointments] = useState([]);
   const [myAppointments, setMyAppointments] = useState([]);
-  
 
-  useEffect(()=>{
+
+  useEffect(() => {
     //to get all appointments
     getService(baseUrl, stringInterpolater(
       API_ROUTES.GET_APPOINTMENTS,
-      { 
+      {
         fromdate: dayjs().format('YYYY-MM-DD'),
         todate: dayjs().format('YYYY-MM-DD'),
       }
     ))
-    .then((res)=>{
-      if(res.status === 1){
+      .then((res) => {
+        if (res.status === 1) {
 
-        setAppointments(res.data)
-      }else{
-        
-        dispatch(valuesActions.statusNot1(res));
-      }
-    }).catch((error) => {
+          setAppointments(res.data)
+        } else {
 
-        dispatch(valuesActions.error({error:`Error in Get Appointments ${error}`}));
-    })
+          dispatch(valuesActions.statusNot1(res));
+        }
+      }).catch((error) => {
 
-  },[])
+        dispatch(valuesActions.error({ error: `Error in Get Appointments ${error}` }));
+      })
+
+  }, [])
 
   const careManagersFilter = () => {
 
     let filterArray = appointments;
-    
+
     let email = cmDetails.email
     filterArray = filterArray.filter(item => item.ccownername === email)
 
@@ -83,12 +83,12 @@ const HomeScreen = () => {
     setMyAppointments(filterArray);
   }
 
-  useEffect(()=>{
-    if(appointments.length > 0){
+  useEffect(() => {
+    if (appointments.length > 0) {
       careManagersFilter()
       myAppointmentsFilter()
     }
-  },[appointments, cmDetails])
+  }, [appointments, cmDetails])
 
   return (
     <ScrollView style={styles.container}>
@@ -101,7 +101,7 @@ const HomeScreen = () => {
         />
         <Text
           style={{
-            color:theme.colors.text,
+            color: theme.colors.text,
             ...theme.fonts.titleMedium,
             paddingLeft: 15
           }}
@@ -110,16 +110,16 @@ const HomeScreen = () => {
         </Text>
         <Ionicons
           style={{
-            textAlign:'right',
-            flex:1,
+            textAlign: 'right',
+            flex: 1,
           }}
           name="notifications"
           size={25}
           color={theme.colors.text}
-          // onPress={() => navigation.openDrawer()}
+        // onPress={() => navigation.openDrawer()}
         />
       </View>
-      
+
       {/* my patients appointments card */}
       {
         careManagersAppointments.length > 0 &&
@@ -128,10 +128,10 @@ const HomeScreen = () => {
           duration={400}
         >
           <TouchableOpacity
-            onPress={()=>navigation.navigate('Appointments', {
-                screen: 'Appointments_MyPatientAppointments',
-                params: { appointments: careManagersAppointments },
-              })
+            onPress={() => navigation.navigate('Appointments', {
+              screen: 'Appointments_MyPatientAppointments',
+              params: { appointments: careManagersAppointments },
+            })
             }
             style={{
               borderColor: theme.colors.border,
@@ -141,12 +141,12 @@ const HomeScreen = () => {
             <View
               style={{
                 ...styles.row,
-                justifyContent:'space-between'
+                justifyContent: 'space-between'
               }}
             >
               <View
                 style={{
-                  flex:1
+                  flex: 1
                 }}
               >
                 <Text
@@ -165,14 +165,14 @@ const HomeScreen = () => {
                 >
                   {`${careManagersAppointments.length} Appointment${careManagersAppointments.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`}
                 </Text>
-                
+
               </View>
-              
+
               <Image
                 source={assets.ImageBaseUrl('consultation')}
                 style={{
-                  height:100,
-                  width:100
+                  height: 100,
+                  width: 100
                 }}
               />
             </View>
@@ -192,21 +192,21 @@ const HomeScreen = () => {
               borderColor: theme.colors.border,
               ...styles.card
             }}
-            onPress={()=>navigation.navigate('Appointments', {
-                screen: 'Appointments_MyClinicalAppointments',
-                params: { appointments: myAppointments },
-              })
+            onPress={() => navigation.navigate('Appointments', {
+              screen: 'Appointments_MyClinicalAppointments',
+              params: { appointments: myAppointments },
+            })
             }
           >
             <View
               style={{
                 ...styles.row,
-                justifyContent:'space-between'
+                justifyContent: 'space-between'
               }}
             >
               <View
                 style={{
-                  flex:1
+                  flex: 1
                 }}
               >
                 <Text
@@ -225,14 +225,14 @@ const HomeScreen = () => {
                 >
                   {`${myAppointments.length} Appointment${myAppointments.length > 1 ? 's' : ''} found for the day ${dayjs().format('DD MMM YYYY')}`}
                 </Text>
-                
+
               </View>
-              
+
               <Image
                 source={assets.ImageBaseUrl('gpconsultation')}
                 style={{
-                  height:110,
-                  width:110
+                  height: 110,
+                  width: 110
                 }}
               />
             </View>
@@ -240,7 +240,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </Animatable.View>
       }
-      
+
 
     </ScrollView>
   );

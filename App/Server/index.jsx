@@ -212,7 +212,7 @@ const getCmDetails = (baseUrl, dispatch, email) => {
                 }
               });
 
-              dispatch(loginActions.setCmDetails({ ...res.data?.[0], mydocid: myDocId }));
+              dispatch(loginActions.setCorporateDetails({ ...res.data?.[0], mydocid: myDocId }));
             } else {
 
               dispatch(valuesActions.statusNot1('Get all Doctors Status != 1'));
