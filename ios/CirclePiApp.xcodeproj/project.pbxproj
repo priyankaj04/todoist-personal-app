@@ -42,7 +42,7 @@
 		EC5061CD2B559BE6004062E2 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC5061BA2B559BE5004062E2 /* Ionicons.ttf */; };
 		EC5061CE2B559BE6004062E2 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC5061BB2B559BE6004062E2 /* Feather.ttf */; };
 		EC5061CF2B559BE6004062E2 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC5061BC2B559BE6004062E2 /* SimpleLineIcons.ttf */; };
-		EC644DF72B83925A00F2A0EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC644DF62B83925A00F2A0EB /* GoogleService-Info.plist */; };
+		ECB4B17B2B960A61008F35A3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECB4B17A2B960A61008F35A3 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CirclePiApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CirclePiApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CirclePiApp/main.m; sourceTree = "<group>"; };
-		184F65619E974A059539FD95 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
+		184F65619E974A059539FD95 /* antoutline.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-CirclePiApp-CirclePiAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CirclePiApp-CirclePiAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-CirclePiApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CirclePiApp.debug.xcconfig"; path = "Target Support Files/Pods-CirclePiApp/Pods-CirclePiApp.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CirclePiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CirclePiApp.release.xcconfig"; path = "Target Support Files/Pods-CirclePiApp/Pods-CirclePiApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-CirclePiApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CirclePiApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CirclePiApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-CirclePiApp-CirclePiAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CirclePiApp-CirclePiAppTests.release.xcconfig"; path = "Target Support Files/Pods-CirclePiApp-CirclePiAppTests/Pods-CirclePiApp-CirclePiAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		CE8AB7C0DB994758ADE4028E /* antfill.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
+		CE8AB7C0DB994758ADE4028E /* antfill.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		EC50619C2B558E07004062E2 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-ExtraBold.ttf"; path = "../App/assets/fonts/Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
 		EC50619D2B558E07004062E2 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../App/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		EC50619E2B558E07004062E2 /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-Regular.ttf"; path = "../App/assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
@@ -100,8 +100,8 @@
 		EC5061BA2B559BE5004062E2 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		EC5061BB2B559BE6004062E2 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		EC5061BC2B559BE6004062E2 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
-		EC644DF62B83925A00F2A0EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EC644DF82B83957400F2A0EB /* CirclePiApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CirclePiApp.entitlements; path = CirclePiApp/CirclePiApp.entitlements; sourceTree = "<group>"; };
+		ECB4B17A2B960A61008F35A3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "CirclePiApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -146,7 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				EC644DF82B83957400F2A0EB /* CirclePiApp.entitlements */,
-				EC644DF62B83925A00F2A0EB /* GoogleService-Info.plist */,
+				ECB4B17A2B960A61008F35A3 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -343,7 +343,6 @@
 				EC5061A32B558E07004062E2 /* Nunito-ExtraBold.ttf in Resources */,
 				EC5061CC2B559BE6004062E2 /* Foundation.ttf in Resources */,
 				EC5061C22B559BE6004062E2 /* MaterialCommunityIcons.ttf in Resources */,
-				EC644DF72B83925A00F2A0EB /* GoogleService-Info.plist in Resources */,
 				EC5061BE2B559BE6004062E2 /* Entypo.ttf in Resources */,
 				EC5061CF2B559BE6004062E2 /* SimpleLineIcons.ttf in Resources */,
 				EC5061C12B559BE6004062E2 /* AntDesign.ttf in Resources */,
@@ -355,6 +354,7 @@
 				EC5061A52B558E07004062E2 /* Nunito-Regular.ttf in Resources */,
 				EC5061C92B559BE6004062E2 /* FontAwesome5_Solid.ttf in Resources */,
 				EC5061CA2B559BE6004062E2 /* FontAwesome5_Regular.ttf in Resources */,
+				ECB4B17B2B960A61008F35A3 /* GoogleService-Info.plist in Resources */,
 				EC5061A62B558E07004062E2 /* Roboto-Bold.ttf in Resources */,
 				EC5061C82B559BE6004062E2 /* FontAwesome6_Brands.ttf in Resources */,
 				EC5061C02B559BE6004062E2 /* FontAwesome5_Brands.ttf in Resources */,
