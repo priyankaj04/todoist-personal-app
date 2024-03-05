@@ -132,6 +132,7 @@ const HomeScreen = () => {
             color: theme.colors.data,
             ...theme.fonts.titleMedium,
             paddingLeft: 15,
+            fontFamily: 'Nunito Bold'
           }}
         >Hello Team{" " + corporateDetails?.brandname ?? ""}
         </Text>
@@ -152,7 +153,7 @@ const HomeScreen = () => {
           animation="fadeIn"
           duration={400}
         >
-          <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito-Regular', fontWeight: 'bold', fontSize: 18, margin: 10 }}>Hope you're feeling healthy!</Text>
+            <Text style={{ color: theme.colors.alpha, fontSize: 18, margin: 10, fontFamily:'Nunito ExtraBold' }}>Hope you're feeling healthy!</Text>
           <View
             style={{ display: 'flex', gap: 0, flexDirection: 'row' }}
           >
@@ -160,7 +161,7 @@ const HomeScreen = () => {
               <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', marginLeft: 15 }}>Total Lives</Text>
+                    <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito ExtraBold' }}>Total Lives</Text>
                   <TouchableOpacity>
                     <Icon
                       name="chevron-right"
@@ -169,23 +170,23 @@ const HomeScreen = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={{ display: 'flex', gap: 7, flexDirection: 'row' }}>
+                <View style={{ display: 'flex', gap: 5, flexDirection: 'row' }}>
                   <Image
                     source={assets.ImageBaseUrl('totallivespi')}
                     style={{
-                      height: 70,
-                      width: 70
+                      height: 65,
+                      width: 65
                     }}
                   />
                   <View>
-                    <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 18 }}>{hrdashboard?.patientdetails?.total ?? 0}</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>{hrdashboard?.patientdetails?.total ?? 0}</Text>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', marginTop: 3 }}>
-                      <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 14 }}>{hrdashboard?.patientdetails?.employees ?? 0}</Text>
-                      <Text style={{ color: theme.colors.data, fontSize: 10 }}>Employees</Text>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 14 }}>{hrdashboard?.patientdetails?.employees ?? 0}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 10, fontFamily: 'Nunito Medium' }}>Employees</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', marginTop: 3 }}>
-                      <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 14 }}>{hrdashboard?.patientdetails?.dependents ?? 0}</Text>
-                      <Text style={{ color: theme.colors.data, fontSize: 10 }}>Dependents</Text>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 14 }}>{hrdashboard?.patientdetails?.dependents ?? 0}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 10, fontFamily: 'Nunito Medium' }}>Dependents</Text>
                     </View>
                   </View>
                 </View>
@@ -193,7 +194,7 @@ const HomeScreen = () => {
               <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', marginLeft: 15 }}>Mental Health</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15 }}>Mental Health</Text>
                   <TouchableOpacity>
                     <Icon
                       name="chevron-right"
@@ -203,36 +204,40 @@ const HomeScreen = () => {
                   </TouchableOpacity>
                 </View>
                 <View style={{ display: 'flex', gap: 7, flexDirection: 'column', justifyContent: 'center' }}>
-                  <ProgressChart
-                    data={{
-                      labels: ["Swim", "Bike", "Run"], // optional
-                      data: [0.4, 0.6, 0.8]
-                    }}
-                    strokeWidth={16}
-                    radius={32}
-                    chartConfig={{
-                      backgroundGradientFrom: "#1E2923",
-                      backgroundGradientFromOpacity: 0,
-                      backgroundGradientTo: "#08130D",
-                      backgroundGradientToOpacity: 0.5,
-                      color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-                      strokeWidth: 2, // optional, default 3
-                      barPercentage: 0.5,
-                      useShadowColorFromDataset: false // optional
-                    }}
-                    hideLegend={false}
-                  />
+                    <ProgressChart
+                      width={150}
+                      height={100}
+                      data={{
+                        data: [0.6]
+                      }}
+                      strokeWidth={16}
+                      radius={32}
+                      chartConfig={{
+                        color: (opacity = 1) => `rgba(50, 102, 227, ${opacity})`,
+                        strokeWidth: 2,
+                        useShadowColorFromDataset: false,
+                        backgroundGradientFromOpacity: 0,
+                        backgroundGradientToOpacity: 0,
+                        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                        propsForDots: {
+                          r: "6",
+                          strokeWidth: "2",
+                          stroke: "rgba(50, 102, 227,1)"
+                        }
+                      }}
+                      hideLegend={false}
+                    />
                   <View>
-                    <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 12 }}>Employee(%) under stress</Text>
-                    <Text style={{ color: theme.colors.subtitle, fontSize: 10 }}>Total Responses - {hrdashboard?.patientdetails?.employees ?? 0}</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 12 }}>Employee(%) under stress</Text>
+                      <Text style={{ color: theme.colors.subtitle, fontSize: 10, fontFamily: 'Nunito Medium' }}>Total Responses - {hrdashboard?.patientdetails?.employees ?? 0}</Text>
                   </View>
                 </View>
               </Animatable.View>
             </View>
             <Animatable.View animation="fadeIn"
-              duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <Text style={{ color: theme.colors.data, fontWeight: 'bold', marginLeft: 15 }}>Engagement</Text>
+              duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', gap: 25 }}>
+              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15 }}>Engagement</Text>
                 <TouchableOpacity>
                   <Icon
                     name="info"
@@ -250,8 +255,8 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12 }}>{arrayOfActivities[0] ? arrayOfActivities[0].display_name : ("")}</Text>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 16 }}>{arrayOfActivities[0] ? arrayOfActivities[0].value : 0}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[0] ? arrayOfActivities[0].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[0] ? arrayOfActivities[0].value : 0}</Text>
                 </View>
               </View>
               <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -263,8 +268,8 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12 }}>{arrayOfActivities[1] ? arrayOfActivities[1].display_name : ("")}</Text>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 16 }}>{arrayOfActivities[1] ? arrayOfActivities[1].value : 0}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[1] ? arrayOfActivities[1].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[1] ? arrayOfActivities[1].value : 0}</Text>
                 </View>
               </View>
               <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -276,8 +281,8 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12 }}>{arrayOfActivities[2] ? arrayOfActivities[2].display_name : ("")}</Text>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 16 }}>{arrayOfActivities[2] ? arrayOfActivities[2].value : 0}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[2] ? arrayOfActivities[2].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[2] ? arrayOfActivities[2].value : 0}</Text>
                 </View>
               </View>
               <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -289,8 +294,8 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12 }}>{arrayOfActivities[3] ? arrayOfActivities[3].display_name : ("")}</Text>
-                  <Text style={{ color: theme.colors.data, fontWeight: 'bold', fontSize: 16 }}>{arrayOfActivities[3] ? arrayOfActivities[3].value : 0}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[3] ? arrayOfActivities[3].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[3] ? arrayOfActivities[3].value : 0}</Text>
                 </View>
               </View>
             </Animatable.View>

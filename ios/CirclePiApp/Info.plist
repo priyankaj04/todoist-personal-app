@@ -25,7 +25,7 @@
 	<key>CodePushDeploymentKey</key>
 	<string>5zNcdKAlQEcoJgzKPVuZvYRrpaT9Pisi3dPQV</string>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -36,7 +36,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -58,8 +58,13 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
-		<string>antfill.ttf</string>
-		<string>antoutline.ttf</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+		<string>Nunito Bold.ttf</string>
+		<string>Nunito ExtraBold.ttf</string>
+		<string>Nunito Medium.ttf</string>
+		<string>Nunito Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

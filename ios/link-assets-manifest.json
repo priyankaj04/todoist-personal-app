@@ -2,12 +2,32 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "node_modules/@ant-design/icons-react-native/fonts/antfill.ttf",
-      "sha1": "56960e7721fc92b62e0f7c4d131ffe34ed042c49"
+      "path": "assets/fonts/Nunito Bold.ttf",
+      "sha1": "dea5eec0aca2aef62e3bfc625cf95f9d45b59687"
     },
     {
-      "path": "node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf",
-      "sha1": "66720607b7496a48f145425386b2082b73662fd1"
+      "path": "assets/fonts/Nunito ExtraBold.ttf",
+      "sha1": "60821838f6675153f0699c6a86ad8467a937e0f5"
+    },
+    {
+      "path": "assets/fonts/Nunito Medium.ttf",
+      "sha1": "0e3a9789daa6603bf6870c124727c3643b56574a"
+    },
+    {
+      "path": "assets/fonts/Nunito Regular.ttf",
+      "sha1": "4b7236ba666cb77f00d8cb2a17696cc0dc2b2cc9"
+    },
+    {
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "assets/fonts/Roboto-Medium.ttf",
+      "sha1": "3c6a09fcc6a454924c81af7dff94fc6d399ed79b"
+    },
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "56c5c0d38bde4c1f1549dda43db37b09c608aad3"
     }
   ]
 }
