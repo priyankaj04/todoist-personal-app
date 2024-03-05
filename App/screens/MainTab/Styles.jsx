@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
   },
   header: {
-    flexDirection:'row',
+    flexDirection: 'row',
     alignItems: 'center'
   },
   title: {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 15,
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
@@ -85,37 +85,37 @@ const styles = StyleSheet.create({
     color: '#303030',
   },
   patientCard: {
-    backgroundColor:'#f1f5ff',
-    marginBottom:18,
-    minHeight:80,
-    borderRadius:5
+    backgroundColor: '#f1f5ff',
+    marginBottom: 18,
+    minHeight: 80,
+    borderRadius: 5
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap:5
+    columnGap: 5
   },
   minBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    columnGap:5,
-    padding:5,
-    backgroundColor:'#ededed',
-    borderRadius:5,
-    paddingHorizontal:10,
-    zIndex:2
+    columnGap: 5,
+    padding: 5,
+    backgroundColor: '#ededed',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    zIndex: 2
   },
   actionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    columnGap:5,
-    padding:7,
-    backgroundColor:'#ffffff',
-    borderRadius:5,
-    paddingHorizontal:10,
-    zIndex:2,
-    width:'100%',
+    columnGap: 5,
+    padding: 7,
+    backgroundColor: '#ffffff',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    zIndex: 2,
+    width: '100%',
     borderWidth: 1,
     color: '#000',
     flex: 1
@@ -124,18 +124,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    columnGap:5,
-    padding:6,
-    backgroundColor:'#ededed',
+    columnGap: 5,
+    padding: 6,
+    backgroundColor: '#ededed',
     color: '#000',
-    borderRadius:5,
-    paddingHorizontal:10,
+    borderRadius: 5,
+    paddingHorizontal: 10,
   },
   //! Dropdown styles
   dropdown: {
     color: '#000',
-    borderRadius:5,
-    paddingHorizontal:10,
+    borderRadius: 5,
+    paddingHorizontal: 10,
     flex: 1,
     borderWidth: 1,
     paddingVertical: 2
@@ -187,10 +187,12 @@ const styles = StyleSheet.create({
   card: {
     minHeight: 100,
     padding: 10,
-    borderWidth:2,
-    marginTop:15,
-    borderRadius:5
-  }
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#f2f5f9',
+    borderStyle: 'solid',
+  },
+
 });
 
 export default styles;

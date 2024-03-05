@@ -1,5 +1,5 @@
 const ImageBaseUrl = (image) => {
-  return({uri: `https://circlehealth-assets.s3.ap-south-1.amazonaws.com/APP_ASSESTS/${image}.png` })
+  return({uri: `https://circlehealth-assets.s3.ap-south-1.amazonaws.com/${image}.png` })
   };
   
  const getProfileIcon = (gender, age)=>{

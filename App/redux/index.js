@@ -3,7 +3,7 @@ import Login from './Login';
 import Values from "./Values";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion } from './Login';
+import { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setHrdashboard, setClinicalDetails } from './Login';
 import { setAlert, statusNot1, error, setToggleTheme } from "./Values";
 
 const store = configureStore({
@@ -22,7 +22,7 @@ const mySelector = (selector) => {
   return useSelector(selector);
 };
 
-const loginActions = { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion }
+const loginActions = { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setClinicalDetails, setHrdashboard }
 const valuesActions = { setAlert, statusNot1, error, setToggleTheme, logOut }
 
 export {

@@ -251,7 +251,10 @@ const API_ROUTES = {
   HEALTH_PLAN_REMINDERS: '/adherence/healthplan/reminder/{email}',
   SEND_H_PLAN_REMINDER: '/healthplan/sendwareminder/{patientid}',
   PATIENT_DETAILS: '/patient/detailed/patientid/{patientid}',
-  GET_ALL_CORPORATES: '/corporate/all/1'
+  GET_ALL_CORPORATES: '/corporate/all/1',
+  GET_CORPORATE_CLINICAL_DETAILS: '/clinical/corporate/{corporateid}',
+  GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
+  GET_HRDASHBOARD_HOME:'/corporate/hrdashboard/home/{corporateid}'
 }
 
 export {
