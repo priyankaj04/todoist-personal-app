@@ -106,7 +106,7 @@ const HomeScreen = () => {
             paddingLeft: 15
           }}
         >
-          Hi {cmDetails?.name ? getName(cmDetails?.name) : 'Circle Pi'}!
+          Welcome Back!
         </Text>
         <Ionicons
           style={{

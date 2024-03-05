@@ -38,7 +38,7 @@ const MainTabScreen = ({route, navigation}) => {
           initialRouteName="TabHome"
           screenOptions={{
             tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
-            tabBarActiveTintColor:"#05375a",
+            tabBarActiveTintColor: colors.alpha,
             headerShown:false
           }}
         >
@@ -57,18 +57,18 @@ const MainTabScreen = ({route, navigation}) => {
             name="TabMessages"
             component={Messages}
             options={{
-              tabBarLabel: 'Messages',
+              tabBarLabel: 'Mediclaim',
               tabBarIcon: ({color}) => (
-                <Feather name="message-square" color={color} size={25} />
+                <Feather name="book" color={color} size={22} />
               ),
             }}
             // initialParams={{mainNavigation}}
           />
           <Tab.Screen
-            name="TabMyJobs"
+            name="TabStories"
             component={MyJobs}
             options={{
-              tabBarLabel: 'My Jobs',
+              tabBarLabel: 'Stories',
               tabBarIcon: ({color}) => (
                 <Feather name="folder" color={color} size={22} />
               ),
@@ -76,12 +76,12 @@ const MainTabScreen = ({route, navigation}) => {
             // initialParams={{mainNavigation}}
           />
           <Tab.Screen
-            name="TabPatients"
+            name="TabSettings"
             component={MyPatients}
             options={{
-              tabBarLabel: 'Patients',
+              tabBarLabel: 'Settings',
               tabBarIcon: ({color}) => (
-                <Feather name="users" color={color} size={22} />
+                <Feather name="settings" color={color} size={22} />
               ),
             }}
             // initialParams={{mainNavigation}}
