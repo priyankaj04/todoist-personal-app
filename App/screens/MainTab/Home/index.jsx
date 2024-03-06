@@ -262,7 +262,7 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[0] ? arrayOfActivities[0].display_name : ("")}</Text>
+                  <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[0] ? arrayOfActivities[0].display_name : ("")}</Text>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[0] ? arrayOfActivities[0].value : 0}</Text>
                 </View>
               </View>
@@ -275,7 +275,7 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[1] ? arrayOfActivities[1].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[1] ? arrayOfActivities[1].display_name : ("")}</Text>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[1] ? arrayOfActivities[1].value : 0}</Text>
                 </View>
               </View>
@@ -288,7 +288,7 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[2] ? arrayOfActivities[2].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[2] ? arrayOfActivities[2].display_name : ("")}</Text>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[2] ? arrayOfActivities[2].value : 0}</Text>
                 </View>
               </View>
@@ -301,7 +301,7 @@ const HomeScreen = () => {
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[3] ? arrayOfActivities[3].display_name : ("")}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[3] ? arrayOfActivities[3].display_name : ("")}</Text>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[3] ? arrayOfActivities[3].value : 0}</Text>
                 </View>
               </View>
