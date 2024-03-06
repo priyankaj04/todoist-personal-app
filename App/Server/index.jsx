@@ -254,7 +254,7 @@ const API_ROUTES = {
   GET_ALL_CORPORATES: '/corporate/all/1',
   GET_CORPORATE_CLINICAL_DETAILS: '/clinical/corporate/{corporateid}',
   GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
-  GET_HRDASHBOARD_HOME:'/corporate/hrdashboard/home/{corporateid}'
+  GET_HRDASHBOARD_HOME: '/corporate/hrdashboard/home/{corporateid}',
 }
 
 export {
