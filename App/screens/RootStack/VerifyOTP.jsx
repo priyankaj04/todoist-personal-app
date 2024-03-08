@@ -19,31 +19,56 @@ import {
 import assets from '../../assets';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Feather from 'react-native-vector-icons/Feather';
 const { width, height } = Dimensions.get('window');
+
 import { useTheme } from 'react-native-paper';
+
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
-import { postService, API_ROUTES } from '../../server';
+
+import Users from '../../utils';
+
+import { postService, API_ROUTES, getCmDetails } from '../../server';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({ navigation }) => {
 
     const dispatch = myDispatch();
     const baseUrl = mySelector(state => state.Login.value.baseUrl);
-    const [email, setEmail] = React.useState('');
-    const { colors } = useTheme();
+    const email = mySelector(state => state.Login.value.loginData?.email);
     const [loading, setLoading] = useState(false);
+    const [otp, setOtp] = useState('')
+    const { colors } = useTheme();
+
+    const updateUserData = async (userData) => {
+        try {
+            console.log("updated data", userData);
+            await AsyncStorage.setItem('email', email);
+            await AsyncStorage.setItem('refreshToken', userData.token);
+            await AsyncStorage.setItem('token', userData.token);
+            await AsyncStorage.setItem('corporateid', userData.data)
+
+            dispatch(loginActions.setLoginData({
+                email: email,
+                token: userData.token,
+                corporateid: parseInt(userData.data)
+            }))
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     const handleVerifyOTP = () => {
         setLoading(true);
         let req_body = {
-            "email": email
+            "email": email,
+            "otp": otp
         }
-        
-        postService(baseUrl, API_ROUTES.GET_OTP, req_body).then((response) => {
+        postService(baseUrl, API_ROUTES.VERIFY_OTP, req_body).then((response) => {
             if (response.status === 1) {
-                dispatch(loginActions.setLoginData({ email: email }));
-                navigation.navigate('VerifyOTP');
+                updateUserData(response);
             } else {
                 dispatch(valuesActions.statusNot1(response.msg));
             }
@@ -85,14 +110,14 @@ const SignInScreen = ({ navigation }) => {
                         flexDirection: 'row',
                         alignItems: 'center'
                     }}>
-                        <FontAwesome5
-                            name="at"
+                        <FontAwesome6
+                            name="lock"
                             color='gray'
-                            style={{paddingHorizontal: 10}}
+                            style={{ paddingHorizontal: 10 }}
                             size={20}
                         />
                         <TextInput
-                            placeholder="Enter your email"
+                            placeholder="Enter OTP"
                             placeholderTextColor="#666666"
                             style={{
                                 fontFamily: 'Nunito Regular',
@@ -102,15 +127,15 @@ const SignInScreen = ({ navigation }) => {
                             underlineColorAndroid="transparent"
                             importantForAutofill="noExcludeDescendants"
                             autoCapitalize="none"
-                            onChangeText={(val) => setEmail(val)}
+                            onChangeText={(val) => setOtp(val)}
                         />
                     </View>
                     <View style={styles.button}>
-                        <TouchableOpacity onPress={() => { handleVerifyOTP()}}>
+                        <TouchableOpacity onPress={() => { handleVerifyOTP() }}>
                             <View
                                 style={{ ...styles.signIn, backgroundColor: colors.alpha }}
                             >
-                                <Text style={styles.textSign}>Get OTP</Text>
+                                <Text style={styles.textSign}>Verify OTP</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

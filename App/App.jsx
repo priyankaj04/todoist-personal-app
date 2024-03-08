@@ -104,49 +104,33 @@ const App = () => {
 
   useEffect(() => {
     checkDevEnv();
-
-    AsyncStorage.getItem('noOtp')
-      .then(noOtp => {
-        if (JSON.parse(noOtp) === true) {
-          !noOtp && dispatch(loginActions.toggleNoOtp());
-          handleNoOtpAuth();
-        } else {
-          try {
-            AsyncStorage.getItem('token').then(token => {
-              if (token) {
-                let decoded = jwtDecode(token);
-                if (!(decoded.exp < Date.now() / 1000)) {
-                  dispatch(
-                    loginActions.setLoginData({
-                      email: decoded.email,
-                      type: decoded.type,
-                      token: token,
-                    }),
-                  );
-
-                  getCmDetails(baseUrl, dispatch, decoded.email);
-
-                  setLoading(false);
-                } else refreshTheToken();
-              } else setLoading(false);
-            });
-          } catch (e) {
+    try {
+      AsyncStorage.getItem('token').then(token => {
+        if (token) {
+          let decoded = jwtDecode(token);
+          if (!(decoded.exp < Date.now() / 1000)) {
             dispatch(
-              valuesActions.error({
-                error: `Error in Get AsyncStorage Token ${error}`,
+              loginActions.setLoginData({
+                email: decoded.email,
+                type: decoded.type,
+                token: token,
               }),
             );
-          }
-        }
-      })
-      .catch(e => {
-        console.log('Error in get noOtp', e);
-        setLoading(false);
-      });
 
+            setLoading(false);
+          } else refreshTheToken();
+        } else setLoading(false);
+      })
+    } catch (e) {
+      dispatch(
+        valuesActions.error({
+          error: `Error in Get AsyncStorage Token ${error}`,
+        }),
+      );
+    }
     // push notification
-    notificationListener()
-    requestUserPermission()
+    // notificationListener()
+    // requestUserPermission()
     // push notification
 
   }, []);
@@ -268,7 +252,7 @@ const App = () => {
     <PaperProvider theme={theme}>
       <AntModalProvider>
         <NavigationContainer theme={theme}>
-          {loginData?.email ? (
+          {loginData?.token ? (
             <Stack.Navigator
               initialRouteName={'MainDrawer'}
               screenOptions={{

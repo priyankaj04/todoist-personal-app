@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import SplashScreen from './Splash';
 import SignInScreen from './SignIn';
-import SignUpScreen from './SignUp';
+import VerifyOTP from './VerifyOTP';
 
 const RootStack = createStackNavigator();
 
@@ -14,7 +14,7 @@ const RootStackScreen = ({navigation}) => (
       }} >
         <RootStack.Screen name="SplashScreen" component={SplashScreen}/>
         <RootStack.Screen name="SignInScreen" component={SignInScreen}/>
-        <RootStack.Screen name="SignUpScreen" component={SignUpScreen}/>
+        <RootStack.Screen name="VerifyOTP" component={VerifyOTP}/>
     </RootStack.Navigator>
 );
 

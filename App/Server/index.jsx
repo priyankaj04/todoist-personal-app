@@ -232,7 +232,8 @@ const getCmDetails = (baseUrl, dispatch, email) => {
 }
 
 const API_ROUTES = {
-  VERIFY_USER: '/staffuser/verify',
+  GET_OTP: '/corporate/login/sendotpv2',
+  VERIFY_OTP:'/corporate/login/verifyotpv2',
   REFRESH_USER: '/staffuser/refreshtokenv2',
   STAFF_DETAILS: '/staffuser/search/term/{email}',
   GET_MY_PATIENTS: '/patient/search/cm/{email}',
@@ -255,6 +256,7 @@ const API_ROUTES = {
   GET_CORPORATE_CLINICAL_DETAILS: '/clinical/corporate/{corporateid}',
   GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
   GET_HRDASHBOARD_HOME: '/corporate/hrdashboard/home/{corporateid}',
+  GET_CORPORATE_POLICY: '/policy/{cpolid}?type=patients'
 }
 
 export {

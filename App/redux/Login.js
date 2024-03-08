@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialValue = {
-    loginData:{email:'priyanka@circlehealth.in',corporateid: '2'},
+    loginData: {},
     devEnv:false,
     noOtp:false,
-    baseUrl:`https://api.circle.care/v1`,
+    baseUrl:`https://devapi.circle.care/v1`,
     corporateDetails: {},
     clinicalDetails: {},
     hrdashboard:{},
