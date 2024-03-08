@@ -19,7 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from 'react-native-paper';
 
 import Home from './Home';
-import Messages from './Messages';
+import Claim from './Claim';
 import MyJobs from './MyJobs';
 import MyPatients from './Patients';
 
@@ -54,10 +54,10 @@ const MainTabScreen = ({route, navigation}) => {
             // initialParams={{mainNavigation: navigation}}
           />
           <Tab.Screen
-            name="TabMessages"
-            component={Messages}
+            name="TabClaim"
+            component={Claim}
             options={{
-              tabBarLabel: 'Mediclaim',
+              tabBarLabel: 'Claims',
               tabBarIcon: ({color}) => (
                 <Feather name="book" color={color} size={22} />
               ),

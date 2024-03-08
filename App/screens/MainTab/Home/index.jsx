@@ -288,7 +288,7 @@ const HomeScreen = () => {
                 </View>
               </Animatable.View>
             </View>
-            <Animatable.View animation="fadeIn"
+              {/*<Animatable.View animation="fadeIn"
               duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', gap: 25 }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15 }}>Engagement</Text>
@@ -352,9 +352,9 @@ const HomeScreen = () => {
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[3] ? arrayOfActivities[3].value : 0}</Text>
                 </View>
               </View>
-            </Animatable.View>
+                </Animatable.View>*/}
           </View>
-          <View style={{ ...styles.card, margin: 10 }}>
+          {/*<View style={{ ...styles.card, margin: 10 }}>
             <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginBottom: 15 }}>
               <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito ExtraBold' }}>Physical Health</Text>
               <TouchableOpacity>
@@ -499,7 +499,7 @@ const HomeScreen = () => {
                 </View>
               </View>
             </View>
-          </View>
+          </View>*/}
         </Animatable.View>
       }
     </ScrollView>
