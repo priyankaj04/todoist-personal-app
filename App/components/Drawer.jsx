@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import {
     useTheme,
     Avatar,
@@ -27,8 +27,9 @@ import { getName } from '../utils';
 export function DrawerContent(props) {
 
     const paperTheme = useTheme();
+    const [active, setActive] = useState('home');
 
-    const cmDetails = mySelector(state => state.Login.value.corporateDetails);
+    const corporateDetails = mySelector(state => state.Login.value.corporateDetails);
     const cpVersion = mySelector(state => state.Login.value.cpVersion);
 
     const signOut = async () => {
@@ -36,108 +37,118 @@ export function DrawerContent(props) {
             await AsyncStorage.removeItem('loginData');
             await AsyncStorage.removeItem('refreshToken');
             await AsyncStorage.removeItem('token');
-
             props.dispatch(loginActions.logOut());
         } catch (e) {
             console.log(e);
         }
     }
 
+    useEffect(() => {
+        console.log("datassss", corporateDetails?.logourl)
+    })
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: paperTheme.colors.alpha }}>
             <DrawerContentScrollView {...props}>
-                <View style={styles.drawerContent}>
-                    <View style={styles.userInfoSection}>
+                <View style={[styles.drawerContent, styles.bottomBorder]}>
+                    <View style={{ ...styles.userInfoSection, ...styles.bottomBorder, paddingVertical: 15 }}>
                         <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                            <Avatar.Image
-                                source={cmDetails?.profilepic ? { uri: cmDetails?.profilepic } : assets.ImageBaseUrl('brain_cons')}
-                                size={50}
+                            <Image
+                                source={{ uri: corporateDetails?.logourl }}
+                                style={{ width: 150, objectFit: 'contain', minHeight: 50, maxHeight: 150, backgroundColor:'white' }}
                             />
-                            <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                                <Title style={styles.title}>{getName(cmDetails?.name)}</Title>
-                                <Caption style={styles.caption}>{cmDetails?.email}</Caption>
-                            </View>
                         </View>
-
-                        <View style={styles.column}>
-                            <View style={styles.section}>
-                                <Caption style={styles.caption}>Ph- </Caption>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>{cmDetails?.mobile}</Paragraph>
-                            </View>
-                            <View style={styles.section}>
-                                <Caption style={styles.caption}>Ut- </Caption>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>{getName(cmDetails?.type)}</Paragraph>
-                            </View>
-                        </View>
+                        <Text style={{color:'white', fontFamily:'Nunito Bold'}}>{corporateDetails?.legalname}</Text>
                     </View>
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="home"
+                                color={(active === 'home') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="Home"
+                        labelStyle={{ color: (active === 'home') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('home') }}
+                        style={{ backgroundColor: (active === 'home') ? 'white' : 'transparent' }}
+                    />
 
-                    <Drawer.Section style={styles.drawerSection}>
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="account-outline"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="Profile"
-                            onPress={() => { props.navigation.navigate('ProfileEdit') }}
-                        />
-                    </Drawer.Section>
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="basketball"
+                                color={(active === 'physicalhealth') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="Physical Health"
+                        labelStyle={{ color: (active === 'physicalhealth') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('physicalhealth') }}
+                        style={{ backgroundColor: (active === 'physicalhealth') ? 'white' : 'transparent' }}
+                    />
 
-                    <Drawer.Section>
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="account-check-outline"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="All Patients"
-                        // onPress={() => {props.navigation.navigate('Profile')}}
-                        />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="bookmark-outline"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="Care Stories"
-                        // onPress={() => {props.navigation.navigate('BookmarkScreen')}}
-                        />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="account-settings-outline"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="Settings"
-                        // onPress={() => {props.navigation.navigate('SettingScreen')}}
-                        />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="account-check-outline"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="Support"
-                        // onPress={() => {props.navigation.navigate('SupportScreen')}}
-                        />
-                    </Drawer.Section>
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="yoga"
+                                color={(active === 'mentalhealth') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="Mental Health"
+                        labelStyle={{ color: (active === 'mentalhealth') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('mentalhealth') }}
+                        style={{ backgroundColor: (active === 'mentalhealth') ? 'white' : 'transparent' }}
+                    />
+
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="plus-box"
+                                color={(active === 'healthepisodes') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="Health Episodes"
+                        labelStyle={{ color: (active === 'healthepisodes') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('healthepisodes') }}
+                        style={{ backgroundColor: (active === 'healthepisodes') ? 'white' : 'transparent' }}
+                    />
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="clipboard-plus"
+                                color={(active === 'gtlinsurance') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="GTL Insurace"
+                        labelStyle={{ color: (active === 'gtlinsurance') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('gtlinsurance') }}
+                        style={{ backgroundColor: (active === 'gtlinsurance') ? 'white' : 'transparent' }}
+                    />
+                    <DrawerItem
+                        icon={() => (
+                            <Icon
+                                name="shield-search"
+                                color={(active === 'expiredpolicy') ? paperTheme.colors.alpha : 'white'}
+                                size={30}
+                            />
+                        )}
+                        label="Expired Policy"
+                        labelStyle={{ color: (active === 'expiredpolicy') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
+                        onPress={() => { setActive('expiredpolicy') }}
+                        style={{ backgroundColor: (active === 'expiredpolicy') ? 'white' : 'transparent' }}
+                    />
                 </View>
                 <Paragraph
                     style={{
                         textAlign: 'center',
                         marginTop: 10,
                         fontWeight: '500',
-                        color: '#646161',
+                        color: 'white',
+                        fontFamily: 'Nunito Bold',
                         fontSize: 13
                     }}
                 >App- 1  Cp- {cpVersion ?? 0}</Paragraph>
@@ -152,11 +163,14 @@ export function DrawerContent(props) {
                     </View>
                 </TouchableRipple>
             </Drawer.Section> */}
-            <TouchableRipple onPress={signOut} style={{ paddingVertical: 10 }}>
-                <View style={styles.preference}>
-                    <Text style={{ color: paperTheme.colors.text, ...paperTheme.fonts.titleSmall }}>Sign Out</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Image source={assets.ImageBaseUrl('brandlogopi')} style={{ width: 150, height: 40, objectFit: 'contain' }} />
+            </View>
+            <TouchableRipple onPress={signOut} style={{ paddingVertical: 10, ...styles.topBorder }}>
+                <View style={{ ...styles.preference, alignItems: 'center' }}>
+                    <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito Bold' }}>Sign Out</Text>
                     <View pointerEvents="none">
-                        <Icon name="exit-to-app" color={paperTheme.colors.text} size={20} style={{ paddingRight: 10 }} />
+                        <Icon name="exit-to-app" color='white' size={30} style={{ paddingRight: 10 }} />
                     </View>
                 </View>
             </TouchableRipple>
@@ -209,4 +223,14 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 16,
     },
+    bottomBorder: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#f2f5f9',
+        borderStyle: 'solid',
+    },
+    topBorder: {
+        borderTopWidth: 1,
+        borderTopColor: '#f2f5f9',
+        borderStyle: 'solid',
+    }
 });
