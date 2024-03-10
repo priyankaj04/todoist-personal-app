@@ -192,6 +192,16 @@ const styles = StyleSheet.create({
     borderColor: '#f2f5f9',
     borderStyle: 'solid',
   },
+  bottomBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f5f9',
+    borderStyle: 'solid',
+  },
+  topBorder: {
+    borderTopWidth: 1,
+    borderTopColor: '#f2f5f9',
+    borderStyle: 'solid',
+  }
 
 });
 

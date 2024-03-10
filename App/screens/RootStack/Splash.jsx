@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -24,6 +24,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SplashScreen = ({ navigation }) => {
     const { colors } = useTheme();
     const cpVersion = mySelector(state => state.Login.value.cpVersion);
+    const logindata = mySelector(state => state.Login.value.loginData);
+
+    useEffect(() => {
+        console.log("logindata remote", logindata);
+    },[])
 
     return (
         <Provider>

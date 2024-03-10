@@ -11,6 +11,7 @@ import {
 import { useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from '../Styles'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
@@ -27,47 +28,52 @@ const HomeScreen = () => {
   const dispatch = myDispatch();
   const corporateDetails = mySelector(state => state.Login.value.corporateDetails);
   const baseUrl = mySelector(state => state.Login.value.baseUrl);
-  const corporateid = mySelector(state => state.Login.value.loginData.corporateid) ?? 2;
+  const corporateid = mySelector(state => state.Login.value.loginData.corporateid);
   const loginData = mySelector(state => state.Login.value.loginData);
   const hrdashboard = mySelector(state => state.Login.value.hrdashboard);
+  const policyDetails = mySelector(state => state.Login.value.policyDetails);
   const clinicalDetails = mySelector(state => state.Login.value.clinicalDetails);
   const [arrayOfActivities, setArrayOfActivities] = useState([]);
-  const [policydetails, setPolicyDetails] = useState([]);
 
   useEffect(() => {
-    //dispatch(loginActions.logOut());
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_CLINICAL_DETAILS, { corporateid: corporateid }))
-      .then((res) => {
-        if (res.status === 1) {
-          dispatch(loginActions.setClinicalDetails(res));
-        } else {
-          dispatch(valuesActions.statusNot1(res?.msg));
-        }
-      }).catch((error) => {
-        dispatch(valuesActions.error({ error: `Error in Get Corporate Clinical Details ${error}` }));
-      })
+    // dispatch(loginActions.logOut());
+    // AsyncStorage.clear()
+    console.log("corporateid", corporateid) 
+    console.log("decoded", loginData)
+    if (corporateid) {
+      getService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_CLINICAL_DETAILS, { corporateid: corporateid }))
+        .then((res) => {
+          if (res.status === 1) {
+            dispatch(loginActions.setClinicalDetails(res));
+          } else {
+            dispatch(valuesActions.statusNot1(res?.msg));
+          }
+        }).catch((error) => {
+          dispatch(valuesActions.error({ error: `Error in Get Corporate Clinical Details ${error}` }));
+        })
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_DETAILS, { corporateid: corporateid }))
-      .then((res) => {
-        if (res.status === 1) {
-          dispatch(loginActions.setCorporateDetails(res.data))
-        } else {
-          dispatch(valuesActions.statusNot1(res?.msg));
-        }
-      }).catch((error) => {
-        dispatch(valuesActions.error({ error: `Error in Get Corporate Details ${error}` }));
-      })
+      getService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_DETAILS, { corporateid: corporateid }))
+        .then((res) => {
+          if (res.status === 1) {
+            dispatch(loginActions.setCorporateDetails(res.data))
+          } else {
+            dispatch(valuesActions.statusNot1(res?.msg));
+          }
+        }).catch((error) => {
+          dispatch(valuesActions.error({ error: `Error in Get Corporate Details ${error}` }));
+        })
 
-    getService(baseUrl, stringInterpolater(API_ROUTES.GET_HRDASHBOARD_HOME, { corporateid: corporateid }))
-      .then((res) => {
-        if (res.status === 1) {
-          dispatch(loginActions.setHrdashboard(res))
-        } else {
-          dispatch(valuesActions.statusNot1(res?.msg));
-        }
-      }).catch((error) => {
-        dispatch(valuesActions.error({ error: `Error in Get HRDashboard Details ${error}` }));
-      })
+      getService(baseUrl, stringInterpolater(API_ROUTES.GET_HRDASHBOARD_HOME, { corporateid: corporateid }))
+        .then((res) => {
+          if (res.status === 1) {
+            dispatch(loginActions.setHrdashboard(res))
+          } else {
+            dispatch(valuesActions.statusNot1(res?.msg));
+          }
+        }).catch((error) => {
+          dispatch(valuesActions.error({ error: `Error in Get HRDashboard Details ${error}` }));
+        })
+    }
   }, []);
 
   useEffect(() => {
@@ -77,13 +83,23 @@ const HomeScreen = () => {
         getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: gmcPolicies?.[0] }), loginData.token)
           .then((res) => {
             if (res.status === 1) {
-              setPolicyDetails(res.data)
+              dispatch(loginActions.setPolicyDetails(res.data))
             } else {
-              setPolicyDetails({})
               dispatch(valuesActions.statusNot1(res?.msg));
             }
           }).catch((error) => {
             dispatch(valuesActions.error({ error: `Error in Get Policy Details ${error}` }));
+          })
+
+        getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
+          .then((res) => {
+            if (res.status === 1) {
+              dispatch(loginActions.setNwlDetails(res))
+            } else {
+              dispatch(valuesActions.statusNot1(res?.msg));
+            }
+          }).catch((error) => {
+            dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
           })
       }
     }
@@ -231,12 +247,12 @@ const HomeScreen = () => {
                   <View style={{ display: 'flex', flex: 1, flexDirection: 'row', gap: 15 }}>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Total Premium</Text>
-                      <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>₹{Number(policydetails?.policies?.[0]?.premuimpaid ?? 0).toLocaleString('en-IN')}</Text>
+                      <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>₹{Number(policyDetails?.policies?.[0]?.premuimpaid ?? 0).toLocaleString('en-IN')}</Text>
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Sum Insured</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policydetails?.policies?.[0]?.suminsuredlevels?.map((item) => `₹${Number(item ?? 0).toLocaleString('en-IN')}`)?.join(', ')}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.suminsuredlevels?.map((item) => `₹${Number(item ?? 0).toLocaleString('en-IN')}`)?.join(', ')}</Text>
                       </View>
                     </View>
                   </View>
@@ -244,14 +260,14 @@ const HomeScreen = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>CD Balance</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>₹{Number(policydetails?.policies?.[0]?.cdbalance ?? 0).toLocaleString('en-IN')}</Text>
-                        <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Bold' }}>({policydetails?.policies?.[0]?.cdbalancedate?.split("T")[0] ?? ""})</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>₹{Number(policyDetails?.policies?.[0]?.cdbalance ?? 0).toLocaleString('en-IN')}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 12, fontFamily: 'Nunito Bold' }}>({policyDetails?.policies?.[0]?.cdbalancedate?.split("T")[0] ?? ""})</Text>
                       </View>
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Valid Till</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policydetails?.policies?.[0]?.policyvalidupto?.split("T")[0] ?? ""}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.policyvalidupto?.split("T")[0] ?? ""}</Text>
                       </View>
                     </View>
                   </View>
@@ -259,13 +275,13 @@ const HomeScreen = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Policy Number</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policydetails?.policies?.[0]?.policynumber ?? ""}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.policynumber ?? ""}</Text>
                       </View>
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Policy Cover</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{policydetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}
                         </Text>
                       </View>
                     </View>
@@ -274,13 +290,13 @@ const HomeScreen = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>Insurance</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policydetails?.policies?.[0]?.insurername ?? ""}</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
                       </View>
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 14 }}>TPA</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
-                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{policydetails?.policies?.[0]?.tpaname}
+                        <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{policyDetails?.policies?.[0]?.tpaname}
                         </Text>
                       </View>
                     </View>
@@ -288,7 +304,7 @@ const HomeScreen = () => {
                 </View>
               </Animatable.View>
             </View>
-              {/*<Animatable.View animation="fadeIn"
+            {/*<Animatable.View animation="fadeIn"
               duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', gap: 25 }}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15 }}>Engagement</Text>

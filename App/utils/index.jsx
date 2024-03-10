@@ -15,6 +15,12 @@ function getName(firstName= '', lastName= '') {
     return firstName;
 }
 
+function formatString(inputString) {
+    const cleanedString = inputString.replace(/_/g, ' ');
+    const formattedString = cleanedString.replace(/\b\w/g, (char) => char.toUpperCase());
+    return formattedString;
+}
+
 function getActivity(activity='') {
     
     if (activity?.length > 0) {
@@ -45,4 +51,4 @@ function getActivity(activity='') {
     return activity;
 }
 
-export { getName, getActivity, requestUserPermission, notificationListener }
+export { getName, getActivity, requestUserPermission, notificationListener, formatString }

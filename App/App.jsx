@@ -57,17 +57,15 @@ const App = () => {
     AsyncStorage.getItem('loginData')
       .then(item => {
         const data = JSON.parse(item);
-
         if (data?.email) {
           dispatch(
             loginActions.setLoginData({
               email: data.email,
               type: data.type,
               token: null,
+              corporateid: parseInt(data.corporateid)
             }),
           );
-
-          getCmDetails(baseUrl, dispatch, data.email);
         }
 
         setLoading(false);
@@ -114,6 +112,7 @@ const App = () => {
                 email: decoded.email,
                 type: decoded.type,
                 token: token,
+                corporateid: parseInt(decoded.corporateid)
               }),
             );
 
@@ -204,7 +203,22 @@ const App = () => {
       subtitle: '#5B626F',
       data: '#1A1F2C',
       backdrop: '#F0F2F4',
-      border: '#F2F5F9'
+      border: '#F2F5F9',
+      blue950: '#172554',
+      blue900: '#1e3a8a',
+      blue800: '#1e40af',
+      blue700: '#1d4ed8',
+      blue600: '#2563eb',
+      blue500: '#3b82f6',
+      blue400: '#60a5fa',
+      blue300: '#93c5fd',
+      blue200: '#bfdbfe',
+      blue100: '#dbeafe',
+      blue50: '#eff6ff',
+      yellow: '#facc15',
+      green: '#4ade80',
+      sky: '#38bdf8',
+      indigo: '#6366f1'
     },
   };
 
@@ -223,7 +237,22 @@ const App = () => {
       subtitle: '#5B626F',
       data: '#1A1F2C',
       backdrop: '#F0F2F4',
-      border: '#F2F5F9'
+      border: '#F2F5F9',
+      blue950: '#172554',
+      blue900: '#1e3a8a',
+      blue800: '#1e40af',
+      blue700: '#1d4ed8',
+      blue600: '#2563eb',
+      blue500: '#3b82f6',
+      blue400: '#60a5fa',
+      blue300: '#93c5fd',
+      blue200: '#bfdbfe',
+      blue100: '#dbeafe',
+      blue50: '#eff6ff',
+      yellow: '#facc15',
+      green: '#4ade80',
+      sky: '#38bdf8',
+      indigo: '#6366f1'
     },
   };
 

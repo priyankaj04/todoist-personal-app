@@ -172,11 +172,9 @@ const refreshToken = (baseUrl, dispatch, setLoading) => {
           dispatch(loginActions.setLoginData({
             email: decoded.email,
             type: decoded.type,
-            token: response?.token
+            token: response?.token,
+            corporateid: decoded.corporateid
           }));
-
-          getCmDetails(baseUrl, dispatch, decoded.email);
-
         } else {
           console.info(response.msg, 'Please Login Again')
           // dispatch(valuesActions.statusNot1(response.msg));
@@ -256,7 +254,8 @@ const API_ROUTES = {
   GET_CORPORATE_CLINICAL_DETAILS: '/clinical/corporate/{corporateid}',
   GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
   GET_HRDASHBOARD_HOME: '/corporate/hrdashboard/home/{corporateid}',
-  GET_CORPORATE_POLICY: '/policy/{cpolid}?type=patients'
+  GET_CORPORATE_POLICY: '/policy/{cpolid}?type=patients',
+  GET_NWL_DETAILS: '/corporate/nwl/{corporateid}/{policyid}'
 }
 
 export {

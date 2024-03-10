@@ -4,11 +4,13 @@ const initialValue = {
     loginData: {},
     devEnv:false,
     noOtp:false,
-    baseUrl:`https://devapi.circle.care/v1`,
+    baseUrl:`https://api.circle.care/v1`,
     corporateDetails: {},
     clinicalDetails: {},
     hrdashboard:{},
-    cpVersion:null
+    cpVersion: null,
+    nwlDetails: {},
+    policyDetails: {}
 }
 
 export const LoginDetails = createSlice({
@@ -25,11 +27,13 @@ export const LoginDetails = createSlice({
         setCorporateDetails: (state, action) => { state.value.corporateDetails = action.payload},
         setCpVersion: (state, action) => { state.value.cpVersion = action.payload },
         setClinicalDetails: (state, action) => { state.value.clinicalDetails = action.payload },
-        setHrdashboard: (state, action) => { state.value.hrdashboard = action.payload }
+        setHrdashboard: (state, action) => { state.value.hrdashboard = action.payload },
+        setNwlDetails: (state, action) => { state.value.nwlDetails = action.payload },
+        setPolicyDetails: (state, action) => { state.value.policyDetails = action.payload },
     }, 
 });
 
 
-export const { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setClinicalDetails, setHrdashboard } = LoginDetails.actions;
+export const { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setClinicalDetails, setHrdashboard, setNwlDetails, setPolicyDetails } = LoginDetails.actions;
 
 export default LoginDetails.reducer;
