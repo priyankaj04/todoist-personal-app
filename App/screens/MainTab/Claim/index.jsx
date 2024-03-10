@@ -12,6 +12,7 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import assets from '../../../assets';
 import { formatString } from '../../../utils';
 import { PieChart, ProgressChart } from "react-native-chart-kit";
+import dayjs from "dayjs";
 
 const Claim = ({ route }) => {
 
@@ -160,6 +161,37 @@ const Claim = ({ route }) => {
         }
     }
 
+    const totalClaimUtilization = () => {
+        let value = 0;
+        value = ((nwlDetails?.completedClaims?.totalClaimIssued + nwlDetails?.ongoingClaims?.totalClaimOngong) / nwlDetails?.totalPremiumPaid?.totalPremium) * 100
+        return value;
+    }
+
+    const calculateTimeDurationofClaim = () => {
+        let value = 0;
+        const startedate = dayjs(nwlDetails?.policydetails?.[0]?.policystartedon)
+        value = ((dayjs().diff(startedate, 'days')) / (dayjs().endOf('year').diff(dayjs().startOf('year'), 'day') + 1)) * 100
+        console.log("calculateTimeDurationofClaim", value, dayjs().endOf('year').diff(dayjs().startOf('year'), 'day') + 1, dayjs().diff(startedate, 'days') )
+        return value;
+    }
+
+    function daysToMonthsAndDays() {
+        const startedate = dayjs(nwlDetails?.policydetails?.[0]?.policystartedon)
+        const totalDays = dayjs().diff(startedate, 'days')
+        const currentDate = dayjs();
+        const futureDate = currentDate.add(totalDays, 'day');
+
+        const months = futureDate.diff(currentDate, 'month');
+        const remainingDays = futureDate.diff(currentDate.add(months, 'month'), 'day');
+        console.log("dayjs(nwlDetails?.policydetails?.[0]?.policystartedon)", dayjs().diff(startedate, 'days'))
+
+        return {
+            months,
+            days: remainingDays
+        };
+    }
+
+
     return (
         <ScrollView style={{ ...styles.container }}>
             <View style={{ ...styles.header }}>
@@ -251,6 +283,35 @@ const Claim = ({ route }) => {
                         <View style={{ ...styles.bottomBorder, padding: 5, borderBottomColor: theme.colors.alpha, marginBottom: 10 }}>
                             <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20 }}>Total Claim Utilization</Text>
                         </View>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                            <ProgressChart
+                                width={170}
+                                height={170}
+                                data={{
+                                    label: ['data'],
+                                    data: [parseFloat(totalClaimUtilization()) / 100 || 0]
+                                }}
+                                strokeWidth={14}
+                                radius={50}
+                                chartConfig={{
+                                    color: (opacity = 1) => `rgba(50, 102, 227, ${opacity})`,
+                                    strokeWidth: 2,
+                                    useShadowColorFromDataset: false,
+                                    backgroundGradientFromOpacity: 0,
+                                    backgroundGradientToOpacity: 0,
+                                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+                                }}
+                                hideLegend={true}
+                            />
+                            <View style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 25 }}></View>
+                                <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(totalClaimUtilization())}%` || 0}</Text>
+                            </View>
+                        </View>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={{ color: 'gray', fontFamily: 'Nunito Regular', fontSize: 14, textAlign: 'center' }}>Claim Utilization</Text>
+                            <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'center' }}>₹{Number((nwlDetails?.completedClaims?.totalClaimIssued + nwlDetails?.ongoingClaims?.totalClaimOngong) || 0).toLocaleString('en-IN')}</Text>
+                        </View>
                     </View>
                     <Image
                         source={assets.ImageBaseUrl('amountutilpi')}
@@ -259,32 +320,44 @@ const Claim = ({ route }) => {
                             width: 300
                         }}
                     />
-                    <View style={{ ...styles.topBorder, alignItems: 'center'}}>
+                    <View style={{ ...styles.topBorder, alignItems: 'center' }}>
                         <View style={{ ...styles.bottomBorder, padding: 5, borderBottomColor: theme.colors.alpha }}>
                             <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20 }}>Prorated Claim Utilization</Text>
                         </View>
-                        <ProgressChart
-                            width={350}
-                            height={170}
-                            data={{
-                                label: ['data'],
-                                data: [parseFloat(nwlDetails?.proRatedData?.proRatedClaimUtilization)/100 || 0]
-                            }}
-                            strokeWidth={18}
-                            radius={50}
-                            chartConfig={{
-                                color: (opacity = 1) => `rgba(50, 102, 227, ${opacity})`,
-                                strokeWidth: 2,
-                                useShadowColorFromDataset: false,
-                                backgroundGradientFromOpacity: 0,
-                                backgroundGradientToOpacity: 0,
-                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
-                            }}
-                            hideLegend={true}
-                        />
-                        <View style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                            <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 25 }}></View>
-                            <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(nwlDetails?.proRatedData?.proRatedClaimUtilization)}%` || 0}</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5, margin: 10 }}>
+                            <ProgressChart
+                                width={170}
+                                height={170}
+                                data={{
+                                    label: ['data1', 'data'],
+                                    data: [(calculateTimeDurationofClaim())/100 || 0, parseFloat(nwlDetails?.proRatedData?.proRatedClaimUtilization) / 100 || 0]
+                                }}
+                                strokeWidth={14}
+                                radius={50}
+                                chartConfig={{
+                                    color: (opacity = 1) => `rgba(50, 102, 227, ${opacity})`,
+                                    strokeWidth: 2,
+                                    useShadowColorFromDataset: false,
+                                    backgroundGradientFromOpacity: 0,
+                                    backgroundGradientToOpacity: 0,
+                                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+                                }}
+                                hideLegend={true}
+                            />
+                            <View style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
+                                <View style={{ display: 'flex',flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                    <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 25 }}></View>
+                                    <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(calculateTimeDurationofClaim())}%` || 0}</Text>
+                                </View>
+                                <View style={{ display: 'flex',  flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                    <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.8)', borderRadius: 25 }}></View>
+                                    <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(nwlDetails?.proRatedData?.proRatedClaimUtilization)}%` || 0}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={{ color: 'gray', fontFamily: 'Nunito Regular', fontSize: 14, textAlign: 'center' }}>Time Duration of Claim</Text>
+                            <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'center' }}>{daysToMonthsAndDays().months} Months {daysToMonthsAndDays().days} Days</Text>
                         </View>
                     </View>
                 </View>

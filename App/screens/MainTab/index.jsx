@@ -20,8 +20,9 @@ import { useTheme } from 'react-native-paper';
 
 import Home from './Home';
 import Claim from './Claim';
-import MyJobs from './MyJobs';
-import MyPatients from './Patients';
+import Stories from './Stories';
+import Settings from './Settings';
+import CareManagement from './Caremanagement';
 
 const Tab = createBottomTabNavigator();
 
@@ -66,7 +67,7 @@ const MainTabScreen = ({route, navigation}) => {
           />
           <Tab.Screen
             name="TabStories"
-            component={MyJobs}
+            component={Stories}
             options={{
               tabBarLabel: 'Stories',
               tabBarIcon: ({color}) => (
@@ -77,7 +78,7 @@ const MainTabScreen = ({route, navigation}) => {
           />
           <Tab.Screen
             name="TabSettings"
-            component={MyPatients}
+            component={Settings}
             options={{
               tabBarLabel: 'Settings',
               tabBarIcon: ({color}) => (
