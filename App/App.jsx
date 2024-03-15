@@ -128,8 +128,8 @@ const App = () => {
       );
     }
     // push notification
-    // notificationListener()
-    // requestUserPermission()
+    notificationListener()
+    requestUserPermission()
     // push notification
 
   }, []);

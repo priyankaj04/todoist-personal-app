@@ -14,13 +14,16 @@ const requestUserPermission = async () => {
 const GetFCMToken = async () => {
   const FCMToken = await AsyncStorage.getItem('fcmToken'); console.log("FCMTOKEN Token", FCMToken)
   if (!FCMToken) {
+    console.log("are wher eherere")
     try {
       const fcmToken = await messaging().getToken();
+      console.log("hohoh", fcmToken)
       if (fcmToken) {
         console.log('NEW GENERATED FCM TOKEN: ', fcmToken);
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
     } catch (error) {
+      await AsyncStorage.setItem('fcmToken', 'TOKENKDJIOIUYSIDUAUDSDFHDFIEUWEREPPOIUTNMBKCJSHZZNKJDDUE');
       console.log('ERROR GET IN FCM TOKEN', error);
     }
   }
