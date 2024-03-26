@@ -48,6 +48,8 @@ const Lives = ({ route }) => {
                         if (res.status === 1) {
                             console.log("res.data", res.data.patients)
                             setPatientDetails(res.data.patients)
+                            setEmployees(res.data.patients?.filter((item) => item.relationship === 'self'))
+                            setDependents(res.data.patients?.filter((item) => item.relationship !== 'self'))
                         } else {
                             dispatch(valuesActions.statusNot1(res?.msg));
                         }
@@ -149,7 +151,7 @@ const Lives = ({ route }) => {
                 </View>
                 {
                     tab === 'employee' ?
-                        patientdetails?.filter((item) => item?.relationship === 'self')?.map((item, index) =>
+                        employees?.map((item, index) =>
                             <View key={index} style={{ width: '100%', borderRadius: 15, borderWidth: 1, borderColor: theme.colors.border, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1 }} >
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{getName(item.firstname, item.lastname)}</Text>
@@ -169,7 +171,7 @@ const Lives = ({ route }) => {
                             </View>
                         )
                         :
-                        patientdetails?.filter((item) => item?.relationship !== 'self')?.map((item, index) =>
+                        dependents?.map((item, index) =>
                             <View key={index} style={{ width: '100%', borderRadius: 15, borderWidth: 1, borderColor: theme.colors.border, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1 }} >
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{getName(item.firstname, item.lastname)}</Text>
