@@ -333,7 +333,7 @@ const HomeScreen = () => {
                   </View>
                   <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
-                    <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Bold', marginLeft: 5 }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
+                    <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                   </View>
                 </Animatable.View>
               }
@@ -351,7 +351,7 @@ const HomeScreen = () => {
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {gpapolicy?.policies?.[0]?.insurername ?? ""}</Text>
-                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Bold', marginLeft: 5 }}>{gpapolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
+                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{gpapolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                 </View>
               </Animatable.View>}
               {Object.keys(gtlpolicy)?.length > 0 && <Animatable.View animation="fadeIn"
@@ -368,7 +368,7 @@ const HomeScreen = () => {
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {gtlpolicy?.policies?.[0]?.insurername ?? ""}</Text>
-                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Bold', marginLeft: 5 }}>{gtlpolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
+                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{gtlpolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                 </View>
               </Animatable.View>}
             </View>
