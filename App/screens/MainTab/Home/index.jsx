@@ -286,7 +286,7 @@ const HomeScreen = () => {
               <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito ExtraBold', fontSize: 18 }}>Total Lives</Text>
+                    <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito Bold', fontSize: 18 }}>Total Lives</Text>
                   {/*<TouchableOpacity>
                       <Icon
                         name="chevron-right"
@@ -322,7 +322,7 @@ const HomeScreen = () => {
                 <Animatable.View animation="fadeIn"
                   duration={400} style={{ ...styles.card, marginTop: 15 }}>
                   <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15, fontSize: 20 }}>GMC Details</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GMC Details</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GMC' })}>
                       <Icon
                         name="chevron-right"
@@ -332,7 +332,7 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                   </View>
                   <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
+                      <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
                     <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                   </View>
                 </Animatable.View>
@@ -340,7 +340,7 @@ const HomeScreen = () => {
               {Object.keys(gpapolicy)?.length > 0 && <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GPA' })}>
                     <Icon
                       name="chevron-right"
@@ -357,7 +357,7 @@ const HomeScreen = () => {
               {Object.keys(gtlpolicy)?.length > 0 && <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito ExtraBold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GTL' })}>
                     <Icon
                       name="chevron-right"
