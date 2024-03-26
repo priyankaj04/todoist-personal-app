@@ -1,5 +1,5 @@
 import { requestUserPermission, notificationListener} from  './notification'
-
+import dayjs from 'dayjs';
 function getName(firstName= '', lastName= '') {
     
     if (firstName?.length > 0) {
@@ -19,6 +19,17 @@ function formatString(inputString) {
     const cleanedString = inputString.replace(/_/g, ' ');
     const formattedString = cleanedString.replace(/\b\w/g, (char) => char.toUpperCase());
     return formattedString;
+}
+
+function getYears(dob) {
+    return dayjs().diff(dayjs(dob), 'years');
+}
+
+function getCapitalLetter(str) {
+    if (typeof str !== 'string' || str?.length === 0) {
+        return str;
+    }
+    return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 }
 
 function getActivity(activity='') {
@@ -51,4 +62,12 @@ function getActivity(activity='') {
     return activity;
 }
 
-export { getName, getActivity, requestUserPermission, notificationListener, formatString }
+function getMobile(mobile) {
+    if (mobile?.length === 10) {
+        return '+91' + mobile;
+    } else if (mobile?.length > 10) {
+        return '+' + mobile;
+    }
+}
+
+export { getName, getMobile, getActivity, requestUserPermission, notificationListener, formatString, getYears, getCapitalLetter }

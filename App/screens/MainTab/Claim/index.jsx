@@ -313,14 +313,8 @@ const Claim = ({ route }) => {
                             <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'center' }}>₹{Number((nwlDetails?.completedClaims?.totalClaimIssued + nwlDetails?.ongoingClaims?.totalClaimOngong) || 0).toLocaleString('en-IN')}</Text>
                         </View>
                     </View>
-                    <Image
-                        source={assets.ImageBaseUrl('amountutilpi')}
-                        style={{
-                            height: 300,
-                            width: 300
-                        }}
-                    />
-                    <View style={{ ...styles.topBorder, alignItems: 'center' }}>
+                    
+                    <View style={{alignItems: 'center' }}>
                         <View style={{ ...styles.bottomBorder, padding: 5, borderBottomColor: theme.colors.alpha }}>
                             <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20 }}>Prorated Claim Utilization</Text>
                         </View>

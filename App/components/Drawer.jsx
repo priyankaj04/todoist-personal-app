@@ -43,10 +43,6 @@ export function DrawerContent(props) {
         }
     }
 
-    useEffect(() => {
-        console.log("datassss", corporateDetails?.logourl)
-    })
-
     return (
         <View style={{ flex: 1, backgroundColor: paperTheme.colors.alpha }}>
             <DrawerContentScrollView {...props}>

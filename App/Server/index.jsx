@@ -161,14 +161,13 @@ const refreshToken = (baseUrl, dispatch, setLoading) => {
 
   AsyncStorage.getItem('refreshToken').then((refreshToken) => {
 
+    console.log("refreshtoken", refreshToken)
     if (refreshToken) {
-
       getTokenService(baseUrl, API_ROUTES.REFRESH_USER, refreshToken).then((response) => {
-
+        console.log("response", response)
         if (response?.token) {
 
           let decoded = jwtDecode(response.token);
-
           dispatch(loginActions.setLoginData({
             email: decoded.email,
             type: decoded.type,
@@ -255,7 +254,8 @@ const API_ROUTES = {
   GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
   GET_HRDASHBOARD_HOME: '/corporate/hrdashboard/home/{corporateid}',
   GET_CORPORATE_POLICY: '/policy/{cpolid}?type=patients',
-  GET_NWL_DETAILS: '/corporate/nwl/{corporateid}/{policyid}'
+  GET_NWL_DETAILS: '/corporate/nwl/{corporateid}/{policyid}',
+  GET_ALL_PATIENTS_BY_INSURANCE: '/hrdashboard/insurance/{cpolid}'
 }
 
 export {

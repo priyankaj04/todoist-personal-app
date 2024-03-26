@@ -55,6 +55,17 @@ const MainTabScreen = ({route, navigation}) => {
             // initialParams={{mainNavigation: navigation}}
           />
           <Tab.Screen
+            name="TabPolicy"
+            component={Settings}
+            options={{
+              tabBarLabel: 'Policy',
+              tabBarIcon: ({ color }) => (
+                <Feather name="settings" color={color} size={22} />
+              ),
+            }}
+          // initialParams={{mainNavigation}}
+          />
+          <Tab.Screen
             name="TabClaim"
             component={Claim}
             options={{

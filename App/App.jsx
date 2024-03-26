@@ -41,6 +41,7 @@ import {
 
 import { loginActions, valuesActions, myDispatch, mySelector } from './redux';
 import { notificationListener, requestUserPermission } from './utils'
+import Lives from './screens/Lives';
 
 const App = () => {
   const [loading, setLoading] = React.useState(true);
@@ -52,29 +53,6 @@ const App = () => {
   const baseUrl = mySelector(state => state.Login.value.baseUrl);
   const alert = mySelector(state => state.Values.value.alert);
   const isDarkTheme = mySelector(state => state.Values.value.toggleTheme);
-
-  const handleNoOtpAuth = async () => {
-    AsyncStorage.getItem('loginData')
-      .then(item => {
-        const data = JSON.parse(item);
-        if (data?.email) {
-          dispatch(
-            loginActions.setLoginData({
-              email: data.email,
-              type: data.type,
-              token: null,
-              corporateid: parseInt(data.corporateid)
-            }),
-          );
-        }
-
-        setLoading(false);
-      })
-      .catch(error => {
-        console.log('Error in handle NoOtpAuth ', error);
-        setLoading(false);
-      });
-  };
 
   const checkDevEnv = async () => {
     try {
@@ -103,22 +81,25 @@ const App = () => {
   useEffect(() => {
     checkDevEnv();
     try {
-      AsyncStorage.getItem('token').then(token => {
+      AsyncStorage.getItem('token').then((token) => {
         if (token) {
           let decoded = jwtDecode(token);
+          setLoading(false);
           if (!(decoded.exp < Date.now() / 1000)) {
-            dispatch(
-              loginActions.setLoginData({
-                email: decoded.email,
-                type: decoded.type,
-                token: token,
-                corporateid: parseInt(decoded.corporateid)
-              }),
-            );
-
+            console.log("decoded", decoded)
+            dispatch(loginActions.setLoginData({
+              email: decoded.email,
+              type: decoded.type,
+              token: token,
+              corporateid: parseInt(decoded.corporateid)
+            }));
             setLoading(false);
-          } else refreshTheToken();
-        } else setLoading(false);
+          } else {
+            refreshTheToken();
+          }
+        } else {
+          setLoading(false);
+        }
       })
     } catch (e) {
       dispatch(
@@ -132,7 +113,7 @@ const App = () => {
     requestUserPermission()
     // push notification
 
-  }, []);
+  }, [])
 
   //! codePush updates
 
@@ -218,7 +199,8 @@ const App = () => {
       yellow: '#facc15',
       green: '#4ade80',
       sky: '#38bdf8',
-      indigo: '#6366f1'
+      indigo: '#6366f1',
+      gray: '#6b7280'
     },
   };
 
@@ -252,7 +234,8 @@ const App = () => {
       yellow: '#facc15',
       green: '#4ade80',
       sky: '#38bdf8',
-      indigo: '#6366f1'
+      indigo: '#6366f1',
+      gray: '#6b7280'
     },
   };
 
@@ -287,10 +270,13 @@ const App = () => {
               screenOptions={{
                 headerShown: false,
               }}>
-              <Stack.Screen name={'MainDrawer'} component={MainDrawer} />
+              <Stack.Screen name={'MainDrawer'} component={MainDrawer} >
+              </Stack.Screen>
               <Stack.Screen name="ProfileEdit" component={EditProfile} />
               <Stack.Screen name="PatientDetails" component={PatientIndex} />
               <Stack.Screen name="Appointments" component={Appointments} />
+              <Stack.Screen name="Lives" component={Lives} />
+              
             </Stack.Navigator>
           ) : (
             <RootStackScreen />
