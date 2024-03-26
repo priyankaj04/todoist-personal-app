@@ -9,7 +9,8 @@ import {
     ScrollView,
     Dimensions,
     ActivityIndicator,
-    TextInput
+    TextInput,
+    Linking
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -61,6 +62,41 @@ const Lives = ({ route }) => {
             }
         }
     }, [])
+
+    const handleViewTPA = async (url) => {
+        await Linking.openURL(url)
+    };
+
+    const handleSearch = (query) => {
+        query = query.toLowerCase();
+        if (query) {
+            setEmployees(patientdetails?.filter((item) => item.relationship === 'self'))
+            setDependents(patientdetails?.filter((item) => item.relationship !== 'self'))
+        }
+
+        if (tab === 'employee') {
+            const list = patientdetails?.filter((item) => item.relationship === 'self')
+            return setEmployees(list.filter(employee => {
+                const fullname = employee.firstname.toLowerCase() + ' ' + employee.lastname.toLowerCase();
+                return fullname.includes(query) || // Search by firstname + lastname
+                    employee.mobile.includes(query) || // Search by mobile number
+                    employee.employeeid.toLowerCase().includes(query); // Search by employee id
+            })
+            )
+        } else if (tab !== 'employee') {
+            const list = patientdetails?.filter((item) => item.relationship !== 'self')
+            return setDependents(list.filter(employee => {
+                const fullname = employee.firstname.toLowerCase() + ' ' + employee.lastname.toLowerCase();
+                return fullname.includes(query) || // Search by firstname + lastname
+                    employee.mobile.includes(query) || // Search by mobile number
+                    employee.employeeid.toLowerCase().includes(query); // Search by employee id
+            })
+            )
+        }
+
+
+
+    }
 
     if (loading) {
         return (
@@ -146,12 +182,12 @@ const Lives = ({ route }) => {
                         importantForAutofill="noExcludeDescendants"
                         autoCapitalize="none"
                         value={search}
-                        onChangeText={(val) => setSearch(val)}
+                        onChangeText={(val) => { setSearch(val); handleSearch(val) }}
                     />
                 </View>
                 {
                     tab === 'employee' ?
-                        employees?.map((item, index) =>
+                        employees && employees.length > 0 ? employees?.map((item, index) =>
                             <View key={index} style={{ width: '100%', borderRadius: 15, borderWidth: 1, borderColor: theme.colors.border, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1 }} >
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{getName(item.firstname, item.lastname)}</Text>
@@ -161,7 +197,7 @@ const Lives = ({ route }) => {
                                 </View>
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', gap: 5 }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Bold', textAlign: 'center' }}>{item.employeeid}</Text>
-                                    <TouchableOpacity style={{ backgroundColor: '#4576DC', width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => handleViewTPA(item.policyimageurl)} style={{ backgroundColor: '#4576DC', width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                                         <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: 'white' }}>View TPA</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{ borderColor: '#4576DC', borderWidth: 1, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
@@ -169,9 +205,11 @@ const Lives = ({ route }) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        )
+                        ) : (<View style={{ flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'center', height: 450, fontSize: 16 }}>
+                            <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>No Data...</Text>
+                        </View>)
                         :
-                        dependents?.map((item, index) =>
+                        dependents && dependents.length > 0 ? dependents?.map((item, index) =>
                             <View key={index} style={{ width: '100%', borderRadius: 15, borderWidth: 1, borderColor: theme.colors.border, padding: 10, marginTop: 8, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1 }} >
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>{getName(item.firstname, item.lastname)}</Text>
@@ -181,7 +219,7 @@ const Lives = ({ route }) => {
                                 </View>
                                 <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', gap: 5 }}>
                                     <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Bold', textAlign: 'center' }}>{item.employeeid}</Text>
-                                    <TouchableOpacity style={{ backgroundColor: '#4576DC', width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => handleViewTPA(item.policyimageurl)} style={{ backgroundColor: '#4576DC', width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                                         <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: 'white' }}>View TPA</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{ borderColor: '#4576DC', borderWidth: 1, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
@@ -189,7 +227,10 @@ const Lives = ({ route }) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        )
+                        ) :
+                            <View style={{ flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'center', height: 450, fontSize: 16 }}>
+                                <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>No Data...</Text>
+                            </View>
                 }
             </View>
         </ScrollView>
