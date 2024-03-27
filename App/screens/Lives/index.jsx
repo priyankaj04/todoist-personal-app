@@ -193,7 +193,7 @@ const Lives = ({ route }) => {
                                                 <TouchableOpacity style={{ borderColor: '#4576DC', borderWidth: 1, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                                                     <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: '#4576DC' }}>Send TPA</Text>
                                                 </TouchableOpacity></> :
-                                            <View style={{display:'flex', flexDirection:'row', gap: 2, alignItems:'center'}}><Feather name='alert-circle' size={20} color={theme.colors.alpha} /><Text style={{ color: theme.colors.alpha, fontSize: 14, fontFamily:'Nunito Medium' }}>Upcoming TPA</Text></View>}
+                                            <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}><Feather name='alert-circle' size={20} color={theme.colors.alpha} /><Text style={{ color: theme.colors.alpha, fontSize: 14, fontFamily: 'Nunito Medium' }}>Upcoming TPA</Text></View>}
                                     </View>
                                 </View>
                             ) : (<View style={{ flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'center', height: 450, fontSize: 16 }}>
@@ -211,13 +211,15 @@ const Lives = ({ route }) => {
                                     <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', gap: 5 }}>
                                         <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Bold', textAlign: 'center' }}>{item.employeeid}</Text>
                                         {(item.policyimageurl) ?
-                                            <><TouchableOpacity onPress={() => handleViewTPA(item.policyimageurl)} style={{ backgroundColor: '#4576DC', width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                                                <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: 'white' }}>View TPA</Text>
-                                            </TouchableOpacity>
-                                                <TouchableOpacity style={{ borderColor: '#4576DC', borderWidth: 1, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                                                    <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: '#4576DC' }}>Send TPA</Text>
-                                                </TouchableOpacity></> :
-                                            <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}><Feather name='alert-circle' size={20} color={theme.colors.alpha} /><Text style={{ color: theme.colors.alpha, fontSize: 14, fontFamily: 'Nunito Medium' }}>Upcoming TPA</Text></View>}
+                                            <>
+                                                <TouchableOpacity onPress={() => handleViewTPA(item.policyimageurl)} style={{ backgroundColor: theme.colors.blue600, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                                                    <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: 'white' }}>View TPA</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={{ borderColor: theme.colors.blue600, borderWidth: 1, width: 95, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                                                    <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.blue600 }}>Send TPA</Text>
+                                                </TouchableOpacity>
+                                            </> :
+                                            <View style={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}><Feather name='alert-circle' size={20} color={theme.colors.blue600} /><Text style={{ color: theme.colors.blue600, fontSize: 14, fontFamily: 'Nunito Medium' }}>Upcoming TPA</Text></View>}
                                     </View>
                                 </View>
                             ) :

@@ -7,8 +7,9 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
+
 import { useTheme } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from '../Styles'
@@ -114,7 +115,6 @@ const HomeScreen = () => {
       let gmcPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GMC"));
       let gtlPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GTL"));
       let gpaPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GPA"));
-      console.log('gtlPolicies', gtlPolicies, gpaPolicies)
       if (gmcPolicies?.length) {
         getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: gmcPolicies?.[0] }), loginData.token)
           .then((res) => {
@@ -286,7 +286,9 @@ const HomeScreen = () => {
           >
             <View style={{ flex: 1, margin: 10 }}>
               <Animatable.View animation="fadeIn"
-                duration={400} style={{ ...styles.card }}>
+                duration={400} style={{
+                  ...styles.card
+                }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
                   <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito Bold', fontSize: 18 }}>Total Lives</Text>
                   {/*<TouchableOpacity>
@@ -298,24 +300,24 @@ const HomeScreen = () => {
                     </TouchableOpacity>*/}
                 </View>
                 <View style={{ display: 'flex', gap: 5, flexDirection: 'row', flex: 1 }}>
-                  <View style={{ margin: 5 }}>
+                  <View style={{ margin: 5, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                     {/*<Image
                       source={assets.ImageBaseUrl('totallivespi')}
                       style={{
-                        height: 100,
-                        width: 100
+                        height: 70,
+                        width: 70
                       }}
                     />*/}
                     <LinearGradient
                       colors={
-                        ['#1D3868', '#4E7DDD']
+                        ['#1d4ed8', '#1d4ed8']
                       }
                       style={{
-                        height: 100,
-                        width: 100,
+                        height: 80,
+                        width: 80,
                         borderRadius: 50,
                         alignItems: 'center',
-                        display: 'flex', flex: 1, justifyContent: 'center'
+                        display: 'flex', justifyContent: 'center',
                       }}
                       start={{ x: 0, y: 0 }}
                     >
@@ -340,7 +342,7 @@ const HomeScreen = () => {
                   duration={400} style={{ ...styles.card, marginTop: 15 }}>
                   <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
                     <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GMC Details</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GMC' })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GMC' })}>
                       <Icon
                         name="chevron-right"
                         color={theme.colors.alpha}
@@ -358,7 +360,7 @@ const HomeScreen = () => {
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GPA' })}>
+                  <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GPA' })}>
                     <Icon
                       name="chevron-right"
                       color={theme.colors.alpha}
@@ -375,7 +377,7 @@ const HomeScreen = () => {
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
                   <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GTL' })}>
+                  <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GTL' })}>
                     <Icon
                       name="chevron-right"
                       color={theme.colors.alpha}
@@ -388,6 +390,58 @@ const HomeScreen = () => {
                   <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{gtlpolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                 </View>
               </Animatable.View>}
+              <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Engaged Members</Text>
+                  </View>
+                  <View >
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'right' }}>320</Text>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                  </View>
+                </View>
+                <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                </View>
+                </View>
+                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Physical Health Summary</Text>
+                    </View>
+                    <View >
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    </View>
+                  </View>
+                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  </View>
+                </View>
+                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Mental Health</Text>
+                    </View>
+                    <View >
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    </View>
+                  </View>
+                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  </View>
+                </View>
+                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Claim Status</Text>
+                    </View>
+                    <View >
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    </View>
+                  </View>
+                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  </View>
+                </View>
             </View>
             {/*<Animatable.View animation="fadeIn"
               duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', gap: 25 }}>
@@ -492,7 +546,7 @@ const HomeScreen = () => {
                   hideLegend={true}
                 />
                 <View style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                  <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 25 }}></View>
+                  <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 55 }}></View>
                   <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(clinicalDetails?.avghealthscore)}%` || 0}</Text>
                 </View>
                 <View>

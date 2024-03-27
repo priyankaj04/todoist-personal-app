@@ -187,10 +187,10 @@ const styles = StyleSheet.create({
   card: {
     minHeight: 100,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#f2f5f9',
     borderStyle: 'solid',
+    borderColor: '#f2f5f9',
   },
   bottomBorder: {
     borderBottomWidth: 1,

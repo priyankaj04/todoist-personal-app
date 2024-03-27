@@ -1,59 +1,59 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import { Modal, Portal, Button, Provider } from 'react-native-paper';
-import {vh, vw} from "react-native-css-vh-vw";
+import { vh, vw } from "react-native-css-vh-vw";
 import Feather from 'react-native-vector-icons/Feather';
-import {useTheme} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
-const Dropdown = ({ options, onSelect, value, label, selectedOption, placeholder='', style, title='' }) => {
-  const [isVisible, setIsVisible]= useState(false)
+const Dropdown = ({ options, onSelect, selectedOption, title = '' }) => {
+  const [isVisible, setIsVisible] = useState(false)
   const handleSelectOption = (option) => {
     onSelect(option);
     setIsVisible(false);
   };
 
   const theme = useTheme();
-  
+
   return (
     <View style={[styles.container]}>
-
       <TouchableOpacity
-        onPress={()=>setIsVisible(!isVisible)}
+        style={{ backgroundColor: 'white' }}
+        onPress={() => setIsVisible(!isVisible)}
       >
         <View
           style={{
-            display:'flex',
-            flexDirection:'row',
-            columnGap:10,
-            alignItems:'center',
+            display: 'flex',
+            flexDirection: 'row',
+            columnGap: 10,
+            alignItems: 'center',
             borderWidth: 1,
-            borderColor: '#ccc',
+            borderColor: theme.colors.border,
             width: '100%',
-            borderRadius:5,
-            padding:10,
-            paddingVertical:6,
+            borderRadius: 5,
+            padding: 10,
+            paddingVertical: 6,
             justifyContent: 'space-between',
-            ...style
+            height: 40,
+            backgroundColor: 'white'
           }}
         >
           <Text
             style={{
-              color:selectedOption?.[value] ? theme.colors.text : '#848484',
-              ...theme.fonts.titleSmall,
+              color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold'
             }}
           >
-            {selectedOption?.[label] ?? selectedOption?.[value] ?? placeholder}
+            {selectedOption[0]?.label}
           </Text>
           {
             isVisible ?
-            <Feather name="chevron-up" color={'#848484'} size={18} />
-            :
-            <Feather name="chevron-down" color={'#848484'} size={18} />
+              <Feather name="chevron-up" color={'#848484'} size={18} />
+              :
+              <Feather name="chevron-down" color={'#848484'} size={18} />
           }
         </View>
       </TouchableOpacity>
-      
+
       <Portal>
         <Modal
           visible={isVisible}
@@ -62,47 +62,46 @@ const Dropdown = ({ options, onSelect, value, label, selectedOption, placeholder
             backgroundColor: 'transparent',
           }}
         >
-          <Animatable.View 
+          <Animatable.View
             animation="slideInUp"
             easing='ease-out'
             style={styles.modalContainer}
           >
             <TouchableWithoutFeedback onPress={() => setIsVisible(false)}>
-              <View style={{flex:1}}/>
+              <View style={{ flex: 1 }} />
             </TouchableWithoutFeedback>
             <View style={styles.content}>
               <View
                 style={{
-                  display:'flex',
-                  flexDirection:'row',
-                  justifyContent:'space-between',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  width:vw(100)-30,
-                  marginVertical:10
+                  width: vw(100) - 30,
+                  marginVertical: 10
                 }}
               >
                 <Text
                   style={{
-                    color: '#000',
-                    ...theme.fonts.titleMedium,
+                    color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16
                   }}
                 >
                   {title}
                 </Text>
                 <TouchableOpacity onPress={() => setIsVisible(false)} style={styles.closeButton}>
-                  <Feather name="x" color={'#000'} size={25}/>
+                  <Feather name="x" color={'#000'} size={25} />
                 </TouchableOpacity>
               </View>
               <FlatList
                 data={options}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleSelectOption(item)} style={styles.option}>
-                    <Text style={{color:'#000', fontSize: 15}}>{item[label] ?? item[value]}</Text>
-                    {selectedOption?.[value] === item?.[value] ? <Feather name="check" color={'green'} size={18} /> : null}
+                  <TouchableOpacity onPress={() => handleSelectOption([item])} style={{ ...styles.option, borderBottomColor: theme.colors.border }}>
+                    <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Medium' }}>{item.label}</Text>
+                    {selectedOption[0].value === item.value ? <Feather name="check" color={'green'} size={18} /> : null}
                   </TouchableOpacity>
                 )}
-                keyExtractor={(item) => item[value]}
+                keyExtractor={(item) => item.value}
               />
             </View>
           </Animatable.View>
@@ -115,6 +114,7 @@ const Dropdown = ({ options, onSelect, value, label, selectedOption, placeholder
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white'
   },
   dropdownButton: {
     padding: 10,
@@ -128,16 +128,15 @@ const styles = StyleSheet.create({
   content: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#eee',
+    backgroundColor: 'white',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     borderBottomWidth: 0,
-    maxHeight:vh(80),
+    maxHeight: vh(80),
   },
   option: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: 'gray',
     width: vw(100),
     alignItems: 'center',
     flexDirection: 'row',
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 15,
-    borderRadius:50,
+    borderRadius: 50,
   },
 });
 

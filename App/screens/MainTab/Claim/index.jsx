@@ -171,7 +171,6 @@ const Claim = ({ route }) => {
         let value = 0;
         const startedate = dayjs(nwlDetails?.policydetails?.[0]?.policystartedon)
         value = ((dayjs().diff(startedate, 'days')) / (dayjs().endOf('year').diff(dayjs().startOf('year'), 'day') + 1)) * 100
-        console.log("calculateTimeDurationofClaim", value, dayjs().endOf('year').diff(dayjs().startOf('year'), 'day') + 1, dayjs().diff(startedate, 'days') )
         return value;
     }
 
@@ -183,7 +182,6 @@ const Claim = ({ route }) => {
 
         const months = futureDate.diff(currentDate, 'month');
         const remainingDays = futureDate.diff(currentDate.add(months, 'month'), 'day');
-        console.log("dayjs(nwlDetails?.policydetails?.[0]?.policystartedon)", dayjs().diff(startedate, 'days'))
 
         return {
             months,

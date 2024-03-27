@@ -10,7 +10,10 @@ const initialValue = {
     hrdashboard:{},
     cpVersion: null,
     nwlDetails: {},
-    policyDetails: {}
+    policyDetails: {},
+    gmc: [],
+    gtl: [],
+    gpa: []
 }
 
 export const LoginDetails = createSlice({
@@ -30,10 +33,13 @@ export const LoginDetails = createSlice({
         setHrdashboard: (state, action) => { state.value.hrdashboard = action.payload },
         setNwlDetails: (state, action) => { state.value.nwlDetails = action.payload },
         setPolicyDetails: (state, action) => { state.value.policyDetails = action.payload },
+        setGMC: (state, action) => { state.value.gmc = action.payload },
+        setGTL: (state, action) => { state.value.gtl = action.payload },
+        setGPA: (state, action) => { state.value.gpa = action.payload },
     }, 
 });
 
 
-export const { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setClinicalDetails, setHrdashboard, setNwlDetails, setPolicyDetails } = LoginDetails.actions;
+export const { setLoginData, logOut, toggleDevEnv, toggleNoOtp, setCorporateDetails, setCpVersion, setClinicalDetails, setHrdashboard, setNwlDetails, setPolicyDetails, setGPA, setGMC, setGTL } = LoginDetails.actions;
 
 export default LoginDetails.reducer;
