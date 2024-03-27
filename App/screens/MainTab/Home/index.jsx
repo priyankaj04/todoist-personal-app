@@ -21,6 +21,8 @@ import assets from '../../../assets';
 import { getService, API_ROUTES, stringInterpolater, getTokenService } from '../../../server';
 import { ProgressChart } from "react-native-chart-kit";
 import jwtDecode from 'jwt-decode';
+import LinearGradient from 'react-native-linear-gradient';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const HomeScreen = () => {
   const theme = useTheme();
@@ -286,7 +288,7 @@ const HomeScreen = () => {
               <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                    <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito Bold', fontSize: 18 }}>Total Lives</Text>
+                  <Text style={{ color: theme.colors.data, marginLeft: 15, fontFamily: 'Nunito Bold', fontSize: 18 }}>Total Lives</Text>
                   {/*<TouchableOpacity>
                       <Icon
                         name="chevron-right"
@@ -297,13 +299,28 @@ const HomeScreen = () => {
                 </View>
                 <View style={{ display: 'flex', gap: 5, flexDirection: 'row', flex: 1 }}>
                   <View style={{ margin: 5 }}>
-                    <Image
+                    {/*<Image
                       source={assets.ImageBaseUrl('totallivespi')}
                       style={{
                         height: 100,
                         width: 100
                       }}
-                    />
+                    />*/}
+                    <LinearGradient
+                      colors={
+                        ['#1D3868', '#4E7DDD']
+                      }
+                      style={{
+                        height: 100,
+                        width: 100,
+                        borderRadius: 50,
+                        alignItems: 'center',
+                        display: 'flex', flex: 1, justifyContent: 'center'
+                      }}
+                      start={{ x: 0, y: 0 }}
+                    >
+                      <MaterialIcons name="family-restroom" color='white' size={44} />
+                    </LinearGradient>
                   </View>
                   <View style={{ margin: 10 }}>
                     <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 20 }}>{hrdashboard?.patientdetails?.total ?? 0}</Text>
@@ -332,7 +349,7 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                   </View>
                   <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
+                    <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
                     <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
                   </View>
                 </Animatable.View>
@@ -340,7 +357,7 @@ const HomeScreen = () => {
               {Object.keys(gpapolicy)?.length > 0 && <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
+                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GPA' })}>
                     <Icon
                       name="chevron-right"
@@ -357,7 +374,7 @@ const HomeScreen = () => {
               {Object.keys(gtlpolicy)?.length > 0 && <Animatable.View animation="fadeIn"
                 duration={400} style={{ ...styles.card, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
+                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GTL' })}>
                     <Icon
                       name="chevron-right"

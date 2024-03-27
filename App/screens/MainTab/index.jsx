@@ -20,6 +20,7 @@ import { useTheme } from 'react-native-paper';
 
 import Home from './Home';
 import Claim from './Claim';
+import Policies from './Policies';
 import Stories from './Stories';
 import Settings from './Settings';
 import CareManagement from './Caremanagement';
@@ -39,7 +40,7 @@ const MainTabScreen = ({route, navigation}) => {
           initialRouteName="TabHome"
           screenOptions={{
             tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
-            tabBarActiveTintColor: colors.alpha,
+            tabBarActiveTintColor: '#254E93',
             headerShown:false
           }}
         >
@@ -56,11 +57,11 @@ const MainTabScreen = ({route, navigation}) => {
           />
           <Tab.Screen
             name="TabPolicy"
-            component={Settings}
+            component={Policies}
             options={{
               tabBarLabel: 'Policy',
               tabBarIcon: ({ color }) => (
-                <Feather name="settings" color={color} size={22} />
+                <Feather name="shield" color={color} size={22} />
               ),
             }}
           // initialParams={{mainNavigation}}
@@ -71,7 +72,7 @@ const MainTabScreen = ({route, navigation}) => {
             options={{
               tabBarLabel: 'Claims',
               tabBarIcon: ({color}) => (
-                <Feather name="book" color={color} size={22} />
+                <Feather name="clipboard" color={color} size={22} />
               ),
             }}
             // initialParams={{mainNavigation}}
@@ -82,7 +83,7 @@ const MainTabScreen = ({route, navigation}) => {
             options={{
               tabBarLabel: 'Stories',
               tabBarIcon: ({color}) => (
-                <Feather name="folder" color={color} size={22} />
+                <Feather name="book-open" color={color} size={22} />
               ),
             }}
             // initialParams={{mainNavigation}}

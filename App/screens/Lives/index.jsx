@@ -77,7 +77,7 @@ const Lives = ({ route }) => {
         if (tab === 'employee') {
             const list = patientdetails?.filter((item) => item.relationship === 'self')
             return setEmployees(list.filter(employee => {
-                const fullname = employee.firstname.toLowerCase() + ' ' + employee.lastname.toLowerCase();
+                const fullname = employee.firstname?.toLowerCase() + ' ' + employee.lastname?.toLowerCase();
                 return fullname.includes(query) || // Search by firstname + lastname
                     employee.mobile.includes(query) || // Search by mobile number
                     employee.employeeid.toLowerCase().includes(query); // Search by employee id
@@ -139,10 +139,10 @@ const Lives = ({ route }) => {
                     alignItems: 'center',
                     gap: 5
                 }}>
-                    <TouchableOpacity style={{ flex: 1, padding: 5, marginLeft: 10, borderRadius: 5, backgroundColor: tab === 'employee' ? 'white' : '#eee' }} onPress={() => setTab('employee')}>
+                    <TouchableOpacity style={{ flex: 1, padding: 5, marginLeft: 10, borderRadius: 5, backgroundColor: tab === 'employee' ? 'white' : '#eee' }} onPress={() => { setTab('employee'); setSearch('') }}>
                         <Text style={{ textAlign: 'center', fontFamily: 'Nunito Bold', color: tab === 'employee' ? theme.colors.alpha : theme.colors.data }}>Employees</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flex: 1, padding: 5, marginRight: 10, borderRadius: 5, backgroundColor: tab === 'dependent' ? 'white' : '#eee' }} onPress={() => setTab('dependent')}>
+                    <TouchableOpacity style={{ flex: 1, padding: 5, marginRight: 10, borderRadius: 5, backgroundColor: tab === 'dependent' ? 'white' : '#eee' }} onPress={() => { setTab('dependent'); setSearch('')}}>
                         <Text style={{ textAlign: 'center', fontFamily: 'Nunito Bold', color: tab === 'dependent' ? theme.colors.alpha : theme.colors.data }}>Dependents</Text>
                     </TouchableOpacity>
 
