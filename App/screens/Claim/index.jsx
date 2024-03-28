@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-    View, Text, ScrollView, Image, TouchableOpacity
+    View, Text, ScrollView, Image, TouchableOpacity, StatusBar, StyleSheet
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
-import styles from '../Styles';
+import { loginActions, valuesActions, myDispatch, mySelector } from '../../redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-import assets from '../../../assets';
-import { formatString } from '../../../utils';
+import { formatString } from '../../utils';
 import { PieChart, ProgressChart } from "react-native-chart-kit";
 import dayjs from "dayjs";
 
@@ -19,10 +17,27 @@ const Claim = ({ route }) => {
     const dispatch = myDispatch();
     const navigation = useNavigation();
     const theme = useTheme();
+    const corporateid = mySelector(state => state.Login.value.loginData.corporateid);
     const nwlDetails = mySelector(state => state.Login.value.nwlDetails);
     const [claims, setClaims] = useState('ongoing');
+    ///const [nwlDetails, setNwlDetails] = useState({})
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
-        console.log("claim details", nwlDetails?.completedClaims?.totalClaimIssued)
+        // setLoading(true);
+        // getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: route.params.cpolid }))
+        //     .then((res) => {
+        //         if (res.status === 1) {
+        //             setNwlDetails(res);
+        //             setLoading(false);
+        //         } else {
+        //             dispatch(valuesActions.statusNot1(res?.msg));
+        //             setLoading(false);
+        //         }
+        //     }).catch((error) => {
+        //         setLoading(false);
+        //         dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
+        //     })
     }, [])
 
     const getOngoingClaims = () => {
@@ -189,35 +204,34 @@ const Claim = ({ route }) => {
         };
     }
 
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'black' }}>Please wait...</Text>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
 
     return (
         <View style={{ ...styles.container }}>
-            <View style={{ ...styles.header }}>
+            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+            <View style={styles.header}>
                 <Ionicons
-                    name="menu"
+                    name="arrow-back"
                     size={27}
                     color={theme.colors.data}
-                    onPress={() => navigation.openDrawer()}
+                    onPress={() => navigation.goBack()}
                 />
                 <Text
                     style={{
                         color: theme.colors.data,
                         ...theme.fonts.titleMedium,
-                        paddingLeft: 15,
+                        paddingLeft: 10,
                         fontFamily: 'Nunito Bold'
                     }}
-                >Claim Details
+                > {route.params.policytype} Claims Details
                 </Text>
-                <Ionicons
-                    style={{
-                        textAlign: 'right',
-                        flex: 1,
-                    }}
-                    name="notifications"
-                    size={25}
-                    color={theme.colors.data}
-                // onPress={() => navigation.openDrawer()}
-                />
             </View>
             <ScrollView style={{ margin: 10 }}>
                 <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1 }}>
@@ -337,66 +351,53 @@ const Claim = ({ route }) => {
                         </View>
                     </View>
                 </View>
-                <View style={{ ...styles.card, display: 'flex', flex: 1, marginTop: 10, }}>
-                    <View style={{ display: 'flex', padding: 5, flexDirection: 'row' }}>
-                        <TouchableOpacity onPress={() => setClaims('ongoing')} style={[(claims === 'ongoing' ? { ...styles.bottomBorder, borderBottomColor: theme.colors.alpha } : null), { flex: 1, alignItems: 'center', paddingVertical: 10 }]}>
-                            <Text style={{ color: claims === 'ongoing' ? theme.colors.alpha : theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 18 }}>Ongoing Claims</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setClaims('rejected')} style={[(claims !== 'ongoing' ? { ...styles.bottomBorder, borderBottomColor: theme.colors.alpha } : null), { flex: 1, alignItems: 'center', paddingVertical: 10 }]}>
-                            <Text style={{ color: claims !== 'ongoing' ? theme.colors.alpha : theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 18 }}>Rejected Claims</Text>
-                        </TouchableOpacity>
+                <View style={{ borderWidth: 1, borderColor: theme.colors.border, borderRadius: 5, display: 'flex', flex: 1, marginTop: 10, }}>
+                    <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.border, display: 'flex', padding: 15, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'center', paddingVertical: 10 }}>
+                            <Text style={{ color: theme.colors.blue600, fontFamily: "Nunito Bold", fontSize: 20 }}>Ongoing Claims</Text>
+                        </View>
                     </View>
-                    {claims === 'ongoing' ?
-                        <ScrollView horizontal={true} style={{ marginTop: 10 }}>
-                            <Table borderStyle={{ borderWidth: 2, borderColor: theme.colors.border }}>
-                                <Row
-                                    data={['Employee Name', 'Amount', 'Type', 'Diagnosis', 'Remarks']}
-                                    style={{ height: 70, backgroundColor: theme.colors.alpha }}
-                                    widthArr={[220, 180, 180, 200, 300]}
-                                    textStyle={{ fontFamily: 'Nunito ExtraBold', color: 'white', textAlign: 'center', fontSize: 16, padding: 5 }}
-                                />
-                                {getOngoingClaims()?.length &&
-                                    getOngoingClaims()?.map((rowData, index) => (<Row key={index}
-                                        data={[(<View style={{ marginLeft: 5 }}>
-                                            <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, fontSize: 16, marginBottom: 5 }}>{rowData[0][0]}</Text>
-                                            <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.text }}>{rowData[0][1] ? formatString(rowData[0][1]) : ""}</Text>
-                                            <Text style={{ fontFamily: 'Nunito Medium', color: 'gray' }}>{rowData[0][2] ? (rowData[0][2]).split('T')[0] : ""}</Text>
-                                        </View>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[2] ? formatString(rowData[2]) : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[3] ? JSON.parse(rowData[3])?.join(', ') : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[4] ? rowData[4] : "-"}</Text>)]}
-                                        style={{ height: 70 }}
-                                        widthArr={[220, 180, 180, 200, 300]}
-                                        textStyle={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}
-                                    />))}
-                            </Table>
-                        </ScrollView> :
-                        <ScrollView horizontal={true} style={{ marginTop: 10 }}>
-                            <Table borderStyle={{ borderWidth: 2, borderColor: theme.colors.border }}>
-                                <Row
-                                    data={['Employee Name', 'Amount', 'Type', 'Diagnosis', 'Remarks']}
-                                    style={{ height: 70, backgroundColor: theme.colors.alpha }}
-                                    widthArr={[220, 180, 180, 200, 300]}
-                                    textStyle={{ fontFamily: 'Nunito ExtraBold', color: 'white', textAlign: 'center', fontSize: 16, padding: 10 }}
-                                />
-                                {getRejectedClaims()?.length &&
-                                    getRejectedClaims()?.map((rowData, index) => (<Row key={index}
-                                        data={[(<View style={{ marginLeft: 5 }}>
-                                            <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, fontSize: 16, marginBottom: 5 }}>{rowData[0][0]}</Text>
-                                            <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.text }}>{rowData[0][1] ? formatString(rowData[0][1]) : ""}</Text>
-                                            <Text style={{ fontFamily: 'Nunito Medium', color: 'gray' }}>{rowData[0][2] ? (rowData[0][2]).split('T')[0] : ""}</Text>
-                                        </View>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[2] ? formatString(rowData[2]) : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[3] && JSON.parse(rowData[3])?.length ? JSON.parse(rowData[3])?.join(', ') : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[4] ? rowData[4] : "-"}</Text>)]}
-                                        style={{ height: 70 }}
-                                        widthArr={[220, 180, 180, 200, 300]}
-                                        textStyle={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}
-                                    />))}
-                            </Table>
-                        </ScrollView>}
+                    <View style={{ padding: 10 }}>
+                        {getOngoingClaims()?.length &&
+                            getOngoingClaims()?.map((rowData, index) => (
+                                <View key={index} style={{ display: 'flex', flexDirection: 'row', padding: 15, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, marginTop: 10, justifyContent: 'space-between' }}>
+                                    <View style={{ marginLeft: 5 }}>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, fontSize: 16, marginBottom: 5 }}>{rowData[0][0]}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.text }}>{rowData[0][1] ? formatString(rowData[0][1]) : ""}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: 'gray' }}>{rowData[0][2] ? (rowData[0][2]).split('T')[0] : ""}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, textAlign: 'right', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.subtitle, textAlign: 'right', fontSize: 14 }}>{rowData[2] ? formatString(rowData[2]) : "-"}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'right', fontSize: 16 }}>{rowData[3] && JSON.parse(rowData[3])?.length ? JSON.parse(rowData[3])?.join(', ') : "-"}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                    </View>
+                </View>
+                <View style={{ borderWidth: 1, borderColor: theme.colors.border, borderRadius: 5, display: 'flex', flex: 1, marginTop: 10, }}>
+                    <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.border, display: 'flex', padding: 15, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'center', paddingVertical: 10 }}>
+                            <Text style={{ color: theme.colors.blue600, fontFamily: "Nunito Bold", fontSize: 20 }}>Rejected Claims</Text>
+                        </View>
+                    </View>
+                    <View style={{ padding: 10 }}>
+                        {getRejectedClaims()?.length &&
+                            getRejectedClaims()?.map((rowData, index) => (
+                                <View key={index} style={{ display: 'flex', flexDirection: 'row', padding: 15, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, marginTop: 10, justifyContent: 'space-between' }}>
+                                    <View style={{ marginLeft: 5 }}>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, fontSize: 16, marginBottom: 5 }}>{rowData[0][0]}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.text }}>{rowData[0][1] ? formatString(rowData[0][1]) : ""}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: 'gray' }}>{rowData[0][2] ? (rowData[0][2]).split('T')[0] : ""}</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, textAlign: 'right', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.subtitle, textAlign: 'right', fontSize: 14 }}>{rowData[2] ? formatString(rowData[2]) : "-"}</Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'right', fontSize: 16 }}>{rowData[3] && JSON.parse(rowData[3])?.length ? JSON.parse(rowData[3])?.join(', ') : "-"}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                    </View>
                 </View>
                 <View style={{ ...styles.card, display: 'flex', flex: 1, marginTop: 10, }}>
                     <View style={{ ...styles.bottomBorder, padding: 10, alignItems: 'center' }}>
@@ -492,5 +493,40 @@ const Claim = ({ route }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: 10,
+        paddingTop: StatusBar.currentHeight
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 18,
+        marginTop: 3,
+        fontWeight: '600',
+    },
+    card: {
+        minHeight: 100,
+        padding: 10,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#f2f5f9',
+    },
+    bottomBorder: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#f2f5f9',
+        borderStyle: 'solid',
+    },
+    topBorder: {
+        borderTopWidth: 1,
+        borderTopColor: '#f2f5f9',
+        borderStyle: 'solid',
+    }
+});
 
 export default Claim;

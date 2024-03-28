@@ -42,6 +42,7 @@ import {
 import { loginActions, valuesActions, myDispatch, mySelector } from './redux';
 import { notificationListener, requestUserPermission } from './utils'
 import Lives from './screens/Lives';
+import Claim from './screens/Claim'
 
 const App = () => {
   const [loading, setLoading] = React.useState(true);
@@ -276,7 +277,7 @@ const App = () => {
               <Stack.Screen name="PatientDetails" component={PatientIndex} />
               <Stack.Screen name="Appointments" component={Appointments} />
               <Stack.Screen name="Lives" component={Lives} />
-              
+              <Stack.Screen name="Claims" component={Claim} />
             </Stack.Navigator>
           ) : (
             <RootStackScreen />

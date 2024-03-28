@@ -252,10 +252,12 @@ const API_ROUTES = {
   GET_ALL_CORPORATES: '/corporate/all/1',
   GET_CORPORATE_CLINICAL_DETAILS: '/clinical/corporate/{corporateid}',
   GET_CORPORATE_DETAILS: '/corporate/{corporateid}',
-  GET_HRDASHBOARD_HOME: '/corporate/hrdashboard/home/{corporateid}',
   GET_CORPORATE_POLICY: '/policy/{cpolid}?type=patients',
   GET_NWL_DETAILS: '/corporate/nwl/{corporateid}/{policyid}',
-  GET_ALL_PATIENTS_BY_INSURANCE: '/hrdashboard/insurance/{cpolid}'
+  GET_ALL_PATIENTS_BY_INSURANCE: '/hrdashboard/insurance/{cpolid}',
+  GET_HEALTH_INSIGHTS: '/hrdashboard/healthinsights/{corporateid}',
+  GET_HRDASHBOARD_HOME: '/hrdashboard/home/{corporateid}',
+  GET_CORPORATEUSERS_BY_CORPORATEID: '/corporate/hrdashboard/searchusers'
 }
 
 export {

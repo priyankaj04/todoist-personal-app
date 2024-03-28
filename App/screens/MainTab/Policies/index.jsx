@@ -24,23 +24,23 @@ import { ProgressChart } from "react-native-chart-kit";
 import jwtDecode from 'jwt-decode';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Dropdown from '../../../components/Dropdown';
+import dayjs from 'dayjs';
 
 const Policies = ({ route }) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const dispatch = myDispatch();
+  const corporateid = mySelector(state => state.Login.value.loginData.corporateid)
   const corporatedetails = mySelector(state => state.Login.value.corporateDetails);
   const baseUrl = mySelector(state => state.Login.value.baseUrl);
-  const corporateid = mySelector(state => state.Login.value.loginData.corporateid);
   const [loading, setLoading] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState([{ label: '', value: '' }]);
   const [policyDetails, setPolicyDetails] = useState({});
-  const [counts, setCounts] = useState({});
 
   useEffect(() => {
     setLoading(true);
-    console.log("route.params", route)
     if (Object.keys(corporatedetails)?.length > 0) {
       let gmcPolicies = route?.params?.policytype ? [route?.params?.policytype] : corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'));
       setSelectedPolicy(modifyPolicyNames(route?.params?.policytype ? [route?.params?.policytype] : corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'))));
@@ -58,6 +58,21 @@ const Policies = ({ route }) => {
             setLoading(false);
             dispatch(valuesActions.error({ error: `Error in GET ALL PATIENTS BY INSURANCE ${error}` }));
           })
+        if (gmcPolicies[0].includes('GMC')) {
+          getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
+            .then((res) => {
+              if (res.status === 1) {
+                dispatch(loginActions.setNwlDetails(res));
+                setLoading(false);
+              } else {
+                dispatch(valuesActions.statusNot1(res?.msg));
+                setLoading(false);
+              }
+            }).catch((error) => {
+              setLoading(false);
+              dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
+            })
+        }
       }
     }
   }, [route?.params?.policytype])
@@ -78,6 +93,22 @@ const Policies = ({ route }) => {
         setLoading(false);
         dispatch(valuesActions.error({ error: `Error in GET ALL PATIENTS BY INSURANCE ${error}` }));
       })
+
+    if (value[0].value.includes('GMC')) {
+      getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: value[0].value }))
+        .then((res) => {
+          if (res.status === 1) {
+            dispatch(loginActions.setNwlDetails(res));
+            setLoading(false);
+          } else {
+            dispatch(valuesActions.statusNot1(res?.msg));
+            setLoading(false);
+          }
+        }).catch((error) => {
+          setLoading(false);
+          dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
+        })
+    }
   }
 
   function modifyPolicyNames(policies) {
@@ -97,6 +128,16 @@ const Policies = ({ route }) => {
     return modifiedPolicies;
   }
 
+  function NextEndorsementDate() {
+    const todaydate = dayjs().format('DD');
+    if (todaydate > 4) {
+      return '05-' + dayjs().add(1, 'month').format('MM') + '-2024';
+    } else {
+      return '05-' + dayjs().format('MM') + '-2024';
+    }
+  }
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -114,7 +155,7 @@ const Policies = ({ route }) => {
             fontFamily: 'Nunito Bold'
           }}
         >Policies</Text>
-        <Ionicons
+        {/*<Ionicons
           style={{
             textAlign: 'right',
             flex: 1,
@@ -123,7 +164,7 @@ const Policies = ({ route }) => {
           size={25}
           color={theme.colors.data}
         // onPress={() => navigation.openDrawer()}
-        />
+        />*/}
       </View>
       <View style={{ padding: 10, paddingBottom: 0, backgroundColor: 'white', zIndex: 100 }}>
         <Dropdown options={modifyPolicyNames(corporatedetails?.policytype)} onSelect={handlePolicySelect} selectedOption={selectedPolicy} title={'Policies List'} />
@@ -191,6 +232,38 @@ const Policies = ({ route }) => {
                     </View>
                   </View>
                 </View>
+                {selectedPolicy && selectedPolicy[0].value.includes('GMC') && <TouchableOpacity onPress={() => navigation.navigate('Claims', { cpolid: selectedPolicy[0].value })} style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, alignItems: 'center' }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                      <LinearGradient
+                        colors={
+                          ['#1d4ed8', '#1d4ed8']
+                        }
+                        style={{
+                          height: 50,
+                          width: 50,
+                          borderRadius: 50,
+                          alignItems: 'center',
+                          display: 'flex',
+                          justifyContent: 'center'
+                        }}
+                        start={{ x: 0, y: 0 }}
+                      >
+                        <Ionicons name="clipboard" color='white' size={24} />
+                      </LinearGradient>
+                      <View>
+                        <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Claim Details</Text>
+                      </View>
+                    </View>
+                    <View>
+                      <Icon
+                        name="chevron-right"
+                        color={theme.colors.data}
+                        size={24}
+                      />
+                    </View>
+                  </View>
+                </TouchableOpacity>}
                 <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
                   <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
@@ -318,7 +391,7 @@ const Policies = ({ route }) => {
                       </View>
                       <View style={{ padding: 10 }}>
                         <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium' }}>Next endorsement on</Text>
-                        <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Bold' }}>{ }</Text>
+                        <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Bold' }}>{NextEndorsementDate()}</Text>
                       </View>
                       <View style={{ padding: 10 }}>
                         <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium' }}>Average premium per life</Text>
@@ -341,8 +414,8 @@ const Policies = ({ route }) => {
                     </View>
                   </View>
                   <View>
-                    {policyDetails?.addendums && Object.keys(policyDetails?.addendums?.claimscdops)?.length > 0 ? Object.keys(policyDetails?.addendums?.claimscdops).map((item,index) =>
-                      <View key={index} style={{ padding: 15, borderBottomWidth: 1, borderColor: theme.colors.border, display:'flex', flex: 1, flexDirection: 'row', justifyContent:'space-between', alignItems:'center' }}>
+                    {policyDetails?.addendums && Object.keys(policyDetails?.addendums?.claimscdops)?.length > 0 ? Object.keys(policyDetails?.addendums?.claimscdops).map((item, index) =>
+                      <View key={index} style={{ padding: 15, borderBottomWidth: 1, borderColor: theme.colors.border, display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <View>
                           <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>{item[0].toUpperCase() + item.substring(1)}</Text>
                           <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 16 }}>{policyDetails?.addendums?.claimscdops[item].endorsement_date}</Text>

@@ -39,10 +39,9 @@ const HomeScreen = () => {
   const policyDetails = mySelector(state => state.Login.value.policyDetails);
   const clinicalDetails = mySelector(state => state.Login.value.clinicalDetails);
   const [arrayOfActivities, setArrayOfActivities] = useState([]);
-  const [gtlpolicy, setGtlpolicy] = useState({});
-  const [gpapolicy, setGpapolicy] = useState({});
   const [loading, setLoading] = useState(true);
   const [allpolicies, setAllpolicies] = useState({});
+  const [healthinsights, setHealthinsights] = useState({});
 
   useEffect(() => {
     // dispatch(loginActions.logOut());
@@ -56,12 +55,6 @@ const HomeScreen = () => {
       console.error('Error fetching data:', error);
     }
   }, [corporateid]);
-
-  useEffect(() => {
-
-    console.log("hrdashboard", Object.keys(hrdashboard))
-    console.log("employeeactivitydetails", hrdashboard.employeeactivitydetails)
-  }, [hrdashboard])
 
   useEffect(() => {
     // dispatch(loginActions.logOut());
@@ -84,6 +77,17 @@ const HomeScreen = () => {
         .then((res) => {
           if (res.status === 1) {
             dispatch(loginActions.setClinicalDetails(res));
+          } else {
+            dispatch(valuesActions.statusNot1(res?.msg));
+          }
+        }).catch((error) => {
+          dispatch(valuesActions.error({ error: `Error in Get Corporate Clinical Details ${error}` }));
+        })
+
+      getService(baseUrl, stringInterpolater(API_ROUTES.GET_HEALTH_INSIGHTS, { corporateid: corporateid }))
+        .then((res) => {
+          if (res.status === 1) {
+            setHealthinsights(res);
           } else {
             dispatch(valuesActions.statusNot1(res?.msg));
           }
@@ -149,16 +153,6 @@ const HomeScreen = () => {
             dispatch(valuesActions.error({ error: `Error in Get Policy Details ${error}` }));
           })
       })
-      // getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
-      //     .then((res) => {
-      //         if (res.status === 1) {
-      //             dispatch(loginActions.setNwlDetails(res))
-      //         } else {
-      //             dispatch(valuesActions.statusNot1(res?.msg));
-      //         }
-      //     }).catch((error) => {
-      //         dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
-      //     })
     }
   }
 
@@ -241,7 +235,7 @@ const HomeScreen = () => {
           }}
         >Hello Team{" " + corporateDetails?.brandname ?? ""}
         </Text>
-        <Ionicons
+        {/*<Ionicons
           style={{
             textAlign: 'right',
             flex: 1,
@@ -250,7 +244,7 @@ const HomeScreen = () => {
           size={25}
           color={theme.colors.data}
         // onPress={() => navigation.openDrawer()}
-        />
+        />*/}
       </View>
       {
         Object.keys(corporateDetails).length > 0 &&
@@ -434,11 +428,11 @@ const HomeScreen = () => {
                     </View>
                   </View>
                   <View style={{ flex: 1, paddingTop: 10 }}>
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>Count</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>In %</Text>
                     <View style={{ marginTop: 10, display: 'flex', justifyContent: 'space-between', flex: 1, paddingVertical: 15 }}>
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>36</Text>
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>64</Text>
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>52</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>{Math.round(healthinsights.smoke.percent)}%</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>{Math.round(healthinsights.alcohol.percent)}%</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>{Math.round(healthinsights.obese.percent)}%</Text>
                     </View>
                   </View>
                 </View>
@@ -449,7 +443,7 @@ const HomeScreen = () => {
                     <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Mental Health</Text>
                   </View>
                   <View >
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>260</Text>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>{healthinsights.stress.count}</Text>
                     <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>Members Under Stress</Text>
                   </View>
                 </View>
@@ -470,29 +464,29 @@ const HomeScreen = () => {
                   <View style={{ padding: 10, borderRightWidth: 1, borderRightColor: theme.colors.border }}>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
                       <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Claim Raised</Text>
-                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>32</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>{hrdashboard.claimstatus.claimTotalCount.claimRaised}</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
                       <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Claims Paid</Text>
-                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>24</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>{hrdashboard.claimstatus.paidClaim.paid}</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
                       <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Ongoing Claims </Text>
-                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>4</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>{hrdashboard.claimstatus.ongoingClaim.ongoing}</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
                       <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Claims Rejected</Text>
-                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>10</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>{hrdashboard.claimstatus.rejectClaim.rejected}</Text>
                     </View>
                   </View>
-                  <View style={{ padding: 10, display:'flex', flex: 1 }}>
+                  <View style={{ padding: 10, display: 'flex', flex: 1 }}>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
                       <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data, flex: 2 }}>Prorated Claims Ratio</Text>
-                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>105%</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>{Math.round(hrdashboard.getProratedRatioData)}%</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data, flex: 2 }}>Average Claim Settlement</Text>
-                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>10</Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data, flex: 2 }}>Average Claim Settlement</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>{hrdashboard.getAvgTATData}</Text>
                     </View>
                   </View>
                 </View>

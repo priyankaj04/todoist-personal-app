@@ -13,13 +13,10 @@ import { vh, vw } from 'react-native-css-vh-vw';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from 'react-native-paper';
-
 import Home from './Home';
-import Claim from './Claim';
+import Claim from '../Claim';
 import Policies from './Policies';
 import Stories from './Stories';
 import Settings from './Settings';
@@ -92,9 +89,9 @@ const MainTabScreen = ({ route, navigation }) => {
             name="TabSettings"
             component={Settings}
             options={{
-              tabBarLabel: 'Settings',
+              tabBarLabel: 'Users',
               tabBarIcon: ({ color }) => (
-                <Feather name="settings" color={color} size={22} />
+                <Ionicons name="person-outline" color={color} size={22} />
               ),
             }}
           // initialParams={{mainNavigation}}
