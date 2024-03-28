@@ -1,4 +1,4 @@
-import { 
+import {
   View,
   Platform,
   StatusBar,
@@ -6,9 +6,9 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-native-paper';
-import {vh, vw} from'react-native-css-vh-vw';
+import { vh, vw } from 'react-native-css-vh-vw';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,20 +28,20 @@ import CareManagement from './Caremanagement';
 const Tab = createBottomTabNavigator();
 
 
-const MainTabScreen = ({route, navigation}) => {
+const MainTabScreen = ({ route, navigation }) => {
 
   const { colors } = useTheme();
 
-  return(
+  return (
     <Provider>
-      <View style={{ paddingTop:Platform.OS === 'ios' ? vh(6) : StatusBar.currentHeight, flex:1, backgroundColor:colors.background}}>
-        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content"/>
+      <View style={{ paddingTop: Platform.OS === 'ios' ? vh(6) : StatusBar.currentHeight, flex: 1, backgroundColor: colors.background }}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <Tab.Navigator
           initialRouteName="TabHome"
           screenOptions={{
-            tabBarLabelStyle: {paddingBottom:5, fontWeight:'500'},
+            tabBarLabelStyle: { paddingBottom: 5, fontWeight: '500' },
             tabBarActiveTintColor: '#254E93',
-            headerShown:false
+            headerShown: false
           }}
         >
           <Tab.Screen
@@ -49,11 +49,11 @@ const MainTabScreen = ({route, navigation}) => {
             component={Home}
             options={{
               tabBarLabel: 'Home',
-              tabBarIcon: ({color}) => (
+              tabBarIcon: ({ color }) => (
                 <Feather name="home" color={color} size={22} />
               ),
             }}
-            // initialParams={{mainNavigation: navigation}}
+          // initialParams={{mainNavigation: navigation}}
           />
           <Tab.Screen
             name="TabPolicy"
@@ -66,7 +66,7 @@ const MainTabScreen = ({route, navigation}) => {
             }}
           // initialParams={{mainNavigation}}
           />
-          <Tab.Screen
+          {/*<Tab.Screen
             name="TabClaim"
             component={Claim}
             options={{
@@ -87,23 +87,23 @@ const MainTabScreen = ({route, navigation}) => {
               ),
             }}
             // initialParams={{mainNavigation}}
-          />
+          />*/}
           <Tab.Screen
             name="TabSettings"
             component={Settings}
             options={{
               tabBarLabel: 'Settings',
-              tabBarIcon: ({color}) => (
+              tabBarIcon: ({ color }) => (
                 <Feather name="settings" color={color} size={22} />
               ),
             }}
-            // initialParams={{mainNavigation}}
+          // initialParams={{mainNavigation}}
           />
         </Tab.Navigator>
       </View>
     </Provider>
   )
-  
+
 };
 
 export default MainTabScreen;

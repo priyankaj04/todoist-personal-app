@@ -30,29 +30,34 @@ const Lives = ({ route }) => {
     const [tab, setTab] = useState('employee');
     const [employees, setEmployees] = useState([])
     const [dependents, setDependents] = useState([])
+    const patients = mySelector(state => state.Login.value.policyDetails);
 
     useEffect(() => {
         setLoading(true);
-        if (Object.keys(corporatedetials)?.length > 0) {
-            let gmcPolicies = corporatedetials?.policytype?.filter(policy => policy?.startsWith(route.params.policytype));
-            if (gmcPolicies) {
-                getService(baseUrl, stringInterpolater(API_ROUTES.GET_ALL_PATIENTS_BY_INSURANCE, { cpolid: gmcPolicies[0] }))
-                    .then((res) => {
-                        if (res.status === 1) {
-                            setPatientDetails(res.data.patients)
-                            setEmployees(res.data.patients?.filter((item) => item.relationship === 'self'))
-                            setDependents(res.data.patients?.filter((item) => item.relationship !== 'self'))
-                        } else {
-                            dispatch(valuesActions.statusNot1(res?.msg));
-                        }
-                        setLoading(false);
-                    }).catch((error) => {
-                        setLoading(false);
-                        dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
-                    })
-            }
-        }
-    }, [])
+        setPatientDetails(patients)
+        setEmployees(patients?.filter((item) => item.relationship === 'self'))
+        setDependents(patients?.filter((item) => item.relationship !== 'self'))
+        setLoading(false);
+        // if (Object.keys(corporatedetials)?.length > 0) {
+        //     let gmcPolicies = corporatedetials?.policytype?.filter(policy => policy?.startsWith(route.params.policytype));
+        //     if (gmcPolicies) {
+        //         getService(baseUrl, stringInterpolater(API_ROUTES.GET_ALL_PATIENTS_BY_INSURANCE, { cpolid: gmcPolicies[0] }))
+        //             .then((res) => {
+        //                 if (res.status === 1) {
+        //                     setPatientDetails(res.data.patients)
+        //                     setEmployees(res.data.patients?.filter((item) => item.relationship === 'self'))
+        //                     setDependents(res.data.patients?.filter((item) => item.relationship !== 'self'))
+        //                 } else {
+        //                     dispatch(valuesActions.statusNot1(res?.msg));
+        //                 }
+        //                 setLoading(false);
+        //             }).catch((error) => {
+        //                 setLoading(false);
+        //                 dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
+        //             })
+        //     }
+        // }
+    }, [patients])
 
     const handleViewTPA = async (url) => {
         await Linking.openURL(url)

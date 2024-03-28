@@ -40,15 +40,16 @@ const Policies = ({ route }) => {
 
   useEffect(() => {
     setLoading(true);
+    console.log("route.params", route)
     if (Object.keys(corporatedetails)?.length > 0) {
-      let gmcPolicies = corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'));
-      setSelectedPolicy(modifyPolicyNames(corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'))));
+      let gmcPolicies = route?.params?.policytype ? [route?.params?.policytype] : corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'));
+      setSelectedPolicy(modifyPolicyNames(route?.params?.policytype ? [route?.params?.policytype] : corporatedetails?.policytype?.filter(policy => policy?.startsWith('GMC'))));
       if (gmcPolicies) {
         getService(baseUrl, stringInterpolater(API_ROUTES.GET_ALL_PATIENTS_BY_INSURANCE, { cpolid: gmcPolicies[0] }))
           .then((res) => {
-            console.log("res.data", Object.keys(res?.data))
             if (res.status === 1) {
               setPolicyDetails({ ...res?.data });
+              dispatch(loginActions.setPolicyDetails(res?.data.patients))
             } else {
               dispatch(valuesActions.statusNot1(res?.msg));
             }
@@ -59,11 +60,7 @@ const Policies = ({ route }) => {
           })
       }
     }
-  }, [])
-
-  useEffect(() => {
-    console.log("endorsementdata", policyDetails.addendums)
-  }, [policyDetails])
+  }, [route?.params?.policytype])
 
   const handlePolicySelect = (value) => {
     setLoading(true);
@@ -72,6 +69,7 @@ const Policies = ({ route }) => {
       .then((res) => {
         if (res.status === 1) {
           setPolicyDetails({ ...res?.data });
+          dispatch(loginActions.setPolicyDetails(res?.data.patients))
         } else {
           dispatch(valuesActions.statusNot1(res?.msg));
         }
@@ -140,7 +138,7 @@ const Policies = ({ route }) => {
             policyDetails && Object.keys(policyDetails).length > 0 ?
               <View style={{ marginTop: 60 }}>
                 <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1 }}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: 'GMC' })} style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1 }}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Lives', { policytype: selectedPolicy[0].label })} style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1 }}>
                     <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Active Lives</Text>
                     <View>
                       <Icon
@@ -343,8 +341,8 @@ const Policies = ({ route }) => {
                     </View>
                   </View>
                   <View>
-                    {policyDetails?.addendums && Object.keys(policyDetails?.addendums?.claimscdops)?.length > 0 ? Object.keys(policyDetails?.addendums?.claimscdops).map((item) =>
-                      <View style={{ padding: 15, borderBottomWidth: 1, borderColor: theme.colors.border, display:'flex', flex: 1, flexDirection: 'row', justifyContent:'space-between', alignItems:'center' }}>
+                    {policyDetails?.addendums && Object.keys(policyDetails?.addendums?.claimscdops)?.length > 0 ? Object.keys(policyDetails?.addendums?.claimscdops).map((item,index) =>
+                      <View key={index} style={{ padding: 15, borderBottomWidth: 1, borderColor: theme.colors.border, display:'flex', flex: 1, flexDirection: 'row', justifyContent:'space-between', alignItems:'center' }}>
                         <View>
                           <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>{item[0].toUpperCase() + item.substring(1)}</Text>
                           <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium', fontSize: 16 }}>{policyDetails?.addendums?.claimscdops[item].endorsement_date}</Text>

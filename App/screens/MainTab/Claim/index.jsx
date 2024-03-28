@@ -191,7 +191,7 @@ const Claim = ({ route }) => {
 
 
     return (
-        <ScrollView style={{ ...styles.container }}>
+        <View style={{ ...styles.container }}>
             <View style={{ ...styles.header }}>
                 <Ionicons
                     name="menu"
@@ -206,7 +206,7 @@ const Claim = ({ route }) => {
                         paddingLeft: 15,
                         fontFamily: 'Nunito Bold'
                     }}
-                >Policy Details
+                >Claim Details
                 </Text>
                 <Ionicons
                     style={{
@@ -219,60 +219,44 @@ const Claim = ({ route }) => {
                 // onPress={() => navigation.openDrawer()}
                 />
             </View>
-            <View style={{ margin: 10 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
-                    <View style={{ ...styles.card, backgroundColor: theme.colors.alpha, gap: 5, flex: 1, height: 170 }}>
-                        <View style={{ ...styles.bottomBorder, padding: 5, paddingBottom: 10 }}>
-                            <View style={{ marginBottom: 5, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <MaterialCommunityIcons name='shield-check' color='white' size={20} />
-                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito ExtraBold' }}>Approved Claims</Text>
+            <ScrollView style={{ margin: 10 }}>
+                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1 }}>
+                    <View style={{ padding: 10, display: 'flex', flex: 1, gap: 10, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
+                            <View
+                                style={{
+                                    height: 100,
+                                    width: 100,
+                                    borderRadius: 50,
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#1d4ed8'
+                                }}
+                                start={{ x: 0, y: 0 }}
+                            >
+                                <MaterialCommunityIcons name="shield-star" color='white' size={56} />
                             </View>
-                            <Text style={{ color: 'white', fontSize: 14, fontFamily: 'Nunito Bold' }}>{nwlDetails?.completedClaims?.completedClaims?.length ?? 0}</Text>
                         </View>
-                        <View style={{ padding: 5, marginTop: 5 }}>
-                            <Text style={{ color: 'white', fontSize: 12, fontFamily: 'Nunito Regular' }}>Total Amount</Text>
-                            <Text style={{ color: 'white', fontSize: 20, fontFamily: 'Nunito Bold' }}>₹{Number(nwlDetails?.completedClaims?.totalClaimIssued ?? 0).toLocaleString('en-IN')}</Text>
+                        <View style={{ flex: 1, justifyContent: 'space-around', display: 'flex' }}>
+                            <View style={{ display: 'flex', alignItems: 'center', flex: 1, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, padding: 8, width: 170, gap: 8 }}>
+                                <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium' }}>Approved Claims - {nwlDetails?.completedClaims?.completedClaims?.length ?? 0}</Text>
+                                <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>₹{Number(nwlDetails?.completedClaims?.totalClaimIssued ?? 0).toLocaleString('en-IN')}</Text>
+                            </View>
+                            <View style={{ display: 'flex', alignItems: 'center', marginTop: 10, flex: 1, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, padding: 8, width: 170, gap: 8 }}>
+                                <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium' }}>Ongoing Claims - {nwlDetails?.ongoingClaims?.ongoingClaims?.length ?? 0}</Text>
+                                <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>₹{Number(nwlDetails?.ongoingClaims?.totalClaimOngong ?? 0).toLocaleString('en-IN')}</Text>
+                            </View>
                         </View>
                     </View>
-                    <View style={{ ...styles.card, backgroundColor: theme.colors.alpha, gap: 5, flex: 1, height: 170 }}>
-                        <View style={{ ...styles.bottomBorder, padding: 5, paddingBottom: 10 }}>
-                            <View style={{ marginBottom: 5, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <MaterialCommunityIcons name='shield-refresh' color='white' size={20} />
-                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito ExtraBold' }}>Ongoing Claims</Text>
-                            </View>
-                            <Text style={{ color: 'white', fontSize: 14, fontFamily: 'Nunito Bold' }}>{nwlDetails?.ongoingClaims?.ongoingClaims?.length ?? 0}</Text>
+                    <View style={{ padding: 10, paddingTop: 0, display: 'flex', flex: 1, gap: 10, flexDirection: 'row' }}>
+                        <View style={{ display: 'flex', alignItems: 'center', flex: 1, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, padding: 8, width: 170, gap: 8, justifyContent: 'center' }}>
+                            <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium' }}>Rejected Claims - {nwlDetails?.rejectedClaims?.rejectedClaims?.length ?? 0}</Text>
+                            <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>₹{Number(nwlDetails?.rejectedClaims?.totalClaimrejected ?? 0).toLocaleString('en-IN')}</Text>
                         </View>
-                        <View style={{ padding: 5, marginTop: 5 }}>
-                            <Text style={{ color: 'white', fontSize: 12, fontFamily: 'Nunito Regular' }}>Total Amount</Text>
-                            <Text style={{ color: 'white', fontSize: 20, fontFamily: 'Nunito Bold' }}>₹{Number(nwlDetails?.ongoingClaims?.totalClaimOngong ?? 0).toLocaleString('en-IN')}</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                    <View style={{ ...styles.card, backgroundColor: theme.colors.alpha, gap: 5, flex: 1, height: 170 }}>
-                        <View style={{ ...styles.bottomBorder, padding: 5, paddingBottom: 10 }}>
-                            <View style={{ marginBottom: 5, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <MaterialCommunityIcons name='shield-remove' color='white' size={20} />
-                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito ExtraBold' }}>Rejected Claims</Text>
-                            </View>
-                            <Text style={{ color: 'white', fontSize: 14, fontFamily: 'Nunito Bold' }}>{nwlDetails?.rejectedClaims?.rejectedClaims?.length ?? 0}</Text>
-                        </View>
-                        <View style={{ padding: 5, marginTop: 5 }}>
-                            <Text style={{ color: 'white', fontSize: 12, fontFamily: 'Nunito Regular' }}>Total Amount</Text>
-                            <Text style={{ color: 'white', fontSize: 20, fontFamily: 'Nunito Bold' }}>₹{Number(nwlDetails?.rejectedClaims?.totalClaimrejected ?? 0).toLocaleString('en-IN')}</Text>
-                        </View>
-                    </View>
-                    <View style={{ ...styles.card, backgroundColor: theme.colors.alpha, gap: 5, flex: 1, height: 170 }}>
-                        <View style={{ ...styles.bottomBorder, padding: 5, paddingBottom: 10 }}>
-                            <View style={{ marginBottom: 5, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
-                                <MaterialCommunityIcons name='shield-star' color='white' size={20} />
-                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito ExtraBold' }}>Prorated Claim Utilization</Text>
-                            </View>
-                            <Text style={{ color: 'white', fontSize: 14, fontFamily: 'Nunito Bold' }}>{Math.round(nwlDetails?.proRatedData?.proRatedClaimUtilization ?? 0)}%</Text>
-                        </View>
-                        <View style={{ padding: 5, marginTop: 5 }}>
-                            <Text style={{ color: 'white', fontSize: 12, fontFamily: 'Nunito Regular' }}>Total Amount</Text>
-                            <Text style={{ color: 'white', fontSize: 20, fontFamily: 'Nunito Bold' }}>₹{Number(nwlDetails?.proRatedData?.proRatedAmount ?? 0).toLocaleString('en-IN')}</Text>
+                        <View style={{ display: 'flex', alignItems: 'center', flex: 1, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, padding: 8, width: 170, gap: 8 }}>
+                            <Text style={{ color: theme.colors.subtitle, fontFamily: 'Nunito Medium' }}>Prorated Claim Utilization - {Math.round(nwlDetails?.proRatedData?.proRatedClaimUtilization ?? 0)}%</Text>
+                            <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18 }}>₹{Number(nwlDetails?.proRatedData?.proRatedAmount ?? 0).toLocaleString('en-IN')}</Text>
                         </View>
                     </View>
                 </View>
@@ -311,8 +295,8 @@ const Claim = ({ route }) => {
                             <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'center' }}>₹{Number((nwlDetails?.completedClaims?.totalClaimIssued + nwlDetails?.ongoingClaims?.totalClaimOngong) || 0).toLocaleString('en-IN')}</Text>
                         </View>
                     </View>
-                    
-                    <View style={{alignItems: 'center' }}>
+
+                    <View style={{ alignItems: 'center' }}>
                         <View style={{ ...styles.bottomBorder, padding: 5, borderBottomColor: theme.colors.alpha }}>
                             <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20 }}>Prorated Claim Utilization</Text>
                         </View>
@@ -322,7 +306,7 @@ const Claim = ({ route }) => {
                                 height={170}
                                 data={{
                                     label: ['data1', 'data'],
-                                    data: [(calculateTimeDurationofClaim())/100 || 0, parseFloat(nwlDetails?.proRatedData?.proRatedClaimUtilization) / 100 || 0]
+                                    data: [(calculateTimeDurationofClaim()) / 100 || 0, parseFloat(nwlDetails?.proRatedData?.proRatedClaimUtilization) / 100 || 0]
                                 }}
                                 strokeWidth={14}
                                 radius={50}
@@ -337,11 +321,11 @@ const Claim = ({ route }) => {
                                 hideLegend={true}
                             />
                             <View style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', gap: 15 }}>
-                                <View style={{ display: 'flex',flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                                     <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.6)', borderRadius: 25 }}></View>
                                     <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(calculateTimeDurationofClaim())}%` || 0}</Text>
                                 </View>
-                                <View style={{ display: 'flex',  flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                                     <View style={{ width: 15, height: 15, backgroundColor: 'rgba(50, 102, 227, 0.8)', borderRadius: 25 }}></View>
                                     <Text style={{ color: theme.colors.data, fontFamily: "Nunito Bold" }}>{`${Math.round(nwlDetails?.proRatedData?.proRatedClaimUtilization)}%` || 0}</Text>
                                 </View>
@@ -466,63 +450,46 @@ const Claim = ({ route }) => {
                         </View>
                     </View>
                 </View>
-                <View style={{ ...styles.card, display: 'flex', flex: 1, marginTop: 10, }}>
-                    <View style={{ display: 'flex', padding: 5, flexDirection: 'row' }}>
-                        <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.alpha, flex: 1, alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20 }}>Diagnosis wise split of claims</Text>
+                <View style={{ borderWidth: 1, borderColor: theme.colors.border, borderRadius: 5, display: 'flex', flex: 1, marginTop: 10, }}>
+                    <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.border, display: 'flex', padding: 15, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'center', paddingVertical: 10 }}>
+                            <Text style={{ color: theme.colors.blue600, fontFamily: "Nunito Bold", fontSize: 20 }}>Diagnosis wise split of claims</Text>
                         </View>
                     </View>
-                    <ScrollView horizontal={true} style={{ marginTop: 10 }}>
-                        <Table borderStyle={{ borderWidth: 2, borderColor: theme.colors.border }}>
-                            <Row
-                                data={['Sl No.', 'Revised Disease Category', 'Sum of approved amount', 'No. of claims']}
-                                style={{ height: 70, backgroundColor: theme.colors.alpha }}
-                                widthArr={[70, 220, 180, 100]}
-                                textStyle={{ fontFamily: 'Nunito ExtraBold', color: 'white', textAlign: 'center', fontSize: 16, padding: 10 }}
-                            />
-                            {getDiagnosisClaims()?.length &&
-                                getDiagnosisClaims()?.map((rowData, index) => (<Row key={index}
-                                    data={[
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, fontSize: 16, textAlign: 'center' }}>{index + 1}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[0] ? processArrayData(rowData[0]) : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[2] ? rowData[2] : "-"}</Text>)]}
-                                    style={{ height: 70 }}
-                                    widthArr={[70, 220, 180, 100]}
-                                    textStyle={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}
-                                />))}
-                        </Table>
-                    </ScrollView>
+                    <View style={{ padding: 10 }}>
+                        {getDiagnosisClaims()?.length &&
+                            getDiagnosisClaims()?.map((rowData, index) => (
+                                <View key={index} style={{ display: 'flex', flexDirection: 'row', padding: 15, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, marginTop: 10, justifyContent: 'space-between' }}>
+                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, fontSize: 14, textAlign: 'center' }}>{index + 1}. </Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[0] ? processArrayData(rowData[0]) : "-"} {rowData[2] ? '- ' + rowData[2] : ""}</Text>
+                                    </View>
+                                    <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>
+                                </View>
+                            ))}
+                    </View>
                 </View>
-                <View style={{ ...styles.card, display: 'flex', flex: 1, marginTop: 10, }}>
-                    <View style={{ display: 'flex', padding: 5, flexDirection: 'row' }}>
-                        <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.alpha, flex: 1, alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ color: theme.colors.data, fontFamily: "Nunito ExtraBold", fontSize: 20, textAlign: 'center' }}>Top 10 People who have used Suminsurance</Text>
+                <View style={{ borderWidth: 1, borderColor: theme.colors.border, borderRadius: 5, display: 'flex', flex: 1, marginTop: 10, }}>
+                    <View style={{ ...styles.bottomBorder, borderBottomColor: theme.colors.border, display: 'flex', flexDirection: 'row' }}>
+                        <View style={{ flex: 1, alignItems: 'center', padding: 15 }}>
+                            <Text style={{ color: theme.colors.blue600, fontFamily: "Nunito Bold", fontSize: 18, textAlign: 'center' }}>Top 10 People who have used Suminsurance</Text>
                         </View>
                     </View>
-                    <ScrollView horizontal={true} style={{ marginTop: 10 }}>
-                        <Table borderStyle={{ borderWidth: 2, borderColor: theme.colors.border }}>
-                            <Row
-                                data={['Sl No.', 'Employee Name', 'Sum of approved amount']}
-                                style={{ height: 70, backgroundColor: theme.colors.alpha }}
-                                widthArr={[70, 220, 180]}
-                                textStyle={{ fontFamily: 'Nunito ExtraBold', color: 'white', textAlign: 'center', fontSize: 16, padding: 10 }}
-                            />
-                            {getTop10Claims()?.length &&
-                                getTop10Claims()?.map((rowData, index) => (<Row key={index}
-                                    data={[
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, fontSize: 16, textAlign: 'center' }}>{index + 1}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[0] ? processArrayData(rowData[0]) : "-"}</Text>),
-                                        (<Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>)]}
-                                    style={{ height: 70 }}
-                                    widthArr={[70, 220, 180]}
-                                    textStyle={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}
-                                />))}
-                        </Table>
-                    </ScrollView>
+                    <View style={{ padding: 10 }}>
+                        {getTop10Claims()?.length &&
+                            getTop10Claims()?.map((rowData, index) => (
+                                <View key={index} style={{ display: 'flex', flexDirection: 'row', padding: 15, borderRadius: 5, borderWidth: 1, borderColor: theme.colors.border, marginTop: 10, justifyContent: 'space-between' }}>
+                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, fontSize: 14, textAlign: 'center' }}>{index + 1}. </Text>
+                                        <Text style={{ fontFamily: 'Nunito Medium', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[0] ? processArrayData(rowData[0]) : "-"}</Text>
+                                    </View>
+                                    <Text style={{ fontFamily: 'Nunito Bold', color: theme.colors.data, textAlign: 'center', fontSize: 16 }}>{rowData[1] ? `₹${parseInt(rowData[1]).toLocaleString('en-IN')}` : '-'}</Text>
+                                </View>
+                            ))}
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 };
 

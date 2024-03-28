@@ -24,6 +24,7 @@ import { ProgressChart } from "react-native-chart-kit";
 import jwtDecode from 'jwt-decode';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomeScreen = () => {
   const theme = useTheme();
@@ -41,7 +42,7 @@ const HomeScreen = () => {
   const [gtlpolicy, setGtlpolicy] = useState({});
   const [gpapolicy, setGpapolicy] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [allpolicies, setAllpolicies] = useState({});
 
   useEffect(() => {
     // dispatch(loginActions.logOut());
@@ -57,12 +58,19 @@ const HomeScreen = () => {
   }, [corporateid]);
 
   useEffect(() => {
+
+    console.log("hrdashboard", Object.keys(hrdashboard))
+    console.log("employeeactivitydetails", hrdashboard.employeeactivitydetails)
+  }, [hrdashboard])
+
+  useEffect(() => {
     // dispatch(loginActions.logOut());
     // AsyncStorage.clear()
     setLoading(true);
     try {
-      if (Object.keys(corporateDetails)?.length > 0) {
-        getPolicyDetails();
+      if (Object.keys(corporateDetails)?.length > 0 && !(allpolicies.length)) {
+        const policieslist = modifyPolicyNames(corporateDetails.policytype)
+        getPolicyDetails(policieslist);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -109,79 +117,48 @@ const HomeScreen = () => {
     }
   }
 
-  const getPolicyDetails = () => {
+  function modifyPolicyNames(policies) {
+    const policyCounts = {};
+    const modifiedPolicies = [];
+
+    policies.forEach(policy => {
+      const prefix = policy.match(/[A-Za-z]+/)[0]; // Extract alphabetic characters from the beginning
+      if (!policyCounts[prefix]) {
+        policyCounts[prefix] = 1;
+        modifiedPolicies.push({ label: prefix, value: policy });
+      } else {
+        const count = policyCounts[prefix]++;
+        modifiedPolicies.push({ label: `${prefix}(${count})`, value: policy });
+      }
+    });
+    return modifiedPolicies;
+  }
+
+  const getPolicyDetails = (policieslist) => {
     setLoading(true);
     if (Object.keys(corporateDetails)?.length > 0) {
-      let gmcPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GMC"));
-      let gtlPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GTL"));
-      let gpaPolicies = corporateDetails?.policytype?.filter(policy => policy?.startsWith("GPA"));
-      if (gmcPolicies?.length) {
-        getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: gmcPolicies?.[0] }), loginData.token)
+      policieslist.forEach((item) => {
+        getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: item.value }), loginData.token)
           .then((res) => {
             if (res.status === 1) {
-              dispatch(loginActions.setPolicyDetails(res.data))
+              setAllpolicies((prevState) => ({ ...prevState, [item.label]: res.data }));
             } else {
               dispatch(valuesActions.statusNot1(res?.msg));
             }
           }).catch((error) => {
             dispatch(valuesActions.error({ error: `Error in Get Policy Details ${error}` }));
           })
-
-        getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
-          .then((res) => {
-            if (res.status === 1) {
-              dispatch(loginActions.setNwlDetails(res))
-            } else {
-              dispatch(valuesActions.statusNot1(res?.msg));
-            }
-          }).catch((error) => {
-            dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
-          })
-      }
-      if (gtlPolicies?.length) {
-        getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: gtlPolicies?.[0] }), loginData.token)
-          .then((res) => {
-            if (res.status === 1) {
-              setGtlpolicy(res.data)
-            }
-            setLoading(false);
-          }).catch((error) => {
-            setLoading(false);
-            dispatch(valuesActions.error({ error: `Error in Get Policy Details ${error}` }));
-          })
-
-        getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
-          .then((res) => {
-            if (res.status === 1) {
-              dispatch(loginActions.setNwlDetails(res))
-            } else {
-              dispatch(valuesActions.statusNot1(res?.msg));
-            }
-          }).catch((error) => {
-            dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
-          })
-      }
-      if (gpaPolicies?.length) {
-        getTokenService(baseUrl, stringInterpolater(API_ROUTES.GET_CORPORATE_POLICY, { cpolid: gmcPolicies?.[0] }), loginData.token)
-          .then((res) => {
-            if (res.status === 1) {
-              setGpapolicy(res.data)
-            }
-          }).catch((error) => {
-            dispatch(valuesActions.error({ error: `Error in Get Policy Details ${error}` }));
-          })
-
-        getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
-          .then((res) => {
-            if (res.status === 1) {
-              dispatch(loginActions.setNwlDetails(res))
-            } else {
-              dispatch(valuesActions.statusNot1(res?.msg));
-            }
-          }).catch((error) => {
-            dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
-          })
-      }
+      })
+      // getService(baseUrl, stringInterpolater(API_ROUTES.GET_NWL_DETAILS, { corporateid: corporateid, policyid: gmcPolicies[0] }))
+      //     .then((res) => {
+      //         if (res.status === 1) {
+      //             dispatch(loginActions.setNwlDetails(res))
+      //         } else {
+      //             dispatch(valuesActions.statusNot1(res?.msg));
+      //         }
+      //     }).catch((error) => {
+      //         dispatch(valuesActions.error({ error: `Error in Get NWL Details ${error}` }));
+      //     })
     }
   }
 
@@ -337,111 +314,189 @@ const HomeScreen = () => {
                   </View>
                 </View>
               </Animatable.View>
-              {Object.keys(policyDetails)?.length > 0 &&
-                <Animatable.View animation="fadeIn"
-                  duration={400} style={{ ...styles.card, marginTop: 15 }}>
-                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GMC Details</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GMC' })}>
-                      <Icon
-                        name="chevron-right"
-                        color={theme.colors.alpha}
-                        size={24}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {policyDetails?.policies?.[0]?.insurername ?? ""}</Text>
-                    <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{policyDetails?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
-                  </View>
-                </Animatable.View>
+              {modifyPolicyNames(corporateDetails.policytype)?.length > 0 &&
+                modifyPolicyNames(corporateDetails.policytype).map((item, index) => (
+                  <TouchableOpacity key={index} animation="fadeIn"
+                    onPress={() => navigation.navigate('TabPolicy', { policytype: item.value })}
+                    duration={400} style={{ ...styles.card, marginTop: 15 }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>{item.label} Details</Text>
+                      <TouchableOpacity>
+                        <Icon
+                          name="chevron-right"
+                          color={theme.colors.alpha}
+                          size={24}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {allpolicies?.[item.label]?.policies?.[0]?.insurername ?? ""}</Text>
+                      <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{allpolicies?.[item.label]?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
               }
-              {Object.keys(gpapolicy)?.length > 0 && <Animatable.View animation="fadeIn"
-                duration={400} style={{ ...styles.card, marginTop: 15 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GPA Details</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GPA' })}>
-                    <Icon
-                      name="chevron-right"
-                      color={theme.colors.alpha}
-                      size={24}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {gpapolicy?.policies?.[0]?.insurername ?? ""}</Text>
-                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{gpapolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
-                </View>
-              </Animatable.View>}
-              {Object.keys(gtlpolicy)?.length > 0 && <Animatable.View animation="fadeIn"
-                duration={400} style={{ ...styles.card, marginTop: 15 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
-                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', marginLeft: 15, fontSize: 20 }}>GTL Details</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('TabPolicy', { policytype: 'GTL' })}>
-                    <Icon
-                      name="chevron-right"
-                      color={theme.colors.alpha}
-                      size={24}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}> {gtlpolicy?.policies?.[0]?.insurername ?? ""}</Text>
-                  <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium', marginLeft: 5 }}>{gtlpolicy?.policies?.[0]?.covers?.map((item, index) => (item[0].toUpperCase() + item.substring(1))).join(', ')}</Text>
-                </View>
-              </Animatable.View>}
               <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
                   <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
                     <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Engaged Members</Text>
                   </View>
-                  <View >
-                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'right' }}>320</Text>
+                  {/*<View >
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 18, textAlign: 'right' }}>320</Text>
+                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    </View>*/}
+                </View>
+                <View style={{ display: 'flex', gap: 15, width: '100%' }}>
+                  <View style={{ display: 'flex', gap: 20, flexDirection: 'row', alignItems: 'center', height: 80, borderBottomWidth: 1, borderBottomColor: theme.colors.border, paddingHorizontal: 30 }}>
+                    <Image
+                      source={assets.ImageBaseUrl('questionnairepi1')}
+                      style={{
+                        height: 60,
+                        width: 57,
+                        objectFit: 'contain'
+                      }}
+                    />
+                    <View style={{ display: 'flex', flexDirection: 'column', }}>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{hrdashboard.employeeactivitydetails?.[0]?.questionnaire}</Text>
+                      <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium' }}>Questionnaires Completed</Text>
+                    </View>
+                  </View>
+                  <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center', height: 80, borderBottomWidth: 1, borderBottomColor: theme.colors.border, paddingHorizontal: 30 }}>
+                    <Image
+                      source={assets.ImageBaseUrl('testpi')}
+                      style={{
+                        height: 61,
+                        width: 66,
+                        objectFit: 'contain',
+                        transform: 'rotateY(-180deg)'
+                      }}
+                    />
+                    <View style={{ display: 'flex', flexDirection: 'column', }}>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{hrdashboard.employeeactivitydetails?.[0]?.lab}</Text>
+                      <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium' }}>Pathological tests Completed</Text>
+                    </View>
+                  </View>
+                  <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center', height: 80, borderBottomWidth: 1, borderBottomColor: theme.colors.border, paddingHorizontal: 30 }}>
+                    <Image
+                      source={assets.ImageBaseUrl('consultationpi')}
+                      style={{
+                        height: 65,
+                        width: 61,
+                        objectFit: 'contain'
+                      }}
+                    />
+                    <View style={{ display: 'flex', flexDirection: 'column', }}>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{hrdashboard.employeeactivitydetails?.[0]?.gpconsultation}</Text>
+                      <Text style={{ color: theme.colors.subtitle, fontSize: 14, fontFamily: 'Nunito Medium' }}>GP Consultations Completed</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Physical Health Summary</Text>
+                  </View>
+                  {/*<View >
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
                     <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                      </View>*/}
+                </View>
+                <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  <View style={{ display: 'flex', flex: 3, borderRightWidth: 1, borderRightColor: theme.colors.border, padding: 10 }}>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>Health Aspect</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, alignItems: 'center' }}>
+                      <MaterialCommunityIcons name="smoking"
+                        color={theme.colors.subtitle}
+                        size={24} />
+                      <View>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', }}>Smoking</Text>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Medium', }}>1 or more Cigarettes a week</Text>
+                      </View>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, alignItems: 'center' }}>
+                      <MaterialCommunityIcons name="glass-mug-variant"
+                        color={theme.colors.subtitle}
+                        size={24} />
+                      <View>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', }}>Alcohol Consumption</Text>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Medium', }}>3 or more units/ pints a week</Text>
+                      </View>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, alignItems: 'center' }}>
+                      <Ionicons name="body"
+                        color={theme.colors.subtitle}
+                        size={24} />
+                      <View>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', }}>High BMI</Text>
+                        <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Medium', }}>BMI of 25 or above</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={{ flex: 1, paddingTop: 10 }}>
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>Count</Text>
+                    <View style={{ marginTop: 10, display: 'flex', justifyContent: 'space-between', flex: 1, paddingVertical: 15 }}>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>36</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>64</Text>
+                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>52</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Mental Health</Text>
+                  </View>
+                  <View >
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'center' }}>260</Text>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>Members Under Stress</Text>
                   </View>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                 </View>
+              </View>
+              <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
+                  <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Claim Status</Text>
+                  </View>
+                  {/*<View >
+                    <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
+                    <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    </View>*/}
                 </View>
-                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
-                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
-                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Physical Health Summary</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  <View style={{ padding: 10, borderRightWidth: 1, borderRightColor: theme.colors.border }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Claim Raised</Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>32</Text>
                     </View>
-                    <View >
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Claims Paid</Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>24</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Total Ongoing Claims </Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>4</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data }}>Claims Rejected</Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data }}>10</Text>
                     </View>
                   </View>
-                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  <View style={{ padding: 10, display:'flex', flex: 1 }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data, flex: 2 }}>Prorated Claims Ratio</Text>
+                      <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>105%</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, marginTop: 15, justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.data, flex: 2 }}>Average Claim Settlement</Text>
+                        <Text style={{ fontSize: 14, fontFamily: 'Nunito Medium', color: theme.colors.data, flex: 1 }}>10</Text>
+                    </View>
                   </View>
                 </View>
-                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
-                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
-                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Mental Health</Text>
-                    </View>
-                    <View >
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
-                    </View>
-                  </View>
-                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                  </View>
-                </View>
-                <View style={{ width: '100%', borderRadius: 5, borderColor: theme.colors.border, borderWidth: 1, marginTop: 15 }}>
-                  <View style={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between', padding: 15, borderBottomColor: theme.colors.border, borderBottomWidth: 1, alignItems: 'center' }}>
-                    <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', padding: 14 }}>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Claim Status</Text>
-                    </View>
-                    <View >
-                      <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16, textAlign: 'right' }}>260</Text>
-                      <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Medium', fontSize: 14 }}>View More</Text>
-                    </View>
-                  </View>
-                  <View style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                  </View>
-                </View>
+              </View>
             </View>
             {/*<Animatable.View animation="fadeIn"
               duration={400} style={{ ...styles.card, flex: 1, margin: 10, display: 'flex', gap: 25 }}>
@@ -455,19 +510,7 @@ const HomeScreen = () => {
                   />
                 </TouchableOpacity>
               </View>
-              <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                  source={assets.ImageBaseUrl('dietconsultationpi')}
-                  style={{
-                    height: 50,
-                    width: 50
-                  }}
-                />
-                <View style={{ display: 'flex', flexDirection: 'column', }}>
-                  <Text style={{ color: theme.colors.data, fontSize: 14, fontFamily: 'Nunito Medium' }}>{arrayOfActivities[0] ? arrayOfActivities[0].display_name : ("")}</Text>
-                  <Text style={{ color: theme.colors.data, fontFamily: 'Nunito Bold', fontSize: 16 }}>{arrayOfActivities[0] ? arrayOfActivities[0].value : 0}</Text>
-                </View>
-              </View>
+             
               <View style={{ display: 'flex', gap: 10, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                   source={assets.ImageBaseUrl('gpconsultationpi')}
