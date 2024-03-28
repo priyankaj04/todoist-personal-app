@@ -355,7 +355,7 @@ const Policies = ({ route }) => {
                         <Text style={{ color: theme.colors.alpha, fontFamily: 'Nunito Bold', fontSize: 18 }}>Current Status</Text>
                       </View>
                     </View>
-                    <TouchableOpacity style={{ borderColor: '#4576DC', borderWidth: 1, width: 100, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cdbalance', { cpolid: selectedPolicy[0].value })} style={{ borderColor: '#4576DC', borderWidth: 1, width: 100, borderRadius: 5, height: 35, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                       <Text style={{ textAlign: 'center', fontSize: 14, fontFamily: 'Nunito Bold', color: theme.colors.alpha }}>CD Balance</Text>
                     </TouchableOpacity>
                   </View>

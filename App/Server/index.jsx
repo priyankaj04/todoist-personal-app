@@ -257,7 +257,8 @@ const API_ROUTES = {
   GET_ALL_PATIENTS_BY_INSURANCE: '/hrdashboard/insurance/{cpolid}',
   GET_HEALTH_INSIGHTS: '/hrdashboard/healthinsights/{corporateid}',
   GET_HRDASHBOARD_HOME: '/hrdashboard/home/{corporateid}',
-  GET_CORPORATEUSERS_BY_CORPORATEID: '/corporate/hrdashboard/searchusers'
+  GET_CORPORATEUSERS_BY_CORPORATEID: '/corporate/hrdashboard/searchusers',
+  GET_CD_STATEMENT: '/policy/accstatementspolicies/{cpolid}'
 }
 
 export {
