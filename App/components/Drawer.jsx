@@ -15,12 +15,11 @@ import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import assets from '../assets';
-
 import { valuesActions, loginActions, mySelector } from '../redux';
 import { getName } from '../utils';
 
@@ -31,6 +30,11 @@ export function DrawerContent(props) {
 
     const corporateDetails = mySelector(state => state.Login.value.corporateDetails);
     const cpVersion = mySelector(state => state.Login.value.cpVersion);
+    const loginData = mySelector(state => state.Login.value.loginData);
+
+    useEffect(() => {
+        console.log("setLoginData", loginData)
+    }, [loginData])
 
     const signOut = async () => {
         try {
@@ -44,19 +48,20 @@ export function DrawerContent(props) {
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: paperTheme.colors.alpha }}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
             <DrawerContentScrollView {...props}>
-                <View style={[styles.drawerContent, styles.bottomBorder]}>
-                    <View style={{ ...styles.userInfoSection, ...styles.bottomBorder, paddingVertical: 15 }}>
-                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                <View style={[styles.drawerContent]}>
+                    <View style={{ paddingVertical: 15, backgroundColor: paperTheme.colors.blue600, margin: 15, display: 'flex', alignItems: 'center', borderRadius: 5 }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: 'white', padding: 5, borderRadius: 5 }}>
                             <Image
                                 source={{ uri: corporateDetails?.logourl }}
-                                style={{ width: 150, objectFit: 'contain', minHeight: 50, maxHeight: 150, backgroundColor:'white' }}
+                                style={{ width: 150, objectFit: 'contain', minHeight: 50, maxHeight: 150, }}
                             />
                         </View>
-                        <Text style={{color:'white', fontFamily:'Nunito Bold'}}>{corporateDetails?.legalname}</Text>
+                        <Text style={{ color: 'white', fontFamily: 'Nunito Bold', marginTop: 15 }}>{corporateDetails?.legalname}</Text>
+                        <Text style={{ color: 'white', fontFamily: 'Nunito Medium', marginTop: 15 }}>{loginData?.email}</Text>
                     </View>
-                    <DrawerItem
+                    {/*<DrawerItem
                         icon={() => (
                             <Icon
                                 name="home"
@@ -136,8 +141,16 @@ export function DrawerContent(props) {
                         labelStyle={{ color: (active === 'expiredpolicy') ? paperTheme.colors.alpha : 'white', fontFamily: 'Nunito Bold', fontSize: 16 }}
                         onPress={() => { setActive('expiredpolicy') }}
                         style={{ backgroundColor: (active === 'expiredpolicy') ? 'white' : 'transparent' }}
-                    />
+                        />*/}
                 </View>
+                <TouchableRipple onPress={signOut} style={{ paddingVertical: 5, borderWidth: 1, borderColor: paperTheme.colors.border, borderRadius: 5, margin: 15 }}>
+                    <View style={{ ...styles.preference, alignItems: 'center' }}>
+                        <View pointerEvents="none">
+                            <MaterialIcons name="logout" color={paperTheme.colors.data} size={30} style={{ paddingRight: 10 }} />
+                        </View>
+                        <Text style={{ color: paperTheme.colors.data, fontSize: 16, fontFamily: 'Nunito Bold' }}>Log Out</Text>
+                    </View>
+                </TouchableRipple>
                 <Paragraph
                     style={{
                         textAlign: 'center',
@@ -147,7 +160,7 @@ export function DrawerContent(props) {
                         fontFamily: 'Nunito Bold',
                         fontSize: 13
                     }}
-                >App- 1  Cp- {cpVersion ?? 0}</Paragraph>
+                >App-1  Cp- {cpVersion ?? 0}</Paragraph>
             </DrawerContentScrollView>
             {/* <Drawer.Section>
                 <TouchableRipple onPress={() => {props.dispatch(valuesActions.setToggleTheme())}}>
@@ -159,17 +172,11 @@ export function DrawerContent(props) {
                     </View>
                 </TouchableRipple>
             </Drawer.Section> */}
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ display: 'flex',  alignItems: 'center', justifyContent: 'center', backgroundColor: paperTheme.colors.blue600, height: 100 }}>
                 <Image source={assets.ImageBaseUrl('brandlogopi')} style={{ width: 150, height: 40, objectFit: 'contain' }} />
+                <Text style={{color: 'white', fontFamily: 'Nunito Medium'}}>Version 1</Text>
             </View>
-            <TouchableRipple onPress={signOut} style={{ paddingVertical: 10, ...styles.topBorder }}>
-                <View style={{ ...styles.preference, alignItems: 'center' }}>
-                    <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Nunito Bold' }}>Sign Out</Text>
-                    <View pointerEvents="none">
-                        <Icon name="exit-to-app" color='white' size={30} style={{ paddingRight: 10 }} />
-                    </View>
-                </View>
-            </TouchableRipple>
+
         </View>
     );
 }
@@ -177,9 +184,6 @@ export function DrawerContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-    },
-    userInfoSection: {
-        paddingLeft: 20,
     },
     title: {
         fontSize: 16,
@@ -215,14 +219,9 @@ const styles = StyleSheet.create({
     },
     preference: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: 15,
         paddingVertical: 12,
         paddingHorizontal: 16,
-    },
-    bottomBorder: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#f2f5f9',
-        borderStyle: 'solid',
     },
     topBorder: {
         borderTopWidth: 1,

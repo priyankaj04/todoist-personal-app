@@ -11,22 +11,11 @@ import {
   Linking
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
 import styles from '../Styles'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as Animatable from 'react-native-animatable';
 import { useNavigation, Link } from '@react-navigation/native';
 import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
-import assets from '../../../assets';
 import { API_ROUTES, stringInterpolater, postService } from '../../../server';
-import { ProgressChart } from "react-native-chart-kit";
-import jwtDecode from 'jwt-decode';
-import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Dropdown from '../../../components/Dropdown';
-import dayjs from 'dayjs';
 
 const Settings = () => {
   const theme = useTheme();
