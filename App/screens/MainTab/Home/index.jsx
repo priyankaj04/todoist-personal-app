@@ -1,51 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
-  Image,
-  StyleSheet,
-  StatusBar,
   TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import { Calendar, LocaleConfig, CalendarList } from 'react-native-calendars';
 import { useTheme } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
 import styles from '../Styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as Animatable from 'react-native-animatable';
 import { useNavigation, Link } from '@react-navigation/native';
-import { loginActions, valuesActions, myDispatch, mySelector } from '../../../redux';
-import profilepic from '../../../../assets/profileimg.png';
 import dayjs from 'dayjs';
 
 const HomeScreen = () => {
   const theme = useTheme();
   const navigation = useNavigation();
-
-  const dispatch = myDispatch();
-  const corporateDetails = mySelector(state => state.Login.value.corporateDetails);
-  const baseUrl = mySelector(state => state.Login.value.baseUrl);
-  const corporateid = mySelector(state => state.Login.value.loginData.corporateid);
-  const loginData = mySelector(state => state.Login.value.loginData);
-  const hrdashboard = mySelector(state => state.Login.value.hrdashboard);
-  const policyDetails = mySelector(state => state.Login.value.policyDetails);
-  const clinicalDetails = mySelector(state => state.Login.value.clinicalDetails);
-  const [arrayOfActivities, setArrayOfActivities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [allpolicies, setAllpolicies] = useState({});
-  const [healthinsights, setHealthinsights] = useState({});
   const [selected, setSelected] = useState(dayjs().format('YYYY-MM-DD'));
-
 
   return (
     <ScrollView style={styles.container}>
       <View style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-        {/*<Image
-          source={profilepic} style={{ width: 40, height: 40, borderRadius: 50 }}
-        />*/}
         <Text
           style={{
             color: theme.colors.data,
@@ -104,7 +78,7 @@ const HomeScreen = () => {
           }} />
       </View>
       <View style={{display:'flex', flex: 1, flexDirection:'row', borderBottomColor:theme.colors.border, borderBottomWidth: 1, marginTop: 10}}></View>
-      <View style={{display:'flex', flex: 1, flexDirection:'row', flexWrap:'wrap', gap: 15, padding: 15}}>
+      <View style={{display:'flex', flex: 1, flexDirection:'row', flexWrap:'wrap', gap: 15, padding: 15, marginTop: 5}}>
         <TouchableOpacity style={{ height: 110, width: 180, backgroundColor: theme.colors.yellow, borderRadius: 5, display:'flex', justifyContent:'center' }}>
           <Text style={{
             color: theme.colors.background,
