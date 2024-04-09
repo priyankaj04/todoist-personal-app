@@ -5,25 +5,18 @@ import {
   Dimensions
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-native-paper';
 import { vh, vw } from 'react-native-css-vh-vw';
-
-
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from 'react-native-paper';
 import Home from './Home';
-import Claim from '../Claim';
 import Policies from './Policies';
-import Stories from './Stories';
 import Settings from './Settings';
-import CareManagement from './Caremanagement';
 
 const Tab = createBottomTabNavigator();
-
 
 const MainTabScreen = ({ route, navigation }) => {
 

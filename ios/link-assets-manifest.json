@@ -2,6 +2,14 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/Amarante Regular.ttf",
+      "sha1": "8ced367d0fb1eee3bdfff6bea26f1a7ea2882a3d"
+    },
+    {
+      "path": "assets/fonts/Asar Regular.ttf",
+      "sha1": "20080b4b30b93a44e69f0e1a427b4b37ab4fa4c4"
+    },
+    {
       "path": "assets/fonts/Nunito Bold.ttf",
       "sha1": "dea5eec0aca2aef62e3bfc625cf95f9d45b59687"
     },

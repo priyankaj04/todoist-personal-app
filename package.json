@@ -36,6 +36,7 @@
     "react-native-animatable": "^1.3.3",
     "react-native-blob-util": "^0.19.6",
     "react-native-bottomsheet-reanimated": "^0.3.1",
+    "react-native-calendars": "^1.1304.1",
     "react-native-chart-kit": "^6.12.0",
     "react-native-code-push": "^8.2.1",
     "react-native-css-vh-vw": "^1.0.5",

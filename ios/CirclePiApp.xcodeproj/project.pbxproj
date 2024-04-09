@@ -41,6 +41,8 @@
 		39D4EDDF2B364C779C59AF3F /* Nunito ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40BD35559FA24FE591699B36 /* Nunito ExtraBold.ttf */; };
 		0602173370204E9E9BCC023E /* Nunito Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5AD79F26A994CB89D454F5A /* Nunito Medium.ttf */; };
 		DF4714CF0776424F9CA7E2DE /* Nunito Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 448A0F0C9E1347A28AA16F69 /* Nunito Regular.ttf */; };
+		8D3AA26E24AD481DBDFBD6B9 /* Amarante Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45AEA691187E456D8BD1E394 /* Amarante Regular.ttf */; };
+		61F3FFCE89DD435EA106C5DD /* Asar Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAAAB7E1EE0A480A991AE7E1 /* Asar Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,8 @@
 		40BD35559FA24FE591699B36 /* Nunito ExtraBold.ttf */ = {isa = PBXFileReference; name = "Nunito ExtraBold.ttf"; path = "../assets/fonts/Nunito ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A5AD79F26A994CB89D454F5A /* Nunito Medium.ttf */ = {isa = PBXFileReference; name = "Nunito Medium.ttf"; path = "../assets/fonts/Nunito Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		448A0F0C9E1347A28AA16F69 /* Nunito Regular.ttf */ = {isa = PBXFileReference; name = "Nunito Regular.ttf"; path = "../assets/fonts/Nunito Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		45AEA691187E456D8BD1E394 /* Amarante Regular.ttf */ = {isa = PBXFileReference; name = "Amarante Regular.ttf"; path = "../assets/fonts/Amarante Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CAAAB7E1EE0A480A991AE7E1 /* Asar Regular.ttf */ = {isa = PBXFileReference; name = "Asar Regular.ttf"; path = "../assets/fonts/Asar Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +239,8 @@
 				40BD35559FA24FE591699B36 /* Nunito ExtraBold.ttf */,
 				A5AD79F26A994CB89D454F5A /* Nunito Medium.ttf */,
 				448A0F0C9E1347A28AA16F69 /* Nunito Regular.ttf */,
+				45AEA691187E456D8BD1E394 /* Amarante Regular.ttf */,
+				CAAAB7E1EE0A480A991AE7E1 /* Asar Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -362,6 +368,8 @@
 				39D4EDDF2B364C779C59AF3F /* Nunito ExtraBold.ttf in Resources */,
 				0602173370204E9E9BCC023E /* Nunito Medium.ttf in Resources */,
 				DF4714CF0776424F9CA7E2DE /* Nunito Regular.ttf in Resources */,
+				8D3AA26E24AD481DBDFBD6B9 /* Amarante Regular.ttf in Resources */,
+				61F3FFCE89DD435EA106C5DD /* Asar Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

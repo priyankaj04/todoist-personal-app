@@ -1,6 +1,6 @@
 {
   "name": "CirclePiApp",
-  "displayName": "Circle Pi",
+  "displayName": "TODOIST",
   "packagerOpts": {
     "config": "metro.config.js"
   }
