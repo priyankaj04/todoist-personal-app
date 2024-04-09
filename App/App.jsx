@@ -159,7 +159,8 @@ const App = () => {
       gray: '#6b7280',
       lite: '#fed7aa',
       purple: '#e9d5ff',
-      blue:'#bfdbfe'
+      blue: '#bfdbfe',
+      violet:'#a5b4fc'
     },
   };
 

@@ -133,7 +133,7 @@ const HomeScreen = () => {
             fontSize: 20,
             textAlign: 'center',
             marginTop: 10
-          }}>🕰️ 10-15mins</Text>
+          }}>🕰️ 10-20mins</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ width: 180, height: 110, backgroundColor: theme.colors.blue, borderRadius: 5, display: 'flex', justifyContent: 'center' }}>
           <Text style={{
@@ -193,7 +193,22 @@ const HomeScreen = () => {
             fontSize: 20,
             textAlign: 'center',
             marginTop: 10
-          }}>🙏🏻 Hanuman Chalisa</Text>
+          }}>🙏🏻 Chant Mantras</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ height: 110, width: 180, backgroundColor: theme.colors.violet, borderRadius: 5, display: 'flex', justifyContent: 'center' }}>
+          <Text style={{
+            color: theme.colors.background,
+            fontFamily: 'Asar Regular',
+            fontSize: 24,
+            textAlign: 'center'
+          }}>👩🏻‍💻 DSA</Text>
+          <Text style={{
+            color: theme.colors.background,
+            fontFamily: 'Asar Regular',
+            fontSize: 20,
+            textAlign: 'center',
+            marginTop: 10
+          }}>💡 1/2 problems</Text>
         </TouchableOpacity>
       </View>
     </ScrollView >

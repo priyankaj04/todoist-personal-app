@@ -2,7 +2,7 @@ import {
   View,
   Platform,
   StatusBar,
-  Dimensions
+  Dimensions, Text
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,8 +13,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from 'react-native-paper';
 import Home from './Home';
-import Policies from './Policies';
-import Settings from './Settings';
+import Workout from './Workout';
+import Analysis from './Analysis';
+import Todo from './Todo';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ const MainTabScreen = ({ route, navigation }) => {
           initialRouteName="TabHome"
           screenOptions={{
             tabBarLabelStyle: { paddingBottom: 5, fontWeight: '500' },
-            tabBarActiveTintColor: '#254E93',
+            tabBarActiveTintColor: '#f97316',
             headerShown: false
           }}
         >
@@ -40,21 +41,39 @@ const MainTabScreen = ({ route, navigation }) => {
             options={{
               tabBarLabel: 'Home',
               tabBarIcon: ({ color }) => (
-                <Feather name="home" color={color} size={22} />
+                <Text style={{fontSize: 22}}>🏠</Text>
               ),
             }}
-          // initialParams={{mainNavigation: navigation}}
           />
           <Tab.Screen
-            name="TabPolicy"
-            component={Policies}
+            name="TabWorkout"
+            component={Workout}
             options={{
-              tabBarLabel: 'Policy',
+              tabBarLabel: 'Workout',
               tabBarIcon: ({ color }) => (
-                <Feather name="shield" color={color} size={22} />
+                <Text style={{ fontSize: 22 }}>🏋🏻‍♀️</Text>
               ),
             }}
-          // initialParams={{mainNavigation}}
+          />
+          <Tab.Screen
+            name="TabTodolist"
+            component={Todo}
+            options={{
+              tabBarLabel: 'Todo',
+              tabBarIcon: ({ color }) => (
+                <Text style={{ fontSize: 22 }}>📝</Text>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="TabAnalysis"
+            component={Analysis}
+            options={{
+              tabBarLabel: 'Analysis',
+              tabBarIcon: ({ color }) => (
+                <Text style={{ fontSize: 22 }}>📊</Text>
+              ),
+            }}
           />
           {/*<Tab.Screen
             name="TabClaim"
@@ -78,17 +97,6 @@ const MainTabScreen = ({ route, navigation }) => {
             }}
             // initialParams={{mainNavigation}}
           />*/}
-          <Tab.Screen
-            name="TabSettings"
-            component={Settings}
-            options={{
-              tabBarLabel: 'Users',
-              tabBarIcon: ({ color }) => (
-                <Ionicons name="person-outline" color={color} size={22} />
-              ),
-            }}
-          // initialParams={{mainNavigation}}
-          />
         </Tab.Navigator>
       </View>
     </Provider>
